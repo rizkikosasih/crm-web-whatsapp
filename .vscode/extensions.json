@@ -1,0 +1,18 @@
+{
+  "recommendations": [
+    "onecentlin.laravel-extension-pack",
+    "bmewburn.vscode-intelephense-client",
+    "gamunu.vscode-yarn",
+    "esbenp.prettier-vscode",
+    "editorconfig.editorconfig",
+    "dbaeumer.vscode-eslint",
+    "formulahendry.auto-complete-tag",
+    "abusaidm.html-snippets",
+    "ecmel.vscode-html-css",
+    "zignd.html-css-class-completion",
+    "jasonnutter.search-node-modules",
+    "recca0120.vscode-phpunit",
+    "onecentlin.phpunit-snippets",
+    "cierra.livewire-vscode"
+  ]
+}

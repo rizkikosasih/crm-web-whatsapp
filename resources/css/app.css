@@ -1,0 +1,41 @@
+@import 'select2/dist/css/select2.min.css';
+@import 'sweetalert2/dist/sweetalert2.min.css';
+@import 'admin-lte/dist/css/adminlte.min.css';
+@import '@fortawesome/fontawesome-free/css/all.min.css';
+@import './bootstrap-grid.min.css';
+@import './bootstrap-utilities.min.css';
+
+#nprogress {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 99999 !important;
+}
+
+.avatar-image-navbar {
+  width: 24px;
+  height: 24px;
+}
+
+li.page-item:not(.disabled, .active) {
+  cursor: pointer;
+}
+
+.circle {
+  border-radius: 99%;
+}
+
+table.order-detail tr td:first-child {
+  width: 25%;
+  font-weight: 600;
+}
+
+table.order-detail tr td:nth-child(2) {
+  width: 10%;
+  text-align: center;
+}
+
+table.order-detail tr td:last-child {
+  width: 65%;
+}
