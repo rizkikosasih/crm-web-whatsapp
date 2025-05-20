@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
 
 class RunMigrate extends Command
@@ -24,11 +23,6 @@ class RunMigrate extends Command
    */
   protected $description = 'Run Migrations Step By Step Because Reference Key';
 
-  protected function pathMigrations($fileName)
-  {
-    return 'database/migrations/' . $fileName . '_table.php';
-  }
-
   /**
    * Execute the console command.
    */
@@ -45,13 +39,7 @@ class RunMigrate extends Command
       Artisan::call('migrate:fresh');
 
       //Run Seeder
-      Artisan::call('db:seed', ['--class' => 'MenuSeeder']);
-      Artisan::call('db:seed', ['--class' => 'UserSeeder']);
-      Artisan::call('db:seed', ['--class' => 'CustomerSeeder']);
-
-      $folder = storage_path('app/images/products');
-
-      File::cleanDirectory($folder);
+      Artisan::call('db:seed');
 
       $this->info('Migrations Success');
     } catch (\Exception $e) {
