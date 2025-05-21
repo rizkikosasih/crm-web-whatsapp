@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Models\Product;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Services\Api\RapiwhaApiService;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
@@ -24,6 +25,13 @@ class Create extends Component
 
   /* format: [['product_id' => 1, 'name' => '...', 'price' => 1000, 'quantity' => 2]] */
   public $orderItems = [];
+
+  protected RapiwhaApiService $rapiwha;
+
+  public function __construct()
+  {
+    $this->rapiwha = new RapiwhaApiService();
+  }
 
   public function selectCustomer($id, $name)
   {

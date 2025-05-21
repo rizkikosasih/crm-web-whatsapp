@@ -3,7 +3,7 @@
 namespace App\Livewire\Order;
 
 use App\Models\Order;
-use Illuminate\Support\Str;
+use App\Services\Api\RapiwhaApiService;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
@@ -26,6 +26,13 @@ class Detail extends Component
   public $orderId, $selectedStatus, $proof_of_payment;
 
   public Order $order;
+
+  protected RapiwhaApiService $rapiwha;
+
+  public function __construct()
+  {
+    $this->rapiwha = new RapiwhaApiService();
+  }
 
   public function mount($id)
   {
