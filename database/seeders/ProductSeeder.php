@@ -10,7 +10,7 @@ class ProductSeeder extends Seeder
 {
   public function run(): void
   {
-    $folder = storage_path('app/images/products');
+    $folder = asset('storage/app/images/products');
     File::cleanDirectory($folder);
 
     $products = [];
@@ -20,9 +20,8 @@ class ProductSeeder extends Seeder
         'sku' => 'SKU' . str_pad($i, 4, '0', STR_PAD_LEFT),
         'name' => 'Product ' . $i,
         'description' => 'Description for Product ' . $i,
-        'price' => mt_rand(10000, 100000) / 100,
+        'price' => mt_rand(100000, 1000000),
         'stock' => rand(1, 50),
-        'image' => 'images/product_' . $i . '.jpg',
         'created_at' => now(),
         'updated_at' => now(),
       ];

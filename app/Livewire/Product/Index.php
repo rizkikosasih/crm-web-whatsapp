@@ -3,6 +3,7 @@
 namespace App\Livewire\Product;
 
 use App\Models\Product;
+use App\Services\Api\Implements\RapiwhaApiService;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\Validate;
@@ -43,6 +44,13 @@ class Index extends Component
 
   public $search;
   public $perPage = 10;
+
+  protected RapiwhaApiService $rapiwha;
+
+  public function __construct()
+  {
+    $this->rapiwha = new RapiwhaApiService();
+  }
 
   public function save()
   {
@@ -112,6 +120,20 @@ class Index extends Component
       'image',
       'isEdit',
     ]);
+  }
+
+  public function sendWA($productId)
+  {
+    $product = Product::where(['id' => $productId])
+      ->limit(1)
+      ->get();
+
+    $result = $this->rapiwha->sendMessage(
+      '6285777838862',
+      'Test Pesan Produk: ' . (isset($product->image) ? $product->image : '')
+    );
+
+    dd($result);
   }
 
   public function render()

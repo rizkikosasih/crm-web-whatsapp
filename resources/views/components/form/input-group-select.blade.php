@@ -24,7 +24,9 @@
       ])
       {{ $attributes }}
     >
-      <option value="">{{ $optionHeader }}</option>
+      @if($optionHeader)
+        <option value="">{{ $optionHeader }}</option>
+      @endif
       @foreach ($options as $key => $value)
         <option value="{{ $key }}">{!! $value !!}</option>
       @endforeach

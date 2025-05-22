@@ -12,6 +12,7 @@ return new class extends Migration {
       $table->foreignId('customer_id')->constrained()->onDelete('cascade');
       $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
       $table->text('message');
+      $table->string('image', 255)->nullable();
       $table->enum('status', ['sent', 'delivered', 'read', 'failed'])->default('sent');
       $table->timestamp('sent_at')->nullable();
       $table->timestamps();

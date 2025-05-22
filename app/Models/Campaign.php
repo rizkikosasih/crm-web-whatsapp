@@ -9,16 +9,7 @@ class Campaign extends Model
 {
   use HasFactory;
 
-  protected $fillable = ['title', 'message', 'status', 'schedule_at', 'created_by'];
-
-  protected $casts = [
-    'schedule_at' => 'datetime',
-  ];
-
-  public function recipients()
-  {
-    return $this->hasMany(CampaignRecipient::class);
-  }
+  protected $fillable = ['title', 'message', 'image', 'status', 'created_by'];
 
   public function creator()
   {

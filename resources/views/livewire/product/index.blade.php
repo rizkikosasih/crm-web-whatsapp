@@ -153,6 +153,10 @@
                           <x-link.icon-primary wire:click="edit({{ $item->id }})" customClass="tooltips" title="Ubah">
                             <i class="fas fa-pencil"></i>
                           </x-link.icon-primary>
+
+                          <x-link.icon-success wire:click="sendWA({{ $item->id }})" customClass="tooltips" title="Kirim Sebagai Pesan">
+                            <i class="fab fa-whatsapp"></i>
+                          </x-link.icon-success>
                         </div>
                       </td>
                     </tr>

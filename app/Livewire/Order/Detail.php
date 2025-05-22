@@ -3,7 +3,7 @@
 namespace App\Livewire\Order;
 
 use App\Models\Order;
-use App\Services\Api\RapiwhaApiService;
+use App\Services\Api\Implements\RapiwhaApiService;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
