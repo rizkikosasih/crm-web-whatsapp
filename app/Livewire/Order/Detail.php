@@ -62,7 +62,7 @@ class Detail extends Component
     $allowed = $this->availableStatusOptions();
 
     if (!in_array($this->selectedStatus, $allowed)) {
-      $this->dispatch('showError', ['message' => 'Perubahan status tidak valid.']);
+      $this->dispatch('showError', message: 'Perubahan status tidak valid.');
       return;
     }
 
@@ -98,7 +98,7 @@ class Detail extends Component
           $this->order->proof_of_payment = $imagePath;
         }
       } catch (ValidationException $e) {
-        $this->dispatch('showError', ['message' => $e->validator->errors()->first()]);
+        $this->dispatch('showError', message: $e->validator->errors()->first());
         return;
       }
     }

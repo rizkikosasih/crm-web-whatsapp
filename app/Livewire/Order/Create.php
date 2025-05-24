@@ -65,9 +65,10 @@ class Create extends Component
 
     // Cek stok
     if ($requestedTotal > $product->stock) {
-      $this->dispatch('showError', [
-        'message' => "Stok produk '{$product->name}' tidak mencukupi. Sisa stok: {$product->stock}",
-      ]);
+      $this->dispatch(
+        'showError',
+        message: "Stok produk '{$product->name}' tidak mencukupi. Sisa stok: {$product->stock}"
+      );
       return;
     }
 
@@ -95,9 +96,7 @@ class Create extends Component
   public function save()
   {
     if (empty($this->customer_id) || empty($this->orderItems)) {
-      $this->dispatch('showError', [
-        'message' => 'Customer dan produk harus dipilih.',
-      ]);
+      $this->dispatch('showError', message: 'Customer dan produk harus dipilih.');
       return;
     }
 
@@ -105,16 +104,18 @@ class Create extends Component
       $product = Product::find($item['product_id']);
 
       if (!$product) {
-        $this->dispatch('showError', [
-          'message' => "Produk dengan ID {$item['product_id']} tidak ditemukan.",
-        ]);
+        $this->dispatch(
+          'showError',
+          message: "Produk dengan ID {$item['product_id']} tidak ditemukan."
+        );
         return;
       }
 
       if ($item['quantity'] > $product->stock) {
-        $this->dispatch('showError', [
-          'message' => "Stok produk '{$product->name}' tidak mencukupi. Tersedia: {$product->stock}, diminta: {$item['quantity']}.",
-        ]);
+        $this->dispatch(
+          'showError',
+          message: "Stok produk '{$product->name}' tidak mencukupi. Tersedia: {$product->stock}, diminta: {$item['quantity']}."
+        );
         return;
       }
     }
@@ -151,9 +152,10 @@ class Create extends Component
     } catch (\Exception $e) {
       DB::rollBack();
 
-      $this->dispatch('showError', [
-        'message' => "Terjadi kesalahan saat menyimpan order: {$e->getMessage()}",
-      ]);
+      $this->dispatch(
+        'showError',
+        message: "Terjadi kesalahan saat menyimpan order: {$e->getMessage()}"
+      );
     }
   }
 
