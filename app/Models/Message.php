@@ -22,6 +22,15 @@ class Message extends Model
     'sent_at' => 'datetime',
   ];
 
+  protected static function booted()
+  {
+    static::creating(function ($message) {
+      if (is_null($message->sent_at)) {
+        $message->sent_at = now();
+      }
+    });
+  }
+
   public function customer()
   {
     return $this->belongsTo(Customer::class);
