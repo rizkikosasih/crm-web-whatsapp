@@ -38,10 +38,6 @@ Route::middleware(['auth', 'role'])->group(function () {
 
   Route::prefix('customer')->group(function () {
     Route::get('/', App\Livewire\Customer\Index::class)->name('customer');
-    Route::get('create', App\Livewire\Customer\Form::class)->name('customer-create');
-    Route::get('update/{id}', App\Livewire\Customer\Form::class)
-      ->where('id', '[0-9]+')
-      ->name('customer-update');
   });
 
   Route::prefix('product')->group(function () {
@@ -55,4 +51,14 @@ Route::middleware(['auth', 'role'])->group(function () {
       ->where('id', '[0-9]+')
       ->name('order-detail');
   });
+
+  Route::prefix('message')->group(function () {
+    Route::get('template', App\Livewire\MessageTemplate\Index::class)->name(
+      'message-template'
+    );
+    Route::get('out', App\Livewire\Message\Index::class)->name('message-out');
+  });
+
+  Route::prefix('report')->group(function () {});
+  Route::prefix('settings')->group(function () {});
 });
