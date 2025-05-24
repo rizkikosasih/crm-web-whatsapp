@@ -1,1 +1,1 @@
-<span class="text-danger text-sm">{{ $slot }}</span>
+<span class="text-danger text-sm error">{{ $slot }}</span>
