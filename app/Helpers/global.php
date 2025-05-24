@@ -4,14 +4,14 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 
 if (!function_exists('storage')) {
-  function storage($path)
+  function storage(string $path): string
   {
     return asset('storage/' . ltrim($path, '/'));
   }
 }
 
 if (!function_exists('imageUri')) {
-  function imageUri($path)
+  function imageUri(string $path): string
   {
     $file = Storage::disk('public')->get($path);
 
@@ -27,14 +27,14 @@ if (!function_exists('imageUri')) {
 }
 
 if (!function_exists('setActive')) {
-  function setActive($slug, $output = 'active')
+  function setActive(string $slug, ?string $output = 'active'): ?string
   {
     return preg_match('/' . $slug . '/i', Route::currentRouteName()) ? $output : '';
   }
 }
 
 if (!function_exists('parentClass')) {
-  function parentClass($child)
+  function parentClass(mixed $child): string
   {
     $condition = sizeof($child->children) > 0;
     $output = $condition ? 'parent ' : '';
@@ -48,7 +48,7 @@ if (!function_exists('parentClass')) {
 }
 
 if (!function_exists('dateIndo')) {
-  function dateIndo(?string $string, ?string $format = 'l, d F Y'): string
+  function dateIndo(?string $string, ?string $format = 'l, d F Y'): ?string
   {
     if (!$string) {
       return '';
@@ -59,7 +59,7 @@ if (!function_exists('dateIndo')) {
 }
 
 if (!function_exists('timeIndo')) {
-  function timeIndo(?string $string, $endTime = ' WIB'): string
+  function timeIndo(?string $string, $endTime = ' WIB'): ?string
   {
     if (!$string) {
       return '';
@@ -70,7 +70,7 @@ if (!function_exists('timeIndo')) {
 }
 
 if (!function_exists('rupiah')) {
-  function rupiah(mixed $angka, $label = null)
+  function rupiah(mixed $angka, $label = null): string
   {
     $output = !$label ? 'Rp ' : $label;
     return $output .= number_format(floatval($angka), 0, ',', '.');
@@ -78,14 +78,24 @@ if (!function_exists('rupiah')) {
 }
 
 if (!function_exists('rp')) {
-  function rp($angka)
+  function rp(mixed $angka): string
   {
     return number_format($angka, 0, ',', '.');
   }
 }
 
+if (!function_exists('parseTemplatePlaceholders')) {
+  function parseTemplatePlaceholders(string $template, array $data): string
+  {
+    foreach ($data as $key => $value) {
+      $template = str_replace("{{{$key}}}", $value, $template);
+    }
+    return $template;
+  }
+}
+
 if (!function_exists('arrayKey')) {
-  function arrayKey($array, $key)
+  function arrayKey(array $array, ?string $key): ?string
   {
     if (!is_array($array)) {
       return '';
