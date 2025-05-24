@@ -15,7 +15,7 @@ return new class extends Migration {
       $table->string('title');
       $table->text('body');
       $table->string('image', 255)->nullable();
-      $table->enum('type', ['order', 'produk', 'campaign'])->default('campaign');
+      $table->enum('type', ['order', 'product', 'campaign'])->default('campaign');
       $table->boolean('is_active')->default(true);
       $table->timestamps();
     });
