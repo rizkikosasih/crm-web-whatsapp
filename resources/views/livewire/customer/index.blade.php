@@ -1,20 +1,76 @@
 @section('title', $title)
 
+@section('page-script')
+  @vite(['resources/js/form.js'])
+@endsection
+
 <section class="content">
-  <div class="container-fluid">
+  <div class="container-fluid" id="create-or-update-form">
     <div class="row">
       <div class="col-12 m-1 p-1">
         <div class="card card-primary card-outline">
           <div class="card-header">
-            <x-link.button-primary url="{{ url('customer/create') }}">
-              <i class="fas fa-plus"></i> Tambah
-            </x-link.button-primary>
+            <div class="card-title">{{ $isEdit ? 'Ubah' : 'Tambah' }} Pelanggan</div>
+            <div class="card-tools">
+              <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+            </div>
           </div>
 
           <div class="card-body text-justify">
             @if (session()->has('success'))
               <x-alert.success dismissible="true">{{ session('success') }}</x-alert.success>
             @endif
+
+            <form wire:submit.prevent="save">
+              <x-form.input
+                name="name"
+                id="name"
+                label="Nama Customer"
+                placeholder="Masukan nama customer"
+                wire:model.defer="name"
+                ></x-form.input>
+
+              <x-form.input
+                name="phone"
+                id="phone"
+                label="No Handphone <small>(contoh: 6285123456789)</small>"
+                placeholder="Masukan no handphone"
+                customClass="number-only"
+                wire:model.defer="phone"
+              ></x-form.input>
+
+              <x-form.textarea
+                name="notes"
+                id="notes"
+                label="Catatan"
+                placeholder="Masukan Catatan"
+                rows="3"
+                wire:model.defer="notes"
+              ></x-form.textarea>
+
+              <x-form.button-container customClass="justify-content-end">
+                @if ($isEdit)
+                  <x-button.danger wire:click="resetForm">
+                    Batal
+                  </x-button.danger>
+                @endif
+
+                <x-button.primary type="submit">
+                  Simpan
+                </x-button.primary>
+              </x-form.button-container>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid" id="list">
+    <div class="row">
+      <div class="col-12 m-1 p-1">
+        <div class="card card-primary card-outline">
+          <div class="card-body text-justify">
 
             <div class="d-flex justify-content-center justify-content-sm-start align-items-start gap-sm-3">
               <div class="col-auto">
@@ -49,16 +105,7 @@
                       <td>{{ $item->phone }}</td>
                       <td class="actions">
                         <div class="d-flex justify-content-center align-items-center gap-2">
-                          <x-link.icon-success customClass="tooltips" title="Send Whatsapp">
-                            <i class="fab fa-whatsapp"></i>
-                          </x-link.icon-success>
-
-                          <x-link.icon-primary
-                            url="{{ url('customer/update/' . $item->id) }}"
-                            customClass="tooltips"
-                            title="Ubah"
-                            wire:navigate
-                          >
+                          <x-link.icon-primary wire:click="edit({{$item->id}})" customClass="tooltips" title="Ubah">
                             <i class="fas fa-pencil"></i>
                           </x-link.icon-primary>
                         </div>
