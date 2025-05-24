@@ -23,7 +23,7 @@ class RapiwhaApiService implements SendMessageApiServiceInterface
   public function sendMessage(
     string $number,
     string $text,
-    string $image = ''
+    ?string $image = ''
   ): JsonResponse {
     DB::beginTransaction();
     try {
@@ -38,6 +38,7 @@ class RapiwhaApiService implements SendMessageApiServiceInterface
         );
       }
 
+      /* For Testing */
       Http::fake([
         'rapiwha.com/*' => Http::response(
           [
@@ -87,9 +88,9 @@ class RapiwhaApiService implements SendMessageApiServiceInterface
       return response()->json(
         [
           'success' => false,
-          'error' => $response->status() . ': ' . $response->body(),
+          'message' => $response->status() . ': ' . $response->body(),
         ],
-        $response->status()
+        500
       );
     } catch (\Exception $e) {
       DB::rollBack();
@@ -97,7 +98,7 @@ class RapiwhaApiService implements SendMessageApiServiceInterface
       return response()->json(
         [
           'success' => false,
-          'error' => $e->getMessage(),
+          'message' => $e->getMessage(),
         ],
         500
       );
