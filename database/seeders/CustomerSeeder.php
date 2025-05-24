@@ -23,7 +23,13 @@ class CustomerSeeder extends Seeder
       'created_at' => now(),
     ]);
 
-    foreach (range(1, 100) as $index) {
+    DB::table('customers')->insert([
+      'name' => 'Rizki 2',
+      'phone' => '6285887183001',
+      'created_at' => now(),
+    ]);
+
+    foreach (range(1, 5) as $index) {
       DB::table('customers')->insert([
         'name' => $faker->name(),
         'phone' => $faker->regexify('628[1-9][0-9]{8,9}'),
