@@ -35,7 +35,7 @@ class MenuSeeder extends Seeder
 
     $laporan = Menu::create([
       'name' => 'Laporan',
-      'position' => 3,
+      'position' => 4,
     ]);
 
     $setting = Menu::create([
@@ -71,12 +71,30 @@ class MenuSeeder extends Seeder
       'parent_id' => $master->id,
     ]);
 
+    $messageTemplate = Menu::create([
+      'name' => 'Template Pesan',
+      'icon' => 'fas fa-comment',
+      'route' => '/message/template',
+      'slug' => 'message-template',
+      'position' => 3,
+      'parent_id' => $master->id,
+    ]);
+
     $order = Menu::create([
       'name' => 'Pesanan',
       'icon' => 'fas fa-shop',
       'route' => '/order',
       'slug' => 'order',
       'position' => 1,
+      'parent_id' => $transaksi->id,
+    ]);
+
+    $messageOut = Menu::create([
+      'name' => 'Pesan Keluar',
+      'icon' => 'fas fa-envelope-open',
+      'route' => '/message/out',
+      'slug' => 'message-out',
+      'position' => 2,
       'parent_id' => $transaksi->id,
     ]);
 
@@ -92,8 +110,8 @@ class MenuSeeder extends Seeder
     $penjualanPerProduk = Menu::create([
       'name' => 'Penjualan Per Produk',
       'icon' => 'fas fa-table-columns',
-      'route' => '/report/order-product',
-      'slug' => 'report-order-product',
+      'route' => '/report/product',
+      'slug' => 'report-product',
       'position' => 2,
       'parent_id' => $laporan->id,
     ]);
@@ -143,7 +161,9 @@ class MenuSeeder extends Seeder
       ['menu_id' => $dashboard->id, 'role_id' => $superAdmin->id],
       ['menu_id' => $customer->id, 'role_id' => $superAdmin->id],
       ['menu_id' => $product->id, 'role_id' => $superAdmin->id],
+      ['menu_id' => $messageTemplate->id, 'role_id' => $superAdmin->id],
       ['menu_id' => $order->id, 'role_id' => $superAdmin->id],
+      ['menu_id' => $messageOut->id, 'role_id' => $superAdmin->id],
       ['menu_id' => $penjualan->id, 'role_id' => $superAdmin->id],
       ['menu_id' => $penjualanPerProduk->id, 'role_id' => $superAdmin->id],
       ['menu_id' => $user->id, 'role_id' => $superAdmin->id],
