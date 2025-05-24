@@ -13,7 +13,7 @@ return new class extends Migration {
     Schema::create('customers', function (Blueprint $table) {
       $table->id();
       $table->string('name');
-      $table->string('phone')->unique(); // nomor WhatsApp
+      $table->string('phone', 16)->unique(); // nomor WhatsApp
       $table->string('notes')->nullable();
       $table->timestamps();
     });
