@@ -12,6 +12,13 @@
   Livewire.on('scrollToTop', function () {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
+
+  Livewire.on('clearError', function () {
+    $(function () {
+      $('input, select, textarea').removeClass('is-invalid');
+      $('.error').remove();
+    });
+  });
 </script>
 
 @yield('page-script')
