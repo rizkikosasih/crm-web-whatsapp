@@ -33,17 +33,6 @@ Route::post('/logout', function () {
   ->middleware('auth')
   ->name('logout');
 
-Route::get('/fake-response', function () {
-  return response()->json(
-    [
-      'success' => true,
-      'description' => 'Message queued',
-      'result_code' => 0,
-    ],
-    200
-  );
-});
-
 Route::middleware(['auth', 'role'])->group(function () {
   Route::get('dashboard', App\Livewire\Dashboard::class)->name('dashboard');
 
