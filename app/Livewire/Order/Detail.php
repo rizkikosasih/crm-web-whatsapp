@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Order;
 
+use App\Models\MessageTemplate;
 use App\Models\Order;
 use App\Services\Api\Implements\RapiwhaApiService;
 use Illuminate\Validation\ValidationException;
@@ -39,7 +40,7 @@ class Detail extends Component
     $this->order = Order::with(['customer', 'orderItems.product'])->findOrFail($id);
     $this->orderId = $id;
     $this->selectedStatus = $this->order->status;
-    $this->dispatch('test', $this->order);
+    $this->proof_of_payment = $this->order->proof_of_payment;
   }
 
   public function availableStatusOptions()
@@ -66,41 +67,73 @@ class Detail extends Component
       return;
     }
 
-    if ($this->selectedStatus == 1) {
-      $messages = [];
+    switch ($this->selectedStatus) {
+      case 1:
+        $messages = [];
 
-      try {
-        if ($this->proof_of_payment instanceof TemporaryUploadedFile) {
-          $rules['proof_of_payment'] = 'required|image|max:2048';
-          $messages['proof_of_payment.required'] = 'Bukti Bayar Tidak Boleh Kosong';
-          $messages['proof_of_payment.image'] =
-            'Format file yang diperbolehkan hanya gambar';
-          $messages['proof_of_payment.max'] = 'Ukuran gambar maksimal 2MB';
+        try {
+          if ($this->proof_of_payment instanceof TemporaryUploadedFile) {
+            $rules['proof_of_payment'] = 'required|image|max:2048';
+            $messages['proof_of_payment.required'] = 'Bukti Bayar Tidak Boleh Kosong';
+            $messages['proof_of_payment.image'] =
+              'Format file yang diperbolehkan hanya gambar';
+            $messages['proof_of_payment.max'] = 'Ukuran gambar maksimal 2MB';
+            $this->validate($rules, $messages);
+          }
+
+          $imagePath = null;
+          if ($this->proof_of_payment instanceof TemporaryUploadedFile) {
+            $filename =
+              $this->orderId .
+              '-' .
+              time() .
+              '.' .
+              $this->proof_of_payment->getClientOriginalExtension();
+
+            $imagePath = $this->proof_of_payment->storeAs(
+              'images/proof_of_payments',
+              $filename,
+              'public'
+            );
+
+            $this->order->proof_of_payment = $imagePath;
+
+            $template = MessageTemplate::where(['id' => 3, 'type' => 'order'])->first();
+          }
+        } catch (ValidationException $e) {
+          $this->dispatch('showError', message: $e->validator->errors()->first());
+          return;
         }
+        break;
 
-        $validated = $this->validate($rules, $messages);
+      case 2:
+        $template = MessageTemplate::where(['id' => 4, 'type' => 'order'])->first();
+        break;
 
-        $imagePath = null;
-        if ($this->proof_of_payment instanceof TemporaryUploadedFile) {
-          $filename =
-            $this->orderId .
-            '-' .
-            time() .
-            '.' .
-            $this->proof_of_payment->getClientOriginalExtension();
+      case 3:
+        $template = MessageTemplate::where(['id' => 5, 'type' => 'order'])->first();
+        break;
 
-          $imagePath = $this->proof_of_payment->storeAs(
-            'images/proof_of_payments',
-            $filename,
-            'public'
-          );
+      case 4:
+        $template = MessageTemplate::where(['id' => 6, 'type' => 'order'])->first();
+        break;
+    }
 
-          $this->order->proof_of_payment = $imagePath;
-        }
-      } catch (ValidationException $e) {
-        $this->dispatch('showError', message: $e->validator->errors()->first());
-        return;
+    try {
+      if ($template) {
+        $message = parseTemplatePlaceholders($template->body, [
+          'customer_name' => $this->order->customer->name,
+          'order_number' => $this->order->id,
+          'order_total' => rupiah($this->order->total_amount),
+          'store_name' => env('APP_NAME'),
+          'contact_number' => env('APP_CONTACT_PERSON'),
+        ]);
+
+        $this->rapiwha->sendMessage($this->order->customer->phone, $message);
       }
+    } catch (\Exception $e) {
+      $this->dispatch('showError', message: 'Exception: ' . $e->getMessage());
+      return;
     }
 
     $this->order->status = $this->selectedStatus;

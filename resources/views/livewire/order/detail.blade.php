@@ -13,7 +13,14 @@
             <x-link.button-danger customClass="btn-sm" url="{{ url('order') }}" wire:navigate>
               <i class="fas fa-arrow-left"></i> Kembali
             </x-link.button-danger>
+
+            <div class="card-tools">
+              <button type="button" class="btn btn-tool" wire:click="$refresh">
+                <i class="fas fa-refresh"></i>
+              </button>
+            </div>
           </div>
+
           <div class="card-body text-justify">
             <table class="order-detail">
               <tr>
@@ -27,9 +34,18 @@
                 <td>{{ $order->customer->name }}</td>
               </tr>
               <tr>
+                <td>Pesanan Dibuat Oleh</td>
+                <td>:</td>
+                <td>{{ $order->user->name }}</td>
+              </tr>
+              <tr>
                 <td>Status</td>
                 <td>:</td>
-                <td></td>
+                <td>
+                  <x-button.default customClass="btn-sm btn-{{ $colorStatus[$order->status] }}">
+                    {{ $statusList[$order->status] }}
+                  </x-button.default>
+                </td>
               </tr>
               @if ($order->status > 0 && $order->status < 4)
                 <tr>
@@ -53,7 +69,7 @@
               @endif
             </table>
 
-            @if($order->status != 3)
+            @if(!in_array($order->status, [3,4]))
               <div class="d-flex flex-wrap my-3">
                 <select wire:model.live="selectedStatus" class="form-control form-control-sm col-sm-3">
                   @foreach($this->availableStatusOptions() as $status)
@@ -73,7 +89,8 @@
                       id="proof_of_payment"
                       name="proof_of_payment"
                       label="Bukti Bayar"
-                      path="{{ null }}"
+                      path="{{ $proof_of_payment ?? null }}"
+                      :preview="$proof_of_payment"
                       customClass="form-control-sm"
                       wire:model.defer="proof_of_payment"
                     />

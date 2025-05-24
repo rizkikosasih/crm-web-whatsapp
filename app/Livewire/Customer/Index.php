@@ -42,8 +42,8 @@ class Index extends Component
     $this->validate();
 
     if ($this->phone !== $this->originalPhone) {
-      $rules['image'] = 'unique:customers,phone';
-      $messages['image.unique'] = 'No Handphone sudah ada';
+      $rules['phone'] = 'unique:customers,phone';
+      $messages['phone.unique'] = 'No Handphone sudah ada';
       $this->validate($rules, $messages);
     }
 

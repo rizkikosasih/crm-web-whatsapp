@@ -27,7 +27,7 @@ class MessageTemplateSeeder extends Seeder
       'body' => e('Halo {{customer_name}}, Terima kasih telah melakukan pemesanan di {{store_name}}.
 
         🧾 Rincian Pesanan:
-        Nomor Pesanan: {{order_number}}
+        Nomor Pesanan: #{{order_number}}
         Tanggal Pesanan: {{order_date}}
 
         📦 Produk:
@@ -50,7 +50,7 @@ class MessageTemplateSeeder extends Seeder
       'body' => e('Halo {{customer_name}},
 
         Terima kasih, kami telah menerima pembayaran Anda untuk pesanan berikut:
-        🧾 Nomor Pesanan: {{order_number}}
+        🧾 Nomor Pesanan: #{{order_number}}
         Total Pembayaran: {{order_total}}
 
         ✅ Pesanan Anda sedang kami proses dan akan segera dikirim.
@@ -66,7 +66,7 @@ class MessageTemplateSeeder extends Seeder
     MessageTemplate::create([
       'body' => e('Halo {{customer_name}},
 
-        Pesanan Anda dengan nomor pesanan {{order_number}} saat ini sedang dalam proses pengiriman.
+        Pesanan Anda dengan nomor pesanan #{{order_number}} saat ini sedang dalam proses pengiriman.
 
         Harap ditunggu, kurir akan segera mengantarkan pesanan ke alamat tujuan.
 
@@ -79,7 +79,7 @@ class MessageTemplateSeeder extends Seeder
     MessageTemplate::create([
       'body' => e('Halo {{customer_name}},
 
-        Pesanan Anda dengan nomor pesanan {{order_number}} telah berhasil diselesaikan.
+        Pesanan Anda dengan nomor pesanan #{{order_number}} telah berhasil diselesaikan.
         Kami harap Anda puas dengan produk dan layanan kami 😊
 
         Terima kasih telah berbelanja di {{store_name}}.
@@ -93,7 +93,7 @@ class MessageTemplateSeeder extends Seeder
     MessageTemplate::create([
       'body' => e('Halo {{customer_name}},
 
-        Kami ingin memberitahukan bahwa pesanan Anda dengan nomor pesanan {{order_number}} telah dibatalkan.
+        Kami ingin memberitahukan bahwa pesanan Anda dengan nomor pesanan #{{order_number}} telah dibatalkan.
         Kami mohon maaf atas ketidaknyamanan yang terjadi.
 
         Jika Anda memiliki pertanyaan lebih lanjut atau ingin melakukan pemesanan ulang, silakan hubungi kami di {{contact_number}}.

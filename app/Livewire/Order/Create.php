@@ -3,6 +3,7 @@
 namespace App\Livewire\Order;
 
 use App\Models\Customer;
+use App\Models\MessageTemplate;
 use App\Models\Product;
 use App\Models\Order;
 use App\Services\Api\Implements\RapiwhaApiService;
@@ -134,6 +135,7 @@ class Create extends Component
         'order_date' => now(),
       ]);
 
+      $product_list = '';
       foreach ($this->orderItems as $item) {
         $order->orderItems()->create([
           'product_id' => $item['product_id'],
@@ -143,7 +145,25 @@ class Create extends Component
 
         // Kurangi stok produk
         Product::where('id', $item['product_id'])->decrement('stock', $item['quantity']);
+
+        $product = Product::find($item['product_id']);
+        $itemPrice = rupiah($item['price']);
+        $product_list .= "{$product->name} ({$product->sku}) @{$item['quantity']} {$itemPrice}\n";
       }
+
+      $customer = Customer::findOrFail($this->customer_id);
+      $template = MessageTemplate::where(['id' => 2, 'type' => 'order'])->first();
+      $message = parseTemplatePlaceholders($template->body, [
+        'customer_name' => $customer->name,
+        'order_number' => $order->id,
+        'product_list' => $product_list,
+        'order_date' => dateIndo($order->order_date),
+        'order_total' => rupiah($order->total_amount),
+        'store_name' => env('APP_NAME'),
+        'contact_number' => env('APP_CONTACT_PERSON'),
+      ]);
+
+      $this->rapiwha->sendMessage($customer->phone, $message);
 
       DB::commit();
 

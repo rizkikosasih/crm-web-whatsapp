@@ -62,11 +62,9 @@
               <hr>
 
               <x-form.button-container customClass="justify-content-end">
-                @if ($isEdit)
-                  <x-button.danger wire:click="resetForm">
-                    Batal
-                  </x-button.danger>
-                @endif
+                <x-button.danger wire:click="resetForm">
+                  Batal
+                </x-button.danger>
 
                 <x-button.primary type="submit">
                   Simpan
