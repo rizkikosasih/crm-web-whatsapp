@@ -36,7 +36,11 @@ document.addEventListener('livewire:navigated', function () {
   });
 
   /** Fixing Bug Sidebar */
-  if (window.innerWidth < 991) {
-    document.body.classList.add('sidebar-collapse');
+  function fixingSidebar() {
+    if (window.innerWidth < 991) {
+      document.body.classList.add('sidebar-collapse');
+    }
   }
+  fixingSidebar();
+  window.addEventListener('resize', fixingSidebar);
 });
