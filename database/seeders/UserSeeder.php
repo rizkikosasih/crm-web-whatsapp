@@ -23,14 +23,6 @@ class UserSeeder extends Seeder
       $disk->deleteDirectory($folder);
     }
 
-    $defaultSource = 'images/avatar.png';
-    $avatars = [];
-    foreach ([1, 2] as $row) {
-      $avatarPath = $folder . '/user' . $row . '_' . time() . '.png';
-      $disk->copy($defaultSource, $avatarPath);
-      $avatars[] = $avatarPath;
-    }
-
     DB::table('users')->insert([
       'name' => 'Rizki Kosasih',
       'username' => 'rizki',
@@ -39,7 +31,6 @@ class UserSeeder extends Seeder
       'password' => Hash::make('rizki123'),
       'created_at' => Carbon::now()->subDays(7),
       'role_id' => 1,
-      'avatar' => $avatars[0],
     ]);
 
     DB::table('users')->insert([
@@ -50,7 +41,6 @@ class UserSeeder extends Seeder
       'password' => Hash::make('admin123'),
       'created_at' => Carbon::now()->subDays(10),
       'role_id' => 2,
-      'avatar' => $avatars[1],
     ]);
 
     DB::commit();

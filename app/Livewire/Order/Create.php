@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Models\Product;
 use App\Models\Order;
 use App\Services\Api\Implements\RapiwhaApiService;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
@@ -124,6 +125,7 @@ class Create extends Component
     try {
       $order = Order::create([
         'customer_id' => $this->customer_id,
+        'user_id' => Auth::id(),
         'status' => 0,
         'total_amount' => collect($this->orderItems)->sum(
           fn($item) => $item['price'] * $item['quantity']
