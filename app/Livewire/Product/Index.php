@@ -3,7 +3,6 @@
 namespace App\Livewire\Product;
 
 use App\Models\Product;
-use App\Services\Api\Implements\RapiwhaApiService;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\Validate;
@@ -32,6 +31,8 @@ class Index extends Component
   public $productId;
   #[Validate('required', message: 'Nama Produk tidak boleh kosong')]
   public $name;
+  #[Validate('required', message: 'SKU Produk tidak boleh kosong')]
+  public $sku;
   public $description;
   #[Validate('required', message: 'Harga tidak boleh kosong')]
   #[Validate('numeric', message: 'Harga wajib angka')]
@@ -45,24 +46,16 @@ class Index extends Component
   public $search;
   public $perPage = 10;
 
-  protected RapiwhaApiService $rapiwha;
-
-  public function __construct()
-  {
-    $this->rapiwha = new RapiwhaApiService();
-  }
-
   public function save()
   {
-    $messages = [];
+    $this->validate();
 
     if ($this->image instanceof TemporaryUploadedFile) {
       $rules['image'] = 'image|max:2048';
       $messages['image.image'] = 'Format file yang diperbolehkan hanya gambar';
       $messages['image.max'] = 'Ukuran gambar maksimal 2MB';
+      $this->validate($rules, $messages);
     }
-
-    $validated = $this->validate($rules, $messages);
 
     $imagePath = null;
     if ($this->image instanceof TemporaryUploadedFile) {
@@ -80,7 +73,8 @@ class Index extends Component
       ['id' => $this->productId],
       [
         'name' => $this->name,
-        'description' => $this->description,
+        'sku' => $this->sku,
+        'description' => e($this->description),
         'price' => $this->price,
         'stock' => $this->stock,
         'image' => $imagePath ?? Product::find($this->productId)?->image,
@@ -99,41 +93,21 @@ class Index extends Component
     $this->description = $product->description;
     $this->price = $product->price;
     $this->stock = $product->stock;
+    $this->sku = $product->sku;
     $this->image = $product->image;
     $this->isEdit = true;
-  }
-
-  public function delete($id)
-  {
-    Product::destroy($id);
-    session()->flash('success', 'Produk dihapus.');
+    $this->dispatch('scrollToTop');
   }
 
   public function resetForm()
   {
-    $this->reset([
-      'productId',
-      'name',
-      'description',
-      'price',
-      'stock',
-      'image',
-      'isEdit',
-    ]);
+    $this->reset();
+    $this->dispatch('clearError');
   }
 
-  public function sendWA($productId)
+  public function showCustomer($id)
   {
-    $product = Product::where(['id' => $productId])
-      ->limit(1)
-      ->get();
-
-    $result = $this->rapiwha->sendMessage(
-      '6285777838862',
-      'Test Pesan Produk: ' . (isset($product->image) ? $product->image : '')
-    );
-
-    dd($result);
+    $this->dispatch('showWhatsappModal', id: $id);
   }
 
   public function render()
@@ -143,6 +117,7 @@ class Index extends Component
     })
       ->latest()
       ->paginate($this->perPage);
+
     return view('livewire.product.index', compact('items'));
   }
 }

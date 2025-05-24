@@ -1,7 +1,9 @@
 @section('title', $title)
 
-@section('page-style')
+@section('page-script')
   @vite(['resources/js/form.js', 'resources/js/ekko-lightbox.js'])
+
+  <x-scripts.modal-handler id="whatsappModal" />
 @endsection
 
 <section class="content">
@@ -10,7 +12,7 @@
       <div class="col-12 m-1 p-1">
         <div class="card card-primary card-outline">
           <div class="card-header">
-            <h5 class="card-title">{{ $isEdit ? 'Ubah Produk' : 'Tambah Produk' }}</h5>
+            <div class="card-title">{{ $isEdit ? 'Ubah' : 'Tambah' }} Produk</div>
             <div class="card-tools">
               <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
             </div>
@@ -29,7 +31,16 @@
                 placeholder="Masukan Nama Produk"
                 customClass="form-control-sm"
                 wire:model.defer="name"
-              ></x-form.input-horizontal>
+              />
+
+              <x-form.input-horizontal
+                id="sku"
+                name="sku"
+                label="SKU Produk"
+                placeholder="Masukan SKU Produk"
+                customClass="form-control-sm"
+                wire:model.defer="sku"
+              />
 
               <x-form.input-horizontal
                 id="price"
@@ -38,7 +49,7 @@
                 placeholder="Masukan Harga"
                 customClass="form-control-sm number-only"
                 wire:model.defer="price"
-              ></x-form.input-horizontal>
+              />
 
               <x-form.input-horizontal
                 id="stock"
@@ -48,7 +59,7 @@
                 customClass="form-control-sm number-only"
                 maxlength="3"
                 wire:model.defer="stock"
-              ></x-form.input-horizontal>
+              />
 
               <x-form.textarea-horizontal
                 id="description"
@@ -56,7 +67,7 @@
                 label="Deskripsi Produk"
                 placeholder="Masukan Deskripsi Produk"
                 wire:model.defer="description"
-              ></x-form.textarea-horizontal>
+              />
 
               <x-form.image-horizontal
                 id="image"
@@ -65,7 +76,7 @@
                 :preview="$image"
                 path="{{ $image ?? null }}"
                 wire:model.defer="image"
-              ></x-form.image-horizontal>
+              />
 
               <hr>
 
@@ -94,7 +105,7 @@
       <div class="col-12 m-1 p-1">
         <div class="card card-primary card-outline">
           <div class="card-header">
-            <h5 class="card-title">Daftar Produk</h5>
+            <div class="card-title">Daftar Produk</div>
           </div>
 
           <div class="card-body text-justify">
@@ -127,7 +138,7 @@
                   @forelse ($items as $index => $item)
                     <tr>
                       <td class="text-center">{{ $index + $items->firstItem() }}</td>
-                      <td>{{ $item->name }}</td>
+                      <td>{{ $item->name }} ( {{ $item->sku }} )</td>
                       <td class="text-center">
                         <x-button.primary customClass="btn-sm circle">
                           {{ $item->stock }}
@@ -154,7 +165,7 @@
                             <i class="fas fa-pencil"></i>
                           </x-link.icon-primary>
 
-                          <x-link.icon-success wire:click="sendWA({{ $item->id }})" customClass="tooltips" title="Kirim Sebagai Pesan">
+                          <x-link.icon-success wire:click="$dispatch('showWhatsappModal', { id: {{ $item->id }} })" customClass="tooltips" title="Kirim Sebagai Pesan">
                             <i class="fab fa-whatsapp"></i>
                           </x-link.icon-success>
                         </div>
@@ -178,4 +189,6 @@
     <!--/. row -->
   </div>
   <!--/. container-fluid -->
+
+  <livewire:product.whatsapp-modal />
 </section>

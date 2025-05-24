@@ -1,0 +1,112 @@
+<?php
+
+namespace App\Livewire\Product;
+
+use App\Models\Customer;
+use App\Models\MessageTemplate;
+use App\Models\Product;
+use App\Services\Api\Implements\RapiwhaApiService;
+use Livewire\Attributes\Locked;
+use Livewire\Component;
+
+class WhatsappModal extends Component
+{
+  public $perPage = 5;
+  public $items = [];
+  public $search, $searchPhone;
+
+  public $idProduct,
+    $productName,
+    $productSku,
+    $productImage,
+    $productDescription,
+    $productStock,
+    $productPrice;
+
+  #[Locked]
+  public $tableHeader = [
+    ['name' => 'ID'],
+    ['name' => 'Nama'],
+    ['name' => 'No Handphone'],
+    ['name' => '<i class="fas fa-cogs"></i>', 'class' => 'actions'],
+  ];
+
+  protected $listeners = ['showWhatsappModal'];
+
+  protected RapiwhaApiService $rapiwha;
+
+  public function __construct()
+  {
+    $this->rapiwha = new RapiwhaApiService();
+  }
+
+  public function showWhatsappModal($id)
+  {
+    $product = Product::find($id);
+
+    $this->idProduct = $id;
+    $this->productSku = $product->sku;
+    $this->productName = $product->name;
+    $this->productImage = $product->image;
+    $this->productPrice = $product->price;
+    $this->productStock = $product->stock;
+    $this->productDescription = html_entity_decode($product->description);
+
+    $this->items = Customer::when($this->search, function ($query) {
+      $query->where('name', 'like', '%' . $this->search . '%');
+    })
+      ->when($this->searchPhone, function ($query) {
+        $query->where('phone', 'like', '%' . $this->searchPhone . '%');
+      })
+      ->latest()
+      ->paginate($this->perPage)
+      ->toArray();
+
+    $this->dispatch('bootstrap:show');
+  }
+
+  public function updated()
+  {
+    $this->items = Customer::when($this->search, function ($query) {
+      $query->where('name', 'like', '%' . $this->search . '%');
+    })
+      ->when($this->searchPhone, function ($query) {
+        $query->where('phone', 'like', '%' . $this->searchPhone . '%');
+      })
+      ->latest()
+      ->paginate($this->perPage)
+      ->toArray();
+  }
+
+  public function closeModal()
+  {
+    $this->reset();
+  }
+
+  public function sendWA($phone)
+  {
+    $template = MessageTemplate::where(['id' => 1, 'type' => 'product'])->first();
+
+    $message = parseTemplatePlaceholders($template->body, [
+      'name' => $this->productName,
+      'sku' => $this->productSku,
+      'price' => rupiah($this->productPrice),
+      'stock' => $this->productStock,
+      'description' => $this->productDescription,
+    ]);
+
+    $response = $this->rapiwha->sendMessage($phone, $message, $this->productImage);
+
+    if ($response->isSuccessful()) {
+      $this->dispatch('showSuccess', message: 'Info Produk Berhasil Dikirim');
+    } else {
+      $data = json_decode($response->getContent());
+      $this->dispatch('showError', message: $data->message);
+    }
+  }
+
+  public function render()
+  {
+    return view('livewire.product.whatsapp-modal');
+  }
+}
