@@ -39,7 +39,7 @@
               <li class="page-item disabled"><span class="page-link">&lsaquo;&lsaquo;</span></li>
             @else
               <li class="page-item">
-                <a class="page-link" href="{{ $paginator->url(1) }}" wire:navigate>&lsaquo;&lsaquo;</a>
+                <a class="page-link" wire:click="gotoPage(1)">&lsaquo;&lsaquo;</a>
               </li>
             @endif
 
@@ -70,7 +70,7 @@
               @if ($i == $currentPage)
                 <li class="page-item active"><span class="page-link">{{ $i }}</span></li>
               @else
-                <li class="page-item"><a class="page-link" href="{{ $paginator->url($i) }}" wire:navigate>{{ $i }}</a></li>
+                <li class="page-item"><a class="page-link" wire:click="gotoPage({{ $i }})">{{ $i }}</a></li>
               @endif
           @endfor
 
