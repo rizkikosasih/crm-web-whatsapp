@@ -1,5 +1,6 @@
 /** Bootstrap 4 */
-import 'bootstrap';
+import * as bootstrap from 'bootstrap';
+window.bootstrap = bootstrap;
 
 /** Jquery */
 import $ from 'jquery';
