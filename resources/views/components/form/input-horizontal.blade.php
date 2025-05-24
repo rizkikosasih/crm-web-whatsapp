@@ -14,9 +14,9 @@
       ])
       {{ $attributes }}
     />
-  </div>
 
-  @error($name)
-    <x-alert.text-danger customClass="mt-2">{{ $message }}</x-alert.text-danger>
-  @enderror
+    @error($name)
+      <x-alert.text-danger customClass="mt-2">{{ $message }}</x-alert.text-danger>
+    @enderror
+  </div>
 </div>

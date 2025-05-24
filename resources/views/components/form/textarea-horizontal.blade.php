@@ -12,9 +12,9 @@
       ])
       {{ $attributes }}
     ></textarea>
-  </div>
 
-  @error('alamat')
-    <x-alert.danger customClass="mt-2">{{ $message }}</x-alert.danger>
-  @enderror
+    @error($name)
+      <x-alert.danger customClass="mt-2">{{ $message }}</x-alert.danger>
+    @enderror
+  </div>
 </div>

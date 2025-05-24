@@ -34,7 +34,7 @@
             class="img-rounded"
             width="100"
             height="auto"
-          >
+          />
         </a>
       </div>
     @elseif($path)
@@ -45,7 +45,7 @@
             class="img-rounded"
             width="100"
             height="auto"
-          >
+          />
         </a>
       </div>
     @endif

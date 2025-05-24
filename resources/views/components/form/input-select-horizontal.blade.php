@@ -5,6 +5,8 @@
   'parentClass' => '',
   'customClass' => '',
   'options' => [],
+  'optionHeader' => [],
+  'selected' => null,
 ])
 
 <div @class(['form-group row', $parentClass ?? ''])>
@@ -23,15 +25,18 @@
       ])
       {{ $attributes }}
     >
-      <option></option>
+      @if($optionHeader)
+        <option value="">{{ $optionHeader }}</option>
+      @endif
+
       @foreach ($options as $key => $value)
-        <option value="{{ $key }}">{!! $value !!}</option>
+        <option value="{{ $key }}" {{ $selected == $value ? 'selected' : ''}}>{!! $value !!}</option>
       @endforeach
     </select>
-  </div>
 
-  @error($name)
-    <x-alert.danger customClass="mt-2">{{ $message }}</x-alert.danger>
-  @enderror
+    @error($name)
+      <x-alert.danger customClass="mt-2">{{ $message }}</x-alert.danger>
+    @enderror
+  </div>
 </div>
 
