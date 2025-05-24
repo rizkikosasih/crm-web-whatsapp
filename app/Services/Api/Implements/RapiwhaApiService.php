@@ -12,49 +12,76 @@ use Illuminate\Support\Facades\Http;
 
 class RapiwhaApiService implements SendMessageApiServiceInterface
 {
-  protected string $baseUrl = 'https://panel.rapiwha.com/send_message.php';
-  protected string $apiKey;
+  protected string $baseUrl, $apiKey;
 
   public function __construct()
   {
     $this->apiKey = config('services.rapiwha.key');
-    $this->baseUrl = url('fake-response');
+    $this->baseUrl = config('services.rapiwha.url');
   }
 
   public function sendMessage(
     string $number,
     string $text,
-    string|null $image = null
+    string $image = ''
   ): JsonResponse {
     DB::beginTransaction();
     try {
-      if (isset($image)) {
+      $customer = Customer::where('phone', $number)->first();
+      if (!$customer) {
+        return response()->json(
+          [
+            'success' => false,
+            'message' => 'Nomor Handphone tidak ditemukan dalam daftar pelanggan',
+          ],
+          404
+        );
+      }
+
+      Http::fake([
+        'rapiwha.com/*' => Http::response(
+          [
+            'success' => true,
+            'description' => 'Message queued',
+            'result_code' => 0,
+          ],
+          200
+        ),
+      ]);
+
+      if ($image) {
         Http::timeout(10)->get($this->baseUrl, [
-          'apikey' => urlencode($this->apiKey),
-          'number' => urlencode($number),
-          'text' => urlencode($image),
+          'apikey' => $this->apiKey,
+          'number' => $number,
+          'text' => $image,
         ]);
       }
 
-      $response = Http::timeout(10)->get($this->baseUrl, [
-        'apikey' => urlencode($this->apiKey),
-        'number' => urlencode($number),
-        'text' => urlencode($text),
-      ]);
+      $response = Http::timeout(10)
+        ->retry(3, 1000)
+        ->get($this->baseUrl, [
+          'apikey' => $this->apiKey,
+          'number' => $number,
+          'text' => $text,
+        ]);
 
       if ($response->successful()) {
         $result = $response->json();
 
-        if ($result->result_code === 0) {
-          $customer = Customer::where(['phone' => $number]);
-          Message::create([
-            'customer_id' => $customer->id,
-            'user_id' => Auth::id(),
-            'message' => e($text),
-            'image' => $image ?? null,
-          ]);
+        if (isset($result['result_code']) && $result['result_code'] === 0) {
+          if ($customer) {
+            Message::create([
+              'customer_id' => $customer->id,
+              'user_id' => Auth::id(),
+              'message' => e($text),
+              'image' => $image ?: null,
+            ]);
+          }
         }
-        return $result;
+
+        DB::commit();
+
+        return response()->json($result, $response->status());
       }
 
       return response()->json(
@@ -66,10 +93,11 @@ class RapiwhaApiService implements SendMessageApiServiceInterface
       );
     } catch (\Exception $e) {
       DB::rollBack();
+      logger('HTTP Error: ' . $e->getMessage());
       return response()->json(
         [
           'success' => false,
-          'error' => 'Exception: ' . $e->getMessage(),
+          'error' => $e->getMessage(),
         ],
         500
       );

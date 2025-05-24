@@ -6,9 +6,5 @@ use Illuminate\Http\JsonResponse;
 
 interface SendMessageApiServiceInterface
 {
-  public function sendMessage(
-    string $number,
-    string $text,
-    string|null $image
-  ): JsonResponse;
+  public function sendMessage(string $number, string $text, string $image): JsonResponse;
 }
