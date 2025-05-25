@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
       MessageTemplateSeeder::class,
       CampaignSeeder::class,
       OrderSeeder::class,
+      WhatsappSettingsSeeder::class,
     ]);
   }
 }
