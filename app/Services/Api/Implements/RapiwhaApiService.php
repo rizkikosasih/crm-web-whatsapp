@@ -26,19 +26,17 @@ class RapiwhaApiService implements SendMessageApiServiceInterface
     ?string $image = ''
   ): JsonResponse {
     DB::beginTransaction();
+
     try {
       $customer = Customer::where('phone', $number)->first();
       if (!$customer) {
-        return response()->json(
-          [
-            'success' => false,
-            'message' => 'Nomor Handphone tidak ditemukan dalam daftar pelanggan',
-          ],
-          404
-        );
+        return response()->json([
+          'success' => false,
+          'message' => 'Nomor Handphone tidak ditemukan dalam daftar pelanggan',
+        ], 404);
       }
 
-      /* For Testing */
+      /* For Testing
       Http::fake([
         'rapiwha.com/*' => Http::response(
           [
@@ -48,16 +46,9 @@ class RapiwhaApiService implements SendMessageApiServiceInterface
           ],
           200
         ),
-      ]);
+      ]);*/
 
-      if ($image) {
-        Http::timeout(10)->get($this->baseUrl, [
-          'apikey' => $this->apiKey,
-          'number' => $number,
-          'text' => storage($image),
-        ]);
-      }
-
+      // Kirim pesan utama (hanya 1x)
       $response = Http::timeout(10)
         ->retry(3, 1000)
         ->get($this->baseUrl, [
@@ -70,38 +61,31 @@ class RapiwhaApiService implements SendMessageApiServiceInterface
         $result = $response->json();
 
         if (isset($result['result_code']) && $result['result_code'] === 0) {
-          if ($customer) {
-            Message::create([
-              'customer_id' => $customer->id,
-              'user_id' => Auth::id(),
-              'message' => e($text),
-              'image' => $image ?: null,
-            ]);
-          }
+          // Simpan ke DB
+          Message::create([
+            'customer_id' => $customer->id,
+            'user_id' => Auth::id(),
+            'message' => e($text),
+            'image' => $image ?: null,
+          ]);
         }
 
         DB::commit();
-
         return response()->json($result, $response->status());
       }
 
-      return response()->json(
-        [
-          'success' => false,
-          'message' => $response->status() . ': ' . $response->body(),
-        ],
-        500
-      );
+      return response()->json([
+        'success' => false,
+        'message' => $response->status() . ': ' . $response->body(),
+      ], 500);
+
     } catch (\Exception $e) {
       DB::rollBack();
       logger('HTTP Error: ' . $e->getMessage());
-      return response()->json(
-        [
-          'success' => false,
-          'message' => $e->getMessage(),
-        ],
-        500
-      );
+      return response()->json([
+        'success' => false,
+        'message' => $e->getMessage(),
+      ], 500);
     }
   }
 }
