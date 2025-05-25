@@ -54,7 +54,7 @@ class RapiwhaApiService implements SendMessageApiServiceInterface
         Http::timeout(10)->get($this->baseUrl, [
           'apikey' => $this->apiKey,
           'number' => $number,
-          'text' => $image,
+          'text' => storage($image),
         ]);
       }
 
