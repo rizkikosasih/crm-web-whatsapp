@@ -44,6 +44,10 @@ Route::middleware(['auth', 'role'])->group(function () {
     Route::get('/', App\Livewire\Product\Index::class)->name('product');
   });
 
+  Route::prefix('campaign')->group(function () {
+    Route::get('/', App\Livewire\Campaign\Index::class)->name('campaign');
+  });
+
   Route::prefix('order')->group(function () {
     Route::get('/', App\Livewire\Order\Index::class)->name('order');
     Route::get('create', App\Livewire\Order\Create::class)->name('order-create');
