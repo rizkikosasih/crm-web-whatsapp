@@ -61,7 +61,7 @@
                   Simpan
                 </x-button.primary>
               </x-form.button-container>
-          </form>
+            </form>
           </div>
           <!-- /. card body -->
         </div>
@@ -112,20 +112,6 @@
                       <td>{!! nl2br(e($item->body)) !!}</td>
                       <td class="text-center">
                         {{ $types[$item->type] }}
-                      </td>
-                      <td class="text-center">
-                        <a
-                          href="{{ imageUri($item->image ?? 'images/no-image.svg') }}"
-                          data-toggle="lightbox"
-                          class="tooltips"
-                          title="Perbesar"
-                        >
-                          <img
-                            class="img-rounded"
-                            style="width:30px;height:auto"
-                            src="{{ imageUri($item->image ?? 'images/no-image.svg') }}"
-                          />
-                        </a>
                       </td>
                       <td class="actions">
                         <div class="d-flex justify-content-center align-items-center gap-2">

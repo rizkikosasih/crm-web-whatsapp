@@ -22,7 +22,6 @@ class Index extends Component
     ['name' => 'Judul'],
     ['name' => 'Isi Pesan'],
     ['name' => 'Tipe'],
-    ['name' => 'Gambar'],
     ['name' => '<i class="fas fa-cogs"></i>', 'class' => 'actions'],
   ];
 
