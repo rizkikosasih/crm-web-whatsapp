@@ -101,7 +101,16 @@ class Index extends Component
 
   public function resetForm()
   {
-    $this->reset();
+    $this->reset([
+      'productId',
+      'name',
+      'description',
+      'price',
+      'stock',
+      'sku',
+      'image',
+      'isEdit',
+    ]);
     $this->dispatch('clearError');
   }
 
