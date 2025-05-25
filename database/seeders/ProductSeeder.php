@@ -10,7 +10,7 @@ class ProductSeeder extends Seeder
 {
   public function run(): void
   {
-    $folder = asset('storage/app/images/products');
+    $folder = storage_path('app/public/images/products');
     File::cleanDirectory($folder);
 
     $products = [];

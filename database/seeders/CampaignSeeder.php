@@ -15,7 +15,7 @@ class CampaignSeeder extends Seeder
    */
   public function run(): void
   {
-    $folder = asset('storage/app/images/campaigns');
+    $folder = storage_path('app/public/images/campaigns');
     File::cleanDirectory($folder);
 
     try {

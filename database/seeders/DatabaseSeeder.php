@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
       ProductSeeder::class,
       MessageTemplateSeeder::class,
       CampaignSeeder::class,
+      OrderSeeder::class,
     ]);
   }
 }

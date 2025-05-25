@@ -6,7 +6,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class UserSeeder extends Seeder
 {
@@ -17,11 +17,8 @@ class UserSeeder extends Seeder
   {
     DB::beginTransaction();
 
-    $disk = Storage::disk('public');
-    $folder = 'images/avatars';
-    if ($disk->exists($folder)) {
-      $disk->deleteDirectory($folder);
-    }
+    $folder = storage_path('app/public/images/avatars');
+    File::cleanDirectory($folder);
 
     DB::table('users')->insert([
       'name' => 'Rizki Kosasih',
