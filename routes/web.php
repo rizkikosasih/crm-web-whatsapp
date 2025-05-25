@@ -64,5 +64,9 @@ Route::middleware(['auth', 'role'])->group(function () {
   });
 
   Route::prefix('report')->group(function () {});
-  Route::prefix('settings')->group(function () {});
+  Route::prefix('setting')->group(function () {
+    Route::get('whatsapp-api', App\Livewire\WhatsappApiSetting\Index::class)->name(
+      'setting-whatsapp-api'
+    );
+  });
 });

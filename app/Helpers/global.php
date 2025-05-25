@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
+use App\Models\WhatsappApiSetting;
 
 if (!function_exists('storage')) {
   function storage(string $path): string
@@ -104,5 +105,21 @@ if (!function_exists('arrayKey')) {
       $array = (array) $array;
     }
     return isset($array[$key]) ? $array[$key] : '';
+  }
+}
+
+if (!function_exists('waApiKey')) {
+  function waApiKey(): ?string
+  {
+    $setting = WhatsappApiSetting::first();
+    return $setting ? $setting->key : config('services.rapiwha.key');
+  }
+}
+
+if (!function_exists('waApiUrl')) {
+  function waApiUrl(): ?string
+  {
+    $setting = WhatsappApiSetting::first();
+    return $setting ? $setting->url : config('services.rapiwha.url');
   }
 }

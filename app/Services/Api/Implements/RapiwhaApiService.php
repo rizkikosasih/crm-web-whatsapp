@@ -16,8 +16,8 @@ class RapiwhaApiService implements SendMessageApiServiceInterface
 
   public function __construct()
   {
-    $this->apiKey = config('services.rapiwha.key');
-    $this->baseUrl = config('services.rapiwha.url');
+      $this->apiKey = waApiKey();
+      $this->baseUrl = waApiUrl();
   }
 
   public function sendMessage(

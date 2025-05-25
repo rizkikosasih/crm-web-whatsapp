@@ -152,6 +152,15 @@ class MenuSeeder extends Seeder
       'parent_id' => $setting->id,
     ]);
 
+    $submenu = Menu::create([
+      'name' => 'Whatsapp Api',
+      'icon' => 'fab fa-whatsapp',
+      'route' => '/setting/whatsapp-api',
+      'slug' => 'setting-whatsapp-api',
+      'position' => 5,
+      'parent_id' => $setting->id,
+    ]);
+
     $superAdmin = Role::create(['name' => 'Super Admin']);
     $admin = Role::create(['name' => 'Admin']);
 
