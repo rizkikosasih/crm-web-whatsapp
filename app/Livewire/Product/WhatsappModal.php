@@ -19,6 +19,7 @@ class WhatsappModal extends Component
     $productName,
     $productSku,
     $productImage,
+    $productImageUrl,
     $productDescription,
     $productStock,
     $productPrice;
@@ -48,6 +49,7 @@ class WhatsappModal extends Component
     $this->productSku = $product->sku;
     $this->productName = $product->name;
     $this->productImage = $product->image;
+    $this->productImageUrl = $product->image_url;
     $this->productPrice = $product->price;
     $this->productStock = $product->stock;
     $this->productDescription = html_entity_decode($product->description);
@@ -95,7 +97,14 @@ class WhatsappModal extends Component
       'description' => $this->productDescription,
     ]);
 
-    $response = $this->rapiwha->sendMessage($phone, $message, $this->productImage);
+    // Tambahkan link gambar jika tersedia
+    $image = $this->productImage ?? null;
+    $imageUrl = $this->productImageUrl ?? null;
+    if (!empty($imageUrl)) {
+      $message .= "\n\nKlik untuk melihat gambar:\n" . $imageUrl;
+    }
+
+    $response = $this->rapiwha->sendMessage($phone, $message, $image);
 
     if ($response->isSuccessful()) {
       $this->dispatch('showSuccess', message: 'Info Produk Berhasil Dikirim');

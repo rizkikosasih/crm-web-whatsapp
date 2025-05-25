@@ -32,7 +32,8 @@ return [
 
   'rapiwha' => [
     // 'key' => 'MJ5YLZEKV85PF356BB4Z',
-    'key' => '1GIZAXSOADPCRDS8VY8S',
+    'key' => 'AULSI7AWTNHKK9RZYZSH',
+    // 'key' => '1GIZAXSOADPCRDS8VY8S',
     'url' => 'https://panel.rapiwha.com/send_message.php',
   ],
 ];

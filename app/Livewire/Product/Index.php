@@ -4,12 +4,17 @@ namespace App\Livewire\Product;
 
 use App\Models\Product;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
+use Google\Client as GoogleClient;
+use Google\Service\Drive;
+use Google\Service\Drive\DriveFile;
+use Google\Service\Drive\Permission;
 
 class Index extends Component
 {
@@ -43,6 +48,7 @@ class Index extends Component
   #[Validate('numeric', message: 'Stock wajib angka')]
   public $stock;
   public $image;
+  public $image_url;
 
   public $isEdit = false;
 
@@ -50,43 +56,74 @@ class Index extends Component
   public $perPage = 10;
 
   public function save()
-  {
+{
     $this->validate();
 
+    $rules = [];
+    $messages = [];
+
     if ($this->image instanceof TemporaryUploadedFile) {
-      $rules['image'] = 'image|max:2048';
-      $messages['image.image'] = 'Format file yang diperbolehkan hanya gambar';
-      $messages['image.max'] = 'Ukuran gambar maksimal 2MB';
-      $this->validate($rules, $messages);
+        $rules['image'] = 'image|max:2048';
+        $messages['image.image'] = 'Format file yang diperbolehkan hanya gambar';
+        $messages['image.max'] = 'Ukuran gambar maksimal 2MB';
+        $this->validate($rules, $messages);
     }
 
-    $imagePath = null;
-    if ($this->image instanceof TemporaryUploadedFile) {
-      $filename =
-        Str::slug($this->name) .
-        '-' .
-        time() .
-        '.' .
-        $this->image->getClientOriginalExtension();
+    $imageLocalPath = null;
+    $imageUrl = null;
 
-      $imagePath = $this->image->storeAs($this->directory, $filename, 'public');
+    if ($this->image instanceof TemporaryUploadedFile) {
+        $filename = Str::slug($this->name) . '-' . time() . '.' . $this->image->getClientOriginalExtension();
+
+        /* Simpan ke lokal */
+        $imageLocalPath = $this->image->storeAs($this->directory, $filename, 'public');
+
+        /* Upload ke Google Drive */
+        $localPath = storage_path('app/public/' . $imageLocalPath);
+        $client = new GoogleClient();
+        $client->setAuthConfig(storage_path('app/public/google-service-account.json'));
+        $client->addScope(Drive::DRIVE);
+        $service = new Drive($client);
+
+        $fileMetadata = new DriveFile([
+            'name' => $filename,
+            'parents' => [env('GOOGLE_DRIVE_FOLDER_ID')],
+        ]);
+
+        $file = $service->files->create($fileMetadata, [
+          'data' => file_get_contents($localPath),
+          'mimeType' => $this->image->getMimeType(),
+          'uploadType' => 'multipart',
+          'fields' => 'id',
+        ]);
+
+        // Buat file di Google Drive menjadi publik
+        $permission = new Drive\Permission([
+          'type' => 'anyone',
+          'role' => 'reader',
+        ]);
+        $service->permissions->create($file->id, $permission);
+
+        $imageUrl = 'https://drive.google.com/uc?export=view&id=' . $file->id;
     }
 
+    // Update ke database
     Product::updateOrCreate(
-      ['id' => $this->productId],
-      [
-        'name' => $this->name,
-        'sku' => $this->sku,
-        'description' => e($this->description),
-        'price' => $this->price,
-        'stock' => $this->stock,
-        'image' => $imagePath ?? Product::find($this->productId)?->image,
-      ]
+        ['id' => $this->productId],
+        [
+            'name' => $this->name,
+            'sku' => $this->sku,
+            'description' => e($this->description),
+            'price' => $this->price,
+            'stock' => $this->stock,
+            'image' => $imageLocalPath ?? Product::find($this->productId)?->image,
+            'image_url' => $imageUrl ?? Product::find($this->productId)?->image_url,
+        ]
     );
 
     $this->resetForm();
     session()->flash('success', 'Produk berhasil disimpan!');
-  }
+}
 
   public function edit($id)
   {
