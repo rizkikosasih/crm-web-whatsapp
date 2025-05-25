@@ -19,6 +19,9 @@ class Detail extends Component
   public $title = 'Order Detail';
 
   #[Locked]
+  public $directory = 'images/proof_of_payments';
+
+  #[Locked]
   public $statusList = ['Belum Bayar', 'Sudah Bayar', 'Pengiriman', 'Selesai', 'Batal'];
 
   #[Locked]
@@ -91,7 +94,7 @@ class Detail extends Component
               $this->proof_of_payment->getClientOriginalExtension();
 
             $imagePath = $this->proof_of_payment->storeAs(
-              'images/proof_of_payments',
+              $this->directory,
               $filename,
               'public'
             );
