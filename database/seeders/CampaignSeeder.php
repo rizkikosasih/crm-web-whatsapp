@@ -23,14 +23,18 @@ class CampaignSeeder extends Seeder
 
       Campaign::create([
         'title' => 'Diskon Produk',
-        'message' => e('👋 Hai {{name}}, kabar baik!
+        'message' => e(
+          <<<'TEXT'
+👋 Hai {{name}}, kabar baik!
 
-          Kami punya penawaran menarik minggu ini!
-          Diskon hingga 50% untuk semua kategori produk.
+Kami punya penawaran menarik minggu ini!
+Diskon hingga 50% untuk semua kategori produk.
 
-          Hubungi {{contact_number}} untuk informasi promo lengkap.
+Hubungi {{contact_number}} untuk informasi promo lengkap.
 
-          Terima kasih telah menjadi pelanggan setia kami 😊'),
+Terima kasih telah menjadi pelanggan setia kami 😊
+TEXT
+        ),
         'created_by' => 1,
       ]);
 
