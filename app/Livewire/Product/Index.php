@@ -19,6 +19,9 @@ class Index extends Component
   public $title = 'Produk';
 
   #[Locked]
+  public $directory = 'images/products';
+
+  #[Locked]
   public $tableHeader = [
     ['name' => 'No'],
     ['name' => 'Nama Produk'],
@@ -66,7 +69,7 @@ class Index extends Component
         '.' .
         $this->image->getClientOriginalExtension();
 
-      $imagePath = $this->image->storeAs('images/products', $filename, 'public');
+      $imagePath = $this->image->storeAs($this->directory, $filename, 'public');
     }
 
     Product::updateOrCreate(
