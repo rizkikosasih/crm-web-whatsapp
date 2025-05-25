@@ -9,7 +9,7 @@ class Campaign extends Model
 {
   use HasFactory;
 
-  protected $fillable = ['title', 'message', 'image', 'status', 'created_by'];
+  protected $fillable = ['title', 'message', 'image', 'created_by'];
 
   public function creator()
   {
