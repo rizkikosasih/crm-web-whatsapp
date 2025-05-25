@@ -89,7 +89,7 @@
                   Simpan
                 </x-button.primary>
               </x-form.button-container>
-          </form>
+            </form>
           </div>
           <!-- /. card body -->
         </div>
@@ -104,6 +104,8 @@
         <div class="card card-primary card-outline">
           <div class="card-header">
             <div class="card-title">Daftar Produk</div>
+
+            <x-card.refresh-tool />
           </div>
 
           <div class="card-body text-justify">
@@ -144,18 +146,7 @@
                       </td>
                       <td class="text-end">{{ rupiah($item->price) }}</td>
                       <td class="text-center">
-                        <a
-                          href="{{ imageUri($item->image ?? 'images/no-image.svg') }}"
-                          data-toggle="lightbox"
-                          class="tooltips"
-                          title="Perbesar"
-                        >
-                          <img
-                            class="img-rounded"
-                            style="width:30px;height:auto"
-                            src="{{ imageUri($item->image ?? 'images/no-image.svg') }}"
-                          />
-                        </a>
+                        <x-preview-image path="{{ $item->image }}" />
                       </td>
                       <td class="actions">
                         <div class="d-flex justify-content-center align-items-center gap-2">
