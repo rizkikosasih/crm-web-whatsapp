@@ -71,11 +71,11 @@ class MenuSeeder extends Seeder
       'parent_id' => $master->id,
     ]);
 
-    $messageTemplate = Menu::create([
-      'name' => 'Template Pesan',
-      'icon' => 'fas fa-comment',
-      'route' => '/message/template',
-      'slug' => 'message-template',
+    $campaign = Menu::create([
+      'name' => 'Campaign Broadcast',
+      'icon' => 'fas fa-bullhorn',
+      'route' => '/campaign',
+      'slug' => 'campaign',
       'position' => 3,
       'parent_id' => $master->id,
     ]);
@@ -116,12 +116,21 @@ class MenuSeeder extends Seeder
       'parent_id' => $laporan->id,
     ]);
 
+    $messageTemplate = Menu::create([
+      'name' => 'Template Pesan',
+      'icon' => 'fas fa-comment',
+      'route' => '/message/template',
+      'slug' => 'message-template',
+      'position' => 1,
+      'parent_id' => $setting->id,
+    ]);
+
     $user = Menu::create([
       'name' => 'User',
       'icon' => 'fas fa-users',
       'route' => '/setting/user',
       'slug' => 'setting-user',
-      'position' => 1,
+      'position' => 2,
       'parent_id' => $setting->id,
     ]);
 
@@ -130,7 +139,7 @@ class MenuSeeder extends Seeder
       'icon' => 'fas fa-wrench',
       'route' => '/setting/role',
       'slug' => 'setting-role',
-      'position' => 2,
+      'position' => 3,
       'parent_id' => $setting->id,
     ]);
 
@@ -139,7 +148,7 @@ class MenuSeeder extends Seeder
       'icon' => 'fas fa-bars',
       'route' => '/setting/menu',
       'slug' => 'setting-menu',
-      'position' => 3,
+      'position' => 4,
       'parent_id' => $setting->id,
     ]);
 
@@ -161,11 +170,12 @@ class MenuSeeder extends Seeder
       ['menu_id' => $dashboard->id, 'role_id' => $superAdmin->id],
       ['menu_id' => $customer->id, 'role_id' => $superAdmin->id],
       ['menu_id' => $product->id, 'role_id' => $superAdmin->id],
-      ['menu_id' => $messageTemplate->id, 'role_id' => $superAdmin->id],
       ['menu_id' => $order->id, 'role_id' => $superAdmin->id],
+      ['menu_id' => $campaign->id, 'role_id' => $superAdmin->id],
       ['menu_id' => $messageOut->id, 'role_id' => $superAdmin->id],
       ['menu_id' => $penjualan->id, 'role_id' => $superAdmin->id],
       ['menu_id' => $penjualanPerProduk->id, 'role_id' => $superAdmin->id],
+      ['menu_id' => $messageTemplate->id, 'role_id' => $superAdmin->id],
       ['menu_id' => $user->id, 'role_id' => $superAdmin->id],
       ['menu_id' => $role->id, 'role_id' => $superAdmin->id],
       ['menu_id' => $submenu->id, 'role_id' => $superAdmin->id],
