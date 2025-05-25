@@ -9,5 +9,5 @@ class MessageTemplate extends Model
 {
   use HasFactory;
 
-  protected $fillable = ['title', 'body', 'image', 'type', 'is_active'];
+  protected $fillable = ['title', 'body', 'type', 'is_active'];
 }

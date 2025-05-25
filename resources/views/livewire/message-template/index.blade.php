@@ -50,15 +50,6 @@
                 wire:model.defer="body"
               />
 
-              <x-form.image-horizontal
-                id="image"
-                name="image"
-                label="Gambar"
-                :preview="$image"
-                path="{{ $image ?? null }}"
-                wire:model.defer="image"
-              />
-
               <hr>
 
               <x-form.button-container customClass="justify-content-end">
