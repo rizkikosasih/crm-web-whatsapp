@@ -13,9 +13,8 @@
         <div class="card card-primary card-outline">
           <div class="card-header">
             <div class="card-title">{{ $isEdit ? 'Ubah' : 'Tambah' }} Campaign</div>
-            <div class="card-tools">
-              <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
-            </div>
+
+            <x-card.tools minus="true"/>
           </div>
 
           <div class="card-body text-justify">
@@ -78,7 +77,7 @@
           <div class="card-header">
             <div class="card-title">Daftar Campaign Broadcast</div>
 
-            <x-card.refresh-tool />
+            <x-card.tools refresh="true"/>
           </div>
 
           <div class="card-body text-justify">

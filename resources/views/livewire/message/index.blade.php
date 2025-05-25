@@ -12,7 +12,7 @@
           <div class="card-header">
             <div class="card-title">Histori Pesan Keluar</div>
 
-            <x-card.refresh-tool />
+            <x-card.tools refresh="true"/>
           </div>
 
           <div class="card-body text-justify">
