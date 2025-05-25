@@ -56,15 +56,13 @@ Route::middleware(['auth', 'role'])->group(function () {
       ->name('order-detail');
   });
 
-  Route::prefix('message')->group(function () {
-    Route::get('template', App\Livewire\MessageTemplate\Index::class)->name(
-      'message-template'
-    );
-    Route::get('out', App\Livewire\Message\Index::class)->name('message-out');
-  });
+  Route::get('message-out', App\Livewire\Message\Index::class)->name('message-out');
 
   Route::prefix('report')->group(function () {});
   Route::prefix('setting')->group(function () {
+    Route::get('template', App\Livewire\MessageTemplate\Index::class)->name(
+      'setting-template'
+    );
     Route::get('whatsapp-api', App\Livewire\WhatsappApiSetting\Index::class)->name(
       'setting-whatsapp-api'
     );

@@ -90,7 +90,7 @@ class MenuSeeder extends Seeder
       [
         'name' => 'Pesan Keluar',
         'icon' => 'fas fa-envelope-open',
-        'route' => '/message/out',
+        'route' => '/message-out',
         'slug' => 'message-out',
         'position' => 2,
         'parent' => 'Transaksi',
@@ -152,7 +152,7 @@ class MenuSeeder extends Seeder
       ],
       [
         'name' => 'Whatsapp Api',
-        'icon' => 'fab fa-whatsapp',
+        'icon' => 'fas fa-network-wired',
         'route' => '/setting/whatsapp-api',
         'slug' => 'setting-whatsapp-api',
         'position' => 5,
