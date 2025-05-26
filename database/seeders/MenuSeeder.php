@@ -25,19 +25,51 @@ class MenuSeeder extends Seeder
 
     // Header Menus
     $headers = [
-      '' => 1,
-      'Master' => 2,
-      'Transaksi' => 3,
-      'Laporan' => 4,
-      'Pengaturan' => 5,
+      [
+        'name' => '',
+        'position' => 1,
+        'roles' => ['super-admin', 'admin'],
+      ],
+      [
+        'name' => 'Master',
+        'position' => 2,
+        'roles' => ['super-admin'],
+      ],
+      [
+        'name' => 'Transaksi',
+        'position' => 3,
+        'roles' => ['super-admin', 'admin'],
+      ],
+      [
+        'name' => 'Laporan',
+        'position' => 4,
+        'roles' => ['super-admin'],
+      ],
+      [
+        'name' => 'Pengaturan',
+        'position' => 5,
+        'roles' => ['super-admin'],
+      ],
     ];
 
     $headerIds = [];
-    foreach ($headers as $name => $position) {
-      $headerIds[$name] = Menu::create([
-        'name' => $name,
-        'position' => $position,
+    $menuRoles = [];
+
+    // Insert headers dan relasi roles-nya
+    foreach ($headers as $header) {
+      $menu = Menu::create([
+        'name' => $header['name'],
+        'position' => $header['position'],
       ]);
+
+      $headerIds[$header['name']] = $menu;
+
+      foreach ($header['roles'] as $roleName) {
+        $menuRoles[] = [
+          'menu_id' => $menu->id,
+          'role_id' => $roles[$roleName]->id,
+        ];
+      }
     }
 
     // Child Menus
@@ -85,7 +117,7 @@ class MenuSeeder extends Seeder
         'slug' => 'order',
         'position' => 1,
         'parent' => 'Transaksi',
-        'roles' => ['super-admin'],
+        'roles' => ['super-admin', 'admin'],
       ],
       [
         'name' => 'Pesan Keluar',
@@ -94,7 +126,7 @@ class MenuSeeder extends Seeder
         'slug' => 'message-out',
         'position' => 2,
         'parent' => 'Transaksi',
-        'roles' => ['super-admin'],
+        'roles' => ['super-admin', 'admin'],
       ],
       [
         'name' => 'Penjualan',
@@ -162,7 +194,6 @@ class MenuSeeder extends Seeder
     ];
 
     // Insert child menus and role access
-    $menuRoles = [];
     foreach ($menus as $menuData) {
       $menu = Menu::create([
         'name' => $menuData['name'],
@@ -177,22 +208,6 @@ class MenuSeeder extends Seeder
         $menuRoles[] = [
           'menu_id' => $menu->id,
           'role_id' => $roles[$roleName]->id,
-        ];
-      }
-    }
-
-    // Header Role Access
-    foreach ($headers as $name => $pos) {
-      $menuRoles[] = [
-        'menu_id' => $headerIds[$name]->id,
-        'role_id' => $roles['super-admin']->id,
-      ];
-
-      // Only '' (Dashboard group) is for admin
-      if ($name === '') {
-        $menuRoles[] = [
-          'menu_id' => $headerIds[$name]->id,
-          'role_id' => $roles['admin']->id,
         ];
       }
     }
