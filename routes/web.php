@@ -66,5 +66,7 @@ Route::middleware(['auth', 'role'])->group(function () {
     Route::get('whatsapp-api', App\Livewire\WhatsappApiSetting\Index::class)->name(
       'setting-whatsapp-api'
     );
+
+    Route::get('user', App\Livewire\User\Index::class)->name('setting-user');
   });
 });
