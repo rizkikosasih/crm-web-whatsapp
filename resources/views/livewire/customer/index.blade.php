@@ -68,7 +68,6 @@
       <div class="col-12 m-1 p-1">
         <div class="card card-primary card-outline">
           <div class="card-body text-justify">
-
             <div class="d-flex justify-content-center justify-content-sm-start align-items-start gap-sm-3">
               <div class="col-auto">
                 <x-form.input-group-select
