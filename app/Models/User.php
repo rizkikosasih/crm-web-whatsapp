@@ -22,7 +22,9 @@ class User extends Authenticatable
     'username',
     'name',
     'email',
+    'phone',
     'password',
+    'role_id',
     'last_login_at',
     'last_login_ip',
   ];
@@ -46,4 +48,9 @@ class User extends Authenticatable
     'last_login_at' => 'datetime',
     'password' => 'hashed',
   ];
+
+  public function role()
+  {
+    return $this->belongsTo(Role::class);
+  }
 }

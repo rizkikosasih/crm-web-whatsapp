@@ -21,8 +21,18 @@ class Role extends Model
     'updated_at' => 'datetime',
   ];
 
+  public function users()
+  {
+    return $this->belongsToMany(User::class, 'users');
+  }
+
   public function menus()
   {
     return $this->belongsToMany(Menu::class, 'menu_roles');
+  }
+
+  public function menuRoles()
+  {
+    return $this->hasMany(MenuRole::class);
   }
 }
