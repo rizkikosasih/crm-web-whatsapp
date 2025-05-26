@@ -27,7 +27,7 @@
                 label="Nama Customer"
                 placeholder="Masukan nama customer"
                 wire:model.defer="name"
-                ></x-form.input>
+              />
 
               <x-form.input
                 name="phone"
@@ -36,7 +36,7 @@
                 placeholder="Masukan no handphone"
                 customClass="number-only"
                 wire:model.defer="phone"
-              ></x-form.input>
+              />
 
               <x-form.textarea
                 name="notes"
@@ -45,7 +45,7 @@
                 placeholder="Masukan Catatan"
                 rows="3"
                 wire:model.defer="notes"
-              ></x-form.textarea>
+              />
 
               <x-form.button-container customClass="justify-content-end">
                 <x-button.danger wire:click="resetForm">

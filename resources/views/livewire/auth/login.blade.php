@@ -20,7 +20,7 @@
           placeholder="Username"
           parentClass="mb-3"
           wire:model.defer="username"
-        ></x-form.input-group>
+        />
 
         <x-form.input-group
           label="<span class='fas fa-lock'></span>"
@@ -30,7 +30,7 @@
           parentClass="mb-3"
           customClass="toggle-password"
           wire:model.defer="password"
-        ></x-form.input-group>
+        />
 
         <div class="row">
           <div class="col-8">
