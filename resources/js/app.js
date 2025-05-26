@@ -44,4 +44,9 @@ document.addEventListener('livewire:navigated', function () {
   }
   fixingSidebar();
   window.addEventListener('resize', fixingSidebar);
+
+  $('input, select, textarea').on('input', function () {
+    $('input, select, textarea').removeClass('is-invalid');
+    $('.error').remove();
+  });
 });
