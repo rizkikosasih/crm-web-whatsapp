@@ -36,33 +36,36 @@ Route::post('/logout', function () {
 Route::middleware(['auth', 'role'])->group(function () {
   Route::get('dashboard', App\Livewire\Dashboard::class)->name('dashboard');
 
-  Route::prefix('customer')->group(function () {
-    Route::get('/', App\Livewire\Customer\Index::class)->name('customer');
+  Route::prefix('master')->group(function () {
+    Route::get('customer', App\Livewire\Customer\Index::class)->name('master-customer');
+
+    Route::get('product', App\Livewire\Product\Index::class)->name('master-product');
+
+    Route::get('campaign', App\Livewire\Campaign\Index::class)->name('master-campaign');
   });
 
-  Route::prefix('product')->group(function () {
-    Route::get('/', App\Livewire\Product\Index::class)->name('product');
+  Route::prefix('transaksi')->group(function () {
+    Route::prefix('order')->group(function () {
+      Route::get('/', App\Livewire\Order\Index::class)->name('transaksi-order');
+      Route::get('create', App\Livewire\Order\Create::class)->name(
+        'transaksi-order-create'
+      );
+      Route::get('detail/{id}', App\Livewire\Order\Detail::class)
+        ->where('id', '[0-9]+')
+        ->name('transaksi-order-detail');
+    });
+    Route::get('message', App\Livewire\Message\Index::class)->name('transaksi-message');
   });
 
-  Route::prefix('campaign')->group(function () {
-    Route::get('/', App\Livewire\Campaign\Index::class)->name('campaign');
+  Route::prefix('report')->group(function () {
+    Route::get('order', App\Livewire\Report\Order::class)->name('report-order');
   });
 
-  Route::prefix('order')->group(function () {
-    Route::get('/', App\Livewire\Order\Index::class)->name('order');
-    Route::get('create', App\Livewire\Order\Create::class)->name('order-create');
-    Route::get('detail/{id}', App\Livewire\Order\Detail::class)
-      ->where('id', '[0-9]+')
-      ->name('order-detail');
-  });
-
-  Route::get('message-out', App\Livewire\Message\Index::class)->name('message-out');
-
-  Route::prefix('report')->group(function () {});
   Route::prefix('setting')->group(function () {
     Route::get('template', App\Livewire\MessageTemplate\Index::class)->name(
       'setting-template'
     );
+
     Route::get('whatsapp-api', App\Livewire\WhatsappApiSetting\Index::class)->name(
       'setting-whatsapp-api'
     );
