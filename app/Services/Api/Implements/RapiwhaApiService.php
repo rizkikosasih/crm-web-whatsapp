@@ -16,8 +16,8 @@ class RapiwhaApiService implements SendMessageApiServiceInterface
 
   public function __construct()
   {
-      $this->apiKey = waApiKey();
-      $this->baseUrl = waApiUrl();
+    $this->apiKey = waApiKey();
+    $this->baseUrl = waApiUrl();
   }
 
   public function sendMessage(
@@ -30,10 +30,13 @@ class RapiwhaApiService implements SendMessageApiServiceInterface
     try {
       $customer = Customer::where('phone', $number)->first();
       if (!$customer) {
-        return response()->json([
-          'success' => false,
-          'message' => 'Nomor Handphone tidak ditemukan dalam daftar pelanggan',
-        ], 404);
+        return response()->json(
+          [
+            'success' => false,
+            'message' => 'Nomor Handphone tidak ditemukan dalam daftar pelanggan',
+          ],
+          404
+        );
       }
 
       /* For Testing
@@ -46,7 +49,7 @@ class RapiwhaApiService implements SendMessageApiServiceInterface
           ],
           200
         ),
-      ]);*/
+      ]); */
 
       // Kirim pesan utama (hanya 1x)
       $response = Http::timeout(10)
@@ -74,18 +77,23 @@ class RapiwhaApiService implements SendMessageApiServiceInterface
         return response()->json($result, $response->status());
       }
 
-      return response()->json([
-        'success' => false,
-        'message' => $response->status() . ': ' . $response->body(),
-      ], 500);
-
+      return response()->json(
+        [
+          'success' => false,
+          'message' => $response->status() . ': ' . $response->body(),
+        ],
+        500
+      );
     } catch (\Exception $e) {
       DB::rollBack();
       logger('HTTP Error: ' . $e->getMessage());
-      return response()->json([
-        'success' => false,
-        'message' => $e->getMessage(),
-      ], 500);
+      return response()->json(
+        [
+          'success' => false,
+          'message' => $e->getMessage(),
+        ],
+        500
+      );
     }
   }
 }
