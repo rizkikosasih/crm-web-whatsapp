@@ -37,13 +37,6 @@ class Index extends Component
     ['name' => '<i class="fas fa-cogs"></i>', 'class' => 'actions'],
   ];
 
-  protected $queryString = ['status', 'dateStart', 'dateEnd', 'search', 'perPage'];
-
-  public function updating($field)
-  {
-    $this->resetPage();
-  }
-
   public function render()
   {
     $items = Order::query()
