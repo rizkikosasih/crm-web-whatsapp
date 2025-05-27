@@ -142,7 +142,7 @@ class Detail extends Component
     $this->order->status = $this->selectedStatus;
     $this->order->save();
     session()->flash('success', "Status ID Pesanan #$this->orderId berhasil diperbarui.");
-    return $this->redirect(route('order'), true);
+    return $this->redirect(route('transaksi-order'), true);
   }
 
   public function render()

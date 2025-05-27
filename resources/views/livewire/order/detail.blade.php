@@ -10,7 +10,7 @@
       <div class="col-12 m-1 p-1">
         <div class="card card-primary card-outline">
           <div class="card-header">
-            <x-link.button-danger customClass="btn-sm" url="{{ url('order') }}" wire:navigate>
+            <x-link.button-danger customClass="btn-sm" url="{{ url('transaksi/order') }}" wire:navigate>
               <i class="fas fa-arrow-left"></i> Kembali
             </x-link.button-danger>
 

@@ -168,7 +168,7 @@ class Create extends Component
       DB::commit();
 
       session()->flash('success', 'Pesanan berhasil dibuat.');
-      return $this->redirect(route('order'), true);
+      return $this->redirect(route('transaksi-order'), true);
     } catch (\Exception $e) {
       DB::rollBack();
 

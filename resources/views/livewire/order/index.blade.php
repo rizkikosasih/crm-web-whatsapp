@@ -6,7 +6,7 @@
       <div class="col-12 m-1 p-1">
         <div class="card card-primary card-outline">
           <div class="card-header">
-            <x-link.button-primary url="{{ url('order/create') }}" customClass="btn-sm">
+            <x-link.button-primary url="{{ url('transaksi/order/create') }}" customClass="btn-sm">
               <i class="fas fa-plus"></i> Buat Pesanan
             </x-link.button-primary>
           </div>
@@ -90,7 +90,7 @@
                       <td class="actions">
                         <div class="d-flex justify-content-center align-items-center gap-2">
                           <x-link.icon-primary
-                            url="{{ url('order/detail/' . $item->id) }}"
+                            url="{{ url('transaksi/order/detail/' . $item->id) }}"
                             customClass="tooltips"
                             title="{{ in_array($item->status, [3,4]) ? 'Lihat Detail' : 'Update Status' }}"
                           >

@@ -11,7 +11,7 @@
         <div class="card card-primary card-outline">
           <div class="card-header">
             <x-link.button-danger
-              url="{{ url('order') }}"
+              url="{{ url('transaksi/order') }}"
               customClass="btn-sm"
               wire:navigate
             >
