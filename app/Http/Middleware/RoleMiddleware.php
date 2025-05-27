@@ -27,15 +27,16 @@ class RoleMiddleware
     $explodeRoute = explode('-', $slug);
     $actions = ['add', 'create', 'edit', 'update', 'delete', 'active', 'detail'];
     $pattern = '/(' . implode('|', $actions) . ')/i';
-    if (sizeof($explodeRoute) > 2) {
-      if (preg_match($pattern, $explodeRoute[2])) {
-        $slug = $explodeRoute[0] . '-' . $explodeRoute[1];
+
+    $slugParts = [];
+    foreach ($explodeRoute as $segment) {
+      if (preg_match($pattern, $segment)) {
+        break;
       }
-    } elseif (sizeof($explodeRoute) > 1) {
-      if (preg_match($pattern, $explodeRoute[1])) {
-        $slug = $explodeRoute[0];
-      }
+      $slugParts[] = $segment;
     }
+
+    $slug = implode('-', $slugParts);
 
     // Ambil menu saat ini
     $menu = Menu::where('slug', $slug)->first();
