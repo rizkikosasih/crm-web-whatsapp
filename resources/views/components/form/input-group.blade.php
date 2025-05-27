@@ -1,20 +1,20 @@
 @props([
   'name' => null,
   'id' => null,
-  'label' => null,
   'placeholder' => null,
   'type' => 'text',
-  'customClass' => '',
-  'parentClass' => '',
-  'prepend' => '',
+  'customClass' => null,
+  'parentClass' => null,
+  'appendText' => null,
+  'prependText' => null,
 ])
 
 <div @class(['form-group', $parentClass ?? ''])>
   <div class="input-group">
-    @if($label && $prepend)
+    @if($prependText)
       <div class="input-group-prepend">
         <div class="input-group-text">
-          {!! $label !!}
+          {!! $prependText !!}
         </div>
       </div>
     @endif
@@ -31,10 +31,10 @@
       {{ $attributes }}
     >
 
-    @if($label && !$prepend)
+    @if($appendText)
       <div class="input-group-append">
         <div class="input-group-text">
-          {!! $label !!}
+          {!! $appendText !!}
         </div>
       </div>
     @endif

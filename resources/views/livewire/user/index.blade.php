@@ -101,7 +101,7 @@
             <div class="d-flex justify-content-center justify-content-sm-start align-items-start gap-sm-3">
               <div class="col-auto">
                 <x-form.input-group-select
-                  label="Length"
+                  prependText="Length"
                   name="perPage"
                   wire:model.live.debounce.250ms="perPage"
                   :options="[5 => 5, 10 => 10, 20 => 20, 50 => 50]"
@@ -110,7 +110,7 @@
 
               <div class="col-auto">
                 <x-form.input-group-select
-                  label="Role"
+                  prependText="Role"
                   name="filterRole"
                   wire:model.live.debounce.250ms="filterRole"
                   :options="$filterRoles"

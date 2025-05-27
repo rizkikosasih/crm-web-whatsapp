@@ -19,7 +19,7 @@
             <div class="d-flex justify-content-center justify-content-sm-start align-items-start flex-wrap gap-sm-3">
               <div class="col-auto px-0">
                 <x-form.input-group-select
-                  label="Length"
+                  prependText="Length"
                   name="perPage"
                   parentClass="mb-0"
                   wire:model.live="perPage"
@@ -29,7 +29,7 @@
 
               <div class="col-auto px-0">
                 <x-form.input-group-select
-                  label="Status"
+                  prependText="Status"
                   name="status"
                   parentClass="mb-0"
                   optionHeader="Semua Status"
@@ -39,11 +39,24 @@
               </div>
 
               <div class="col-auto px-0">
-                <x-form.input-group prepend="true" label="Mulai" type="date" name="dateStart" parentClass="mb-0" wire:model.live="dateStart"/>
+                <x-form.input-group
+                  prependText="Mulai"
+                  type="date"
+                  name="dateStart"
+                  parentClass="mb-0"
+                  wire:model.live="dateStart"
+                />
               </div>
 
               <div class="col-auto px-0">
-                <x-form.input-group prepend="true" label="Akhir" type="date" name="dateEnd" parentClass="mb-0" wire:model.live="dateEnd"/>
+                <x-form.input-group
+                  prepend="true"
+                  prependText="Akhir"
+                  type="date"
+                  name="dateEnd"
+                  parentClass="mb-0"
+                  wire:model.live="dateEnd"
+                />
               </div>
 
               <div class="col-auto px-0">

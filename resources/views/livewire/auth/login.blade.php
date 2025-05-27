@@ -15,7 +15,7 @@
 
       <form wire:submit.prevent="doLogin">
         <x-form.input-group
-          label="<span class='fas fa-user'></span>"
+          prependText="<span class='fas fa-user'></span>"
           name="username"
           placeholder="Username"
           parentClass="mb-3"
@@ -23,7 +23,7 @@
         />
 
         <x-form.input-group
-          label="<span class='fas fa-lock'></span>"
+          prependText="<span class='fas fa-lock'></span>"
           name="password"
           type="password"
           placeholder="Password"
