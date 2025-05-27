@@ -2,17 +2,19 @@
   'name' => null,
   'id' => null,
   'label' => null,
-  'parentClass' => '',
-  'customClass' => '',
+  'parentClass' => null,
+  'customClass' => null,
   'options' => [],
-  'optionHeader' => ''
+  'optionHeader' => null,
+  'prependText' => null,
+  'appendText' => null,
 ])
 
-<div @class(['form-group', $parentClass ?? ''])>
+<div @class(['form-group', $parentClass])>
   <div class="input-group">
-    @isset($label)
-      <span class="input-group-prepend"><div class="input-group-text">{!! $label !!}</div></span>
-    @endisset
+    @if($prependText)
+      <span class="input-group-prepend"><div class="input-group-text">{!! $prependText !!}</div></span>
+    @endif
 
     <select
       name="{{ $name }}"
@@ -27,10 +29,15 @@
       @if($optionHeader)
         <option value="">{{ $optionHeader }}</option>
       @endif
+
       @foreach ($options as $key => $value)
         <option value="{{ $key }}">{!! $value !!}</option>
       @endforeach
     </select>
+
+    @if($appendText)
+      <span class="input-group-append"><div class="input-group-text">{!! $appendText !!}</div></span>
+    @endif
   </div>
 
   @error($name)
