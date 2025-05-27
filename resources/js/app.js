@@ -45,8 +45,11 @@ document.addEventListener('livewire:navigated', function () {
   fixingSidebar();
   window.addEventListener('resize', fixingSidebar);
 
-  $('input, select, textarea').on('input', function () {
-    $('input, select, textarea').removeClass('is-invalid');
-    $('.error').remove();
+  $('input, textarea').on('input', function () {
+    $(this).removeClass('is-invalid').parents('.form-group').find('.error').remove();
+  });
+
+  $('select').on('change', function () {
+    $(this).removeClass('is-invalid').parents('.form-group').find('.error').remove();
   });
 });
