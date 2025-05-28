@@ -60,3 +60,9 @@ table.order-detail tr td:last-child {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+.swal2-container .swal2-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}

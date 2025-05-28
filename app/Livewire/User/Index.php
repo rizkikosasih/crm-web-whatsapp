@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\Locked;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -126,6 +127,43 @@ class Index extends Component
     $this->role_id = $user->role_id;
     $this->isEdit = true;
     $this->dispatch('scrollToTop');
+  }
+
+  public function confirmActive($id, $status)
+  {
+    $html =
+      'Apakah Anda yakin ingin ' .
+      (!$status ? 'mengaktifkan' : 'menonaktifkan') .
+      ' pengguna ini?';
+
+    $this->dispatch(
+      'swal:confirm',
+      method: 'setActive',
+      params: ['id' => $id, 'status' => $status],
+      options: [
+        'html' => $html,
+      ]
+    );
+  }
+
+  #[On('setActive')]
+  public function setActive($id, $status)
+  {
+    try {
+      DB::beginTransaction();
+
+      $user = User::findOrFail($id);
+      $user->is_active = !$status;
+      $user->save();
+
+      $message = 'Pengguna berhasil ' . (!$status ? 'diaktifkan' : 'dinonaktifkan') . '.';
+
+      DB::commit();
+      $this->dispatch('showSuccess', message: $message);
+    } catch (\Exception $e) {
+      DB::rollBack();
+      $this->dispatch('showError', message: $e->getMessage());
+    }
   }
 
   public function resetForm()

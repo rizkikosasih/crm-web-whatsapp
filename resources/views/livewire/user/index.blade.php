@@ -139,7 +139,10 @@
                       <td>{{ $item->email }}</td>
                       <td>{{ $item->phone }}</td>
                       <td class="text-center">
-                        <x-button.default customClass="btn-sm btn-{{ $colorStatus[$item->is_active] }}">
+                        <x-button.default
+                          wire:click="confirmActive({{ $item->id }}, {{ $item->is_active }})"
+                          customClass="btn-sm btn-{{ $colorStatus[$item->is_active] }}"
+                        >
                           {{ $statusList[$item->is_active] }}
                         </x-button.default>
                       </td>

@@ -17,6 +17,14 @@ window.Toast = Swal.mixin({
   timer: 3000,
 });
 
+window.swalWithBsBtn = Swal.mixin({
+  customClass: {
+    confirmButton: 'btn btn-success',
+    cancelButton: 'btn btn-danger',
+  },
+  buttonsStyling: false,
+});
+
 /** AdminLTE 3 */
 import 'admin-lte';
 
@@ -51,5 +59,37 @@ document.addEventListener('livewire:navigated', function () {
 
   $('select').on('change', function () {
     $(this).removeClass('is-invalid').parents('.form-group').find('.error').remove();
+  });
+});
+
+document.addEventListener('livewire:initialized', function () {
+  Livewire.on('swal:confirm', ({ method, params = {}, options = {} }) => {
+    const {
+      title = 'Konfirmasi',
+      text = '',
+      icon = 'warning',
+      html = '',
+      showCancelButton = true,
+      confirmButtonText = 'Ya',
+      cancelButtonText = 'Batal',
+    } = options;
+
+    swalWithBsBtn
+      .fire({
+        title,
+        text,
+        html,
+        icon,
+        showCancelButton,
+        confirmButtonText,
+        cancelButtonText,
+        reverseButtons: true,
+        focusConfirm: true,
+      })
+      .then((result) => {
+        if (result.isConfirmed && method) {
+          Livewire.dispatch(method, params);
+        }
+      });
   });
 });
