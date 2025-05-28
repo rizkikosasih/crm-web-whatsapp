@@ -13,7 +13,7 @@
 </head>
 <body class="hold-transition sidebar-mini layout-fixed" style="overflow-x: visible;">
   <div class="wrapper">
-    @include('partials.navbar')
+    @livewire('layouts.navbar')
 
     @livewire('layouts.sidebar')
 

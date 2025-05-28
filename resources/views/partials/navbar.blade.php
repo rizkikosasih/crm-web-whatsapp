@@ -11,12 +11,12 @@
     <!-- User Dropdown -->
     <li class="nav-item dropdown">
       <a class="nav-link" data-toggle="dropdown" href="#">
-        @if (!Auth::user()->avatar)
+        @if (!$user->avatar)
           <i class="fas fa-user-circle"></i>
         @else
-          <img src="{!! imageUri(Auth::user()->avatar) !!}" class="avatar-image-navbar img-fluid img-circle"/>
+          <img src="{!! imageUri($user->avatar) !!}" class="avatar-image-navbar img-fluid img-circle"/>
         @endif
-        <span class="text-sm">{{ Auth::user()->name }}</span>
+        <span class="text-sm">{{ $user->name }}</span>
       </a>
       <div class="dropdown-menu dropdown-menu-right">
         <a href="{{ url('setting/user/profile') }}" class="dropdown-item" wire:navigate>
