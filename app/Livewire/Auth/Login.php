@@ -33,14 +33,13 @@ class Login extends Component
       $user = Auth::user();
       if (!$user->is_active) {
         Auth::logout();
-        session()->flash('error', 'Akun Anda belum aktif.');
-        return redirect(route('/'), true);
+        session()->flash('error', 'Akun Anda tidak aktif.');
+      } else {
+        session()->regenerate();
+        session()->flash('message', 'Login successful.');
+
+        return $this->redirect(route('dashboard'), true);
       }
-
-      session()->regenerate();
-      session()->flash('message', 'Login successful.');
-
-      return $this->redirect(route('dashboard'), true);
     } else {
       session()->flash('error', 'Username / Password Tidak Ditemukan.');
     }
