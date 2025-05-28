@@ -2,10 +2,11 @@
 
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use App\Models\WhatsappApiSetting;
 
-if (!function_exists('storage')) {
-  function storage(string $path): string
+if (!function_exists('storagePath')) {
+  function storagePath(string $path): string
   {
     return asset('storage/' . ltrim($path, '/'));
   }
@@ -24,6 +25,18 @@ if (!function_exists('imageUri')) {
 
     // Gabungkan jadi data URI
     return "data:$mime;base64,$base64";
+  }
+}
+
+if (!function_exists('createFilename')) {
+  function createFilename(string $prefix, string $extension): string
+  {
+    $names = [Str::slug($prefix), Str::random(5), time()];
+    $filename = implode('-', $names);
+    if ($extension) {
+      $filename .= '.' . $extension;
+    }
+    return $filename;
   }
 }
 
