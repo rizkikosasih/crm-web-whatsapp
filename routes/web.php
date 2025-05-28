@@ -70,6 +70,11 @@ Route::middleware(['auth', 'role'])->group(function () {
       'setting-whatsapp-api'
     );
 
-    Route::get('user', App\Livewire\User\Index::class)->name('setting-user');
+    Route::prefix('user')->group(function () {
+      Route::get('/', App\Livewire\User\Index::class)->name('setting-user');
+      Route::get('profile', App\Livewire\User\Profile::class)->name(
+        'setting-user-profile'
+      );
+    });
   });
 });

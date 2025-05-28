@@ -3,6 +3,7 @@
   'imageTitle' => 'Perbesar',
   'width' => '30px',
   'height' => 'auto',
+  'customClass' => '',
 ])
 
 <a
@@ -16,5 +17,6 @@
     width="{{ $width }}"
     height="{{ $height }}"
     src="{{ imageUri($path ?: 'images/no-image.svg') }}"
+    @class([ $customClass ])
   />
 </a>

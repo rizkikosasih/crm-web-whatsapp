@@ -19,6 +19,9 @@
         <span class="text-sm">{{ Auth::user()->name }}</span>
       </a>
       <div class="dropdown-menu dropdown-menu-right">
+        <a href="{{ url('setting/user/profile') }}" class="dropdown-item" wire:navigate>
+          <i class="fas fa-user mr-2"></i> Profile
+        </a>
         <a href="#" class="dropdown-item" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
           <i class="fas fa-sign-out-alt mr-2"></i> Logout
         </a>
