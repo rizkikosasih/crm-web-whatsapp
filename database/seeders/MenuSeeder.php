@@ -26,7 +26,7 @@ class MenuSeeder extends Seeder
     // Header Menus
     $headers = [
       [
-        'name' => '',
+        'name' => '-',
         'position' => 1,
         'roles' => ['super-admin', 'admin'],
       ],
@@ -80,7 +80,7 @@ class MenuSeeder extends Seeder
         'route' => '/dashboard',
         'slug' => 'dashboard',
         'position' => 1,
-        'parent' => '',
+        'parent' => '-',
         'roles' => ['super-admin', 'admin'],
       ],
       [

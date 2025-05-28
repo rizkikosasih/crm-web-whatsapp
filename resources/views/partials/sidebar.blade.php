@@ -11,7 +11,9 @@
     <nav class="mt-2">
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         @foreach ($menus as $menu)
-          <li class="nav-header">{{$menu->name}}</li>
+          @if ($menu->name !== '-')
+            <li class="nav-header">{{$menu->name}}</li>
+          @endif
           @foreach ($menu->children as $child)
             <x-sidebar-menu
               activeClass="{{ setActive($child->slug) }}"
