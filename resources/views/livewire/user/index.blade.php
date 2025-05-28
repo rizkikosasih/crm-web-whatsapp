@@ -58,17 +58,15 @@
                 wire:model.defer="email"
               />
 
-              <x-dropdown-search
-                label="Role"
+              <x-form.input-select
                 name="role_id"
-                placeholder="Cari role pengguna ..."
+                id="role_id"
+                label="Role Pengguna"
+                placeholder="Pilih Role Pengguna"
                 horizontal="true"
-                :items="$roles"
-                :searching="$roleSearch"
-                :selectedName="$selectedRoleName"
-                searchModel="roleSearch"
-                selectedNameModel="selectedRoleName"
-                onSelect="selectRole"
+                :options="$roles"
+                optionHeader="Pilih Role Pengguna"
+                wire:model.defer="role_id"
               />
 
               <x-form.button-container customClass="justify-content-end">
@@ -113,7 +111,7 @@
                   prependText="Role"
                   name="filterRole"
                   wire:model.live.debounce.250ms="filterRole"
-                  :options="$filterRoles"
+                  :options="$roles"
                   optionHeader="Semua"
                 />
               </div>
@@ -140,7 +138,11 @@
                       <td>{{ $item->name }}</td>
                       <td>{{ $item->email }}</td>
                       <td>{{ $item->phone }}</td>
-                      <td>{{ $item->is_active }}</td>
+                      <td class="text-center">
+                        <x-button.default customClass="btn-sm btn-{{ $colorStatus[$item->is_active] }}">
+                          {{ $statusList[$item->is_active] }}
+                        </x-button.default>
+                      </td>
                       <td>{{ $item->role->name }}</td>
                       <td class="actions">
                         <div class="d-flex justify-content-center align-items-center gap-2">

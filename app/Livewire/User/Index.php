@@ -29,11 +29,19 @@ class Index extends Component
     ['name' => '<i class="fas fa-cogs"></i>', 'class' => 'actions'],
   ];
 
+  #[Locked]
+  public $statusList = ['Non Aktif', 'Aktif'];
+
+  #[Locked]
+  public $colorStatus = ['danger', 'success'];
+
+  #[Locked]
+  public $titleStatus = ['Aktifkan', 'Non Aktifkan'];
+
   public $isEdit = false;
 
   public $search = '';
   public $perPage = 10;
-  public $filterRoles = [];
   public $filterRole;
 
   public $userId;
@@ -53,21 +61,6 @@ class Index extends Component
   public $is_active;
   #[Validate('required', message: 'Role tidak boleh kosong')]
   public $role_id;
-  public $roleSearch, $selectedRoleName;
-
-  public function mount()
-  {
-    foreach (Role::all() as $role) {
-      $this->filterRoles[$role->id] = $role->name;
-    }
-  }
-
-  public function selectRole($id, $name)
-  {
-    $this->role_id = $id;
-    $this->selectedRoleName = $name;
-    $this->roleSearch = $name;
-  }
 
   public function save()
   {
@@ -131,8 +124,6 @@ class Index extends Component
     $this->email = $user->email;
     $this->originalEmail = $user->email;
     $this->role_id = $user->role_id;
-    $this->roleSearch = $this->filterRoles[$user->role_id];
-    $this->selectedRoleName = $this->filterRoles[$user->role_id];
     $this->isEdit = true;
     $this->dispatch('scrollToTop');
   }
@@ -149,9 +140,6 @@ class Index extends Component
       'email',
       'originalEmail',
       'role_id',
-      'roleSearch',
-      'selectedRoleName',
-      'selectedRoleName',
       'isEdit',
     ]);
     $this->dispatch('clearError');
@@ -164,16 +152,12 @@ class Index extends Component
         $q->whereAny(['name', 'email', 'phone'], 'like', '%' . $this->search . '%');
       })
       ->when($this->filterRole, function ($q) {
-        $q->where('id', '=', $this->filterRole);
+        $q->where('role_id', '=', $this->filterRole);
       })
       ->latest()
       ->paginate($this->perPage);
 
-    $roles = Role::when($this->roleSearch, function ($query) {
-      $query->whereAny(['name'], 'like', '%' . $this->roleSearch . '%');
-    })
-      ->limit(3)
-      ->get();
+    $roles = Role::all()->pluck('name', 'id')->toArray();
 
     return view('livewire.user.index', compact(['items', 'roles']));
   }
