@@ -38,6 +38,12 @@ class RoleMiddleware
 
     $slug = implode('-', $slugParts);
 
+    // allowed custom slug
+    $allowedCustomSlugs = ['index', 'login', 'logout', 'setting-user-profile'];
+    if (in_array($slug, $allowedCustomSlugs)) {
+      return $next($request);
+    }
+
     // Ambil menu saat ini
     $menu = Menu::where('slug', $slug)->first();
     if (!$menu) {
