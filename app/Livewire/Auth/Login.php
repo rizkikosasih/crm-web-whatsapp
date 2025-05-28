@@ -30,6 +30,13 @@ class Login extends Component
     $credentials = [$fieldType => $this->username, 'password' => $this->password];
 
     if (Auth::attempt($credentials)) {
+      $user = Auth::user();
+      if (!$user->is_active) {
+        Auth::logout();
+        session()->flash('error', 'Akun Anda belum aktif.');
+        return redirect(route('/'), true);
+      }
+
       session()->regenerate();
       session()->flash('message', 'Login successful.');
 
