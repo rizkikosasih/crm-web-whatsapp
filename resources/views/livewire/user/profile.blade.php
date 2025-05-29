@@ -48,14 +48,14 @@
         <div class="card">
           <div class="card-header p-2">
             <ul class="nav nav-pills">
-              <li class="nav-item"><a class="nav-link active" href="#settings" data-toggle="tab">Pengaturan</a></li>
-              <li class="nav-item"><a class="nav-link" href="#password" data-toggle="tab">Password</a></li>
+              <li class="nav-item"><a @class(["nav-link", 'active' => !$isPasswordVisible ]) href="#settings" data-toggle="tab">Pengaturan</a></li>
+              <li class="nav-item"><a @class(["nav-link", 'active' => $isPasswordVisible ]) href="#password" data-toggle="tab">Password</a></li>
             </ul>
           </div>
           {{-- /.card-header --}}
           <div class="card-body">
             <div class="tab-content">
-              <div class="tab-pane active" id="settings">
+              <div @class(["tab-pane", 'active' => !$isPasswordVisible ]) id="settings">
                 <form class="form-profile" wire:submit.prevent="updateProfile">
                   <x-form.input-horizontal
                     name="name"
@@ -77,7 +77,6 @@
                     placeholder="Masukan No Handphone Anda"
                     wire:model.defer="phone"
                     customClass="number-only"
-                    maxlength="16"
                   />
 
                   <x-form.textarea-horizontal
@@ -106,15 +105,49 @@
               </div>
               {{-- /.settings --}}
 
-              <div class="tab-pane" id="password">
-                <div class="form-group row">
-                  <div class="offset-sm-3 col-sm-9">
-                    <div class="icheck-primary">
-                      <input type="checkbox" id="show-pwd">
-                      <label for="show-pwd">Lihat Password</label>
+              <div @class(["tab-pane", 'active' => $isPasswordVisible ]) id="password">
+                <form wire:submit="updatePassword" class="form-change-password">
+                  <x-form.input-horizontal
+                    name="currentPassword"
+                    label="Password Saat Ini"
+                    type="password"
+                    placeholder="Masukan Password Saat Ini"
+                    wire:model.defer="password"
+                  />
+
+                  <x-form.input-horizontal
+                    name="newPassword"
+                    label="Password Baru"
+                    type="password"
+                    placeholder="Masukan Password Baru"
+                    wire:model.defer="passwordNew"
+                  />
+
+                  <x-form.input-horizontal
+                    name="confirmPassword"
+                    label="Konfirmasi Password Baru"
+                    type="password"
+                    placeholder="Masukan Konfirmasi Password Baru"
+                    wire:model.defer="passwordConfirm"
+                  />
+
+                  <div class="form-group row">
+                    <div class="offset-sm-3 col-sm-9">
+                      <div class="icheck-primary">
+                        <input type="checkbox" id="show-pwd">
+                        <label for="show-pwd">Lihat Password</label>
+                      </div>
                     </div>
                   </div>
-                </div>
+
+                  <div class="form-group row">
+                    <div class="offset-sm-3 col-sm-9">
+                      <x-button.danger type="submit">
+                        Ubah Password
+                      </x-button.danger>
+                    </div>
+                  </div>
+                </form>
               </div>
               {{-- /.password --}}
             </div>
