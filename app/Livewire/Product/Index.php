@@ -3,7 +3,8 @@
 namespace App\Livewire\Product;
 
 use App\Models\Product;
-use Illuminate\Support\Str;
+use App\Services\Api\Implements\GoogleDriveService;
+use Google\Service\AdMob\App;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\Validate;
@@ -11,10 +12,6 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
-use Google\Client as GoogleClient;
-use Google\Service\Drive;
-use Google\Service\Drive\DriveFile;
-use Google\Service\Drive\Permission;
 
 class Index extends Component
 {
@@ -55,75 +52,59 @@ class Index extends Component
   public $search;
   public $perPage = 10;
 
-  public function save()
-{
+  public function save(GoogleDriveService $googleDriveService)
+  {
     $this->validate();
 
     $rules = [];
     $messages = [];
 
     if ($this->image instanceof TemporaryUploadedFile) {
-        $rules['image'] = 'image|max:2048';
-        $messages['image.image'] = 'Format file yang diperbolehkan hanya gambar';
-        $messages['image.max'] = 'Ukuran gambar maksimal 2MB';
-        $this->validate($rules, $messages);
+      $rules['image'] = 'image|max:2048';
+      $messages['image.image'] = 'Format file yang diperbolehkan hanya gambar';
+      $messages['image.max'] = 'Ukuran gambar maksimal 2MB';
+      $this->validate($rules, $messages);
     }
 
     $imageLocalPath = null;
     $imageUrl = null;
 
     if ($this->image instanceof TemporaryUploadedFile) {
-        $filename = Str::slug($this->name) . '-' . time() . '.' . $this->image->getClientOriginalExtension();
+      $product = Product::find($this->productId);
+      $filename = createFilename($this->name, $this->image->getClientOriginalExtension());
+      /* Simpan ke lokal */
+      $imageLocalPath = $this->image->storeAs($this->directory, $filename, 'public');
+      $oldImage = $product?->image;
+      if (isset($oldImage) && $imageLocalPath && $oldImage !== $imageLocalPath) {
+        Storage::disk('public')->delete($oldImage);
+      }
 
-        /* Simpan ke lokal */
-        $imageLocalPath = $this->image->storeAs($this->directory, $filename, 'public');
-
-        /* Upload ke Google Drive */
-        $localPath = storage_path('app/public/' . $imageLocalPath);
-        $client = new GoogleClient();
-        $client->setAuthConfig(storage_path('app/public/google-service-account.json'));
-        $client->addScope(Drive::DRIVE);
-        $service = new Drive($client);
-
-        $fileMetadata = new DriveFile([
-            'name' => $filename,
-            'parents' => [env('GOOGLE_DRIVE_FOLDER_ID')],
-        ]);
-
-        $file = $service->files->create($fileMetadata, [
-          'data' => file_get_contents($localPath),
-          'mimeType' => $this->image->getMimeType(),
-          'uploadType' => 'multipart',
-          'fields' => 'id',
-        ]);
-
-        // Buat file di Google Drive menjadi publik
-        $permission = new Drive\Permission([
-          'type' => 'anyone',
-          'role' => 'reader',
-        ]);
-        $service->permissions->create($file->id, $permission);
-
-        $imageUrl = 'https://drive.google.com/uc?export=view&id=' . $file->id;
+      /* Simpan ke Google Drive */
+      $oldImageUrl = $product?->image_url;
+      if (isset($oldImageUrl) && $imageLocalPath && $oldImageUrl !== $imageLocalPath) {
+        $fileId = $googleDriveService->getFileId($product->image_url);
+        $googleDriveService->delete($fileId);
+      }
+      $imageUrl = $googleDriveService->upload($imageLocalPath, $filename);
     }
 
-    // Update ke database
+    $product = Product::find($this->productId);
     Product::updateOrCreate(
-        ['id' => $this->productId],
-        [
-            'name' => $this->name,
-            'sku' => $this->sku,
-            'description' => e($this->description),
-            'price' => $this->price,
-            'stock' => $this->stock,
-            'image' => $imageLocalPath ?? Product::find($this->productId)?->image,
-            'image_url' => $imageUrl ?? Product::find($this->productId)?->image_url,
-        ]
+      ['id' => $this->productId],
+      [
+        'name' => $this->name,
+        'sku' => $this->sku,
+        'description' => e($this->description),
+        'price' => $this->price,
+        'stock' => $this->stock,
+        'image' => $imageLocalPath ?? $product?->image,
+        'image_url' => $imageUrl ?? $product?->image_url,
+      ]
     );
 
     $this->resetForm();
     session()->flash('success', 'Produk berhasil disimpan!');
-}
+  }
 
   public function edit($id)
   {
