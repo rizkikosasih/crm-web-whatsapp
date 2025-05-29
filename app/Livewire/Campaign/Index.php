@@ -81,12 +81,11 @@ class Index extends Component
       }
 
       /* Simpan ke Google Drive */
-      $oldImageUrl = $campaign?->image;
+      $oldImageUrl = $campaign?->image_url;
       if (isset($oldImageUrl) && $imageLocalPath && $oldImageUrl !== $imageLocalPath) {
-        $fileId = $googleDriveService->getFileId($campaign->image_url);
-        $googleDriveService->delete($fileId);
+        $googleDriveService->delete($oldImageUrl);
       }
-      $imageUrl = $googleDriveService->upload($imageLocalPath, $filename);
+      $imageUrl = $googleDriveService->upload($imageLocalPath, $filename, 'campaigns');
     }
 
     $campaign = Campaign::find($this->campaignId);
