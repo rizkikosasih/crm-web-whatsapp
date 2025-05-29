@@ -74,7 +74,7 @@
                 </select>
 
                 <div class="col-sm-3">
-                  <button class="btn btn-sm btn-primary btn-block" wire:click="updateStatus">Update</button>
+                  <button class="btn btn-sm btn-primary btn-block" wire:click="updateStatus" wire:loading.attr="disabled" wire:target="proof_of_payment">Update</button>
                 </div>
               </div>
 
