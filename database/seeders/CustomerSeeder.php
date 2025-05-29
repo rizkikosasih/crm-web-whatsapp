@@ -19,7 +19,7 @@ class CustomerSeeder extends Seeder
 
     DB::table('customers')->insert([
       'name' => 'Rizki',
-      'phone' => '6285887183001',
+      'phone' => '6285777838862',
       'created_at' => now(),
     ]);
 
