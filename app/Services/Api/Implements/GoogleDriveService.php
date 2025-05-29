@@ -7,7 +7,6 @@ use Exception;
 use Google\Client as GoogleClient;
 use Google\Service\Drive;
 use Google\Service\Drive\DriveFile;
-use Google\Service\Drive\DriveEmpty;
 use Google\Service\Drive\Permission;
 
 class GoogleDriveService implements GoogleDriveServiceInterface
