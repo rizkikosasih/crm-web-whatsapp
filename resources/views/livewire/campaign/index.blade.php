@@ -53,11 +53,11 @@
               <hr>
 
               <x-form.button-container customClass="justify-content-end">
-                <x-button.danger wire:click="resetForm">
+                <x-button.danger wire:click="resetForm" wire:loading.attr="disabled" wire:target="image, save">
                   Batal
                 </x-button.danger>
 
-                <x-button.primary type="submit">
+                <x-button.primary type="submit" wire:loading.attr="disabled" wire:target="image, save">
                   Simpan
                 </x-button.primary>
               </x-form.button-container>

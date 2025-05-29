@@ -4,8 +4,10 @@ namespace App\Livewire\Campaign;
 
 use App\Models\Campaign;
 use App\Models\Customer;
+use App\Services\Api\Implements\GoogleDriveService;
 use App\Services\Api\Implements\RapiwhaApiService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\Validate;
@@ -52,7 +54,7 @@ class Index extends Component
     $this->rapiwha = new RapiwhaApiService();
   }
 
-  public function save()
+  public function save(GoogleDriveService $googleDriveService)
   {
     $this->validate();
 
@@ -63,24 +65,38 @@ class Index extends Component
       $this->validate($rules, $messages);
     }
 
-    $imagePath = null;
+    $imageLocalPath = null;
+    $imageUrl = null;
     if ($this->image instanceof TemporaryUploadedFile) {
-      $filename =
-        Str::slug($this->campaignTitle) .
-        '-' .
-        time() .
-        '.' .
-        $this->image->getClientOriginalExtension();
+      $campaign = Campaign::find($this->campaignId);
+      $filename = createFilename(
+        $this->campaignTitle,
+        $this->image->getClientOriginalExtension()
+      );
+      /* Simpan ke lokal */
+      $imageLocalPath = $this->image->storeAs($this->directory, $filename, 'public');
+      $oldImage = $campaign?->image;
+      if (isset($oldImage) && $imageLocalPath && $oldImage !== $imageLocalPath) {
+        Storage::disk('public')->delete($oldImage);
+      }
 
-      $imagePath = $this->image->storeAs($this->directory, $filename, 'public');
+      /* Simpan ke Google Drive */
+      $oldImageUrl = $campaign?->image;
+      if (isset($oldImageUrl) && $imageLocalPath && $oldImageUrl !== $imageLocalPath) {
+        $fileId = $googleDriveService->getFileId($campaign->image_url);
+        $googleDriveService->delete($fileId);
+      }
+      $imageUrl = $googleDriveService->upload($imageLocalPath, $filename);
     }
 
+    $campaign = Campaign::find($this->campaignId);
     Campaign::updateOrCreate(
       ['id' => $this->campaignId],
       [
         'title' => $this->campaignTitle,
         'message' => e($this->campaignMessage),
-        'image' => $imagePath ?? Campaign::find($this->campaignId)?->image,
+        'image' => $imageLocalPath ?? $campaign?->image,
+        'image_url' => $imageUrl ?? $campaign?->image_url,
         'created_by' => Auth::id(),
       ]
     );
@@ -115,6 +131,7 @@ class Index extends Component
           'name' => $customer->name,
           'contact_number' => env('APP_CONTACT_PERSON'),
           'store_name' => env('APP_NAME'),
+          'image_url' => $campaign->image_url ?? '',
         ]);
 
         $this->rapiwha->sendMessage($customer->phone, $message, $campaign->image);
