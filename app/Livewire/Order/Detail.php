@@ -88,7 +88,7 @@ class Detail extends Component
           $imagePath = null;
           if ($this->proof_of_payment instanceof TemporaryUploadedFile) {
             $filename = createFilename(
-              $this->orderId,
+              $this->order->customer->name . '-' . $this->orderId,
               $this->proof_of_payment->getClientOriginalExtension()
             );
 
