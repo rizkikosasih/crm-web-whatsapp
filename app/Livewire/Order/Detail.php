@@ -72,6 +72,7 @@ class Detail extends Component
 
     switch ($this->selectedStatus) {
       case 1:
+        $rules = [];
         $messages = [];
 
         try {
@@ -86,12 +87,10 @@ class Detail extends Component
 
           $imagePath = null;
           if ($this->proof_of_payment instanceof TemporaryUploadedFile) {
-            $filename =
-              $this->orderId .
-              '-' .
-              time() .
-              '.' .
-              $this->proof_of_payment->getClientOriginalExtension();
+            $filename = createFilename(
+              $this->orderId,
+              $this->proof_of_payment->getClientOriginalExtension()
+            );
 
             $imagePath = $this->proof_of_payment->storeAs(
               $this->directory,
@@ -118,6 +117,14 @@ class Detail extends Component
         break;
 
       case 4:
+        foreach ($this->order->orderItems as $item) {
+          $product = $item->product;
+          // Kembalikan stok
+          $product->stock += $item->quantity;
+          // Simpan perubahan
+          $product->save();
+        }
+
         $template = MessageTemplate::where(['id' => 6, 'type' => 'order'])->first();
         break;
     }
