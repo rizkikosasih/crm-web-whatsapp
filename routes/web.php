@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,16 +25,14 @@ Route::middleware(['guest'])->group(function () {
   Route::get('/login', App\Livewire\Auth\Login::class)->name('login');
 });
 
-Route::post('/logout', function () {
-  Auth::logout();
-  session()->invalidate();
-  session()->regenerateToken();
-  return redirect('/');
-})
-  ->middleware('auth')
-  ->name('logout');
-
 Route::middleware(['auth', 'role'])->group(function () {
+  Route::post('/logout', function () {
+    Auth::logout();
+    session()->invalidate();
+    session()->regenerateToken();
+    return redirect('/');
+  })->name('logout');
+
   Route::get('dashboard', App\Livewire\Dashboard::class)->name('dashboard');
 
   Route::prefix('master')->group(function () {
