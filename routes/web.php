@@ -58,6 +58,7 @@ Route::middleware(['auth', 'role'])->group(function () {
 
   Route::prefix('report')->group(function () {
     Route::get('order', App\Livewire\Report\Order::class)->name('report-order');
+    Route::get('product', App\Livewire\Report\Product::class)->name('report-product');
   });
 
   Route::prefix('setting')->group(function () {
