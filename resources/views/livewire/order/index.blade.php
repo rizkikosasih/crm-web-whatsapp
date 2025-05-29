@@ -9,6 +9,8 @@
             <x-link.button-primary url="{{ url('transaksi/order/create') }}" customClass="btn-sm">
               <i class="fas fa-plus"></i> Buat Pesanan
             </x-link.button-primary>
+
+            <x-card.tools refresh="true" />
           </div>
 
           <div class="card-body text-justify">
