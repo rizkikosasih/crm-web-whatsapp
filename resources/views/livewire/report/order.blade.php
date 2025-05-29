@@ -48,6 +48,12 @@
                   <i class="fas fa-file-excel"></i>
                 </x-button.primary>
               </div>
+
+              <div class="col-auto px-0">
+                <x-button.default wire:click="$refresh" customClass="tooltips btn-info" title="Refresh Halaman">
+                  <i class="fas fa-refresh"></i>
+                </x-button.default>
+              </div>
             </div>
 
             <div class="table-responsive mt-3">
