@@ -62,13 +62,10 @@
 
                 <tbody>
                   @forelse ($orders as $index => $item)
-                    @php
-                      $customer = $item->customer;
-                    @endphp
                     <tr>
                       <td class="text-center">{{ $item->id }}</td>
                       <td class="text-end">{{ dateIndo($item->order_date) }}</td>
-                      <td>{{ $customer->name }}</td>
+                      <td>{{ $item->customer->name }}</td>
                       <td class="text-center">
                         <x-button.default customClass="btn-sm btn-{{ $colorStatus[$item->status] }}">
                           {{ $statusList[$item->status] }}

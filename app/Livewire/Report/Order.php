@@ -5,17 +5,12 @@ namespace App\Livewire\Report;
 use App\Models\Order as ModelsOrder;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
-use Livewire\WithPagination;
 
 class Order extends Component
 {
-  use WithPagination;
-
   public $dateStart;
   public $dateEnd;
   public $status = '';
-  public $search = '';
-  public $perPage = 10;
 
   #[Locked]
   public $title = 'Laporan Pesanan';
@@ -40,12 +35,14 @@ class Order extends Component
   {
     $this->dateStart = now()->subDays(6)->toDateString();
     $this->dateEnd = now()->toDateString();
+
+    $this->report = $this->getReportProperty();
   }
 
-  public function render()
+  public function getReportProperty()
   {
-    $orders = ModelsOrder::with('customer', 'orderItems')
-      ->when($this->status, fn($q) => $q->where('status', $this->status))
+    return ModelsOrder::with('customer', 'orderItems')
+      ->when($this->status !== '', fn($q) => $q->where('status', $this->status))
       ->when(
         $this->dateStart,
         fn($q) => $q->whereDate('order_date', '>=', $this->dateStart)
@@ -53,6 +50,18 @@ class Order extends Component
       ->when($this->dateEnd, fn($q) => $q->whereDate('order_date', '<=', $this->dateEnd))
       ->latest()
       ->get();
+  }
+
+  public function updated($propertyName)
+  {
+    if (in_array($propertyName, ['dateStart', 'dateEnd', 'status'])) {
+      $this->report = $this->getReportProperty();
+    }
+  }
+
+  public function render()
+  {
+    $orders = $this->report;
 
     $totalQty = $orders->flatMap->orderItems->sum('quantity');
     $totalPrice = $orders->flatMap->orderItems->sum(
@@ -64,13 +73,9 @@ class Order extends Component
 
   public function exportXls()
   {
-    $orders = ModelsOrder::with(['customer', 'orderItems.product'])
-      ->when($this->status, fn($q) => $q->where('status', $this->status))
-      ->whereDate('order_date', '>=', $this->dateStart)
-      ->whereDate('order_date', '<=', $this->dateEnd)
-      ->get();
+    $orders = $this->report;
 
-    $filename = 'laporan_order_' . now()->format('Ymd_His') . '.xls';
+    $filename = 'laporan_penjualan_' . now()->format('Ymd_His') . '.xls';
 
     $headers = [
       'Content-Type' => 'application/vnd.ms-excel',
@@ -79,7 +84,7 @@ class Order extends Component
 
     $statusList = $this->statusList;
 
-    $html = view('report.order.xls', compact(['orders', 'statusList']))->render();
+    $html = view('report.order-xls', compact(['orders', 'statusList']))->render();
 
     return response()->stream(
       function () use ($html) {
