@@ -104,7 +104,7 @@ class WhatsappModal extends Component
       $message .= "\n\nKlik untuk melihat gambar:\n" . $imageUrl;
     }
 
-    $response = $this->rapiwha->sendMessage($phone, $message, $image);
+    $response = $this->rapiwha->sendMessage($phone, $message);
 
     if ($response->isSuccessful()) {
       $this->dispatch('showSuccess', message: 'Info Produk Berhasil Dikirim');
@@ -119,3 +119,4 @@ class WhatsappModal extends Component
     return view('livewire.product.whatsapp-modal');
   }
 }
+

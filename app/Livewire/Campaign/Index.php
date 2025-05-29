@@ -101,7 +101,7 @@ class Index extends Component
     );
 
     $this->resetForm();
-    session()->flash('success', 'Produk berhasil disimpan!');
+    session()->flash('success', 'Campaign berhasil disimpan!');
   }
 
   public function edit($id)
@@ -123,22 +123,35 @@ class Index extends Component
 
   public function sendWA($id)
   {
-    $campaign = Campaign::findOrFail($id);
-    if ($campaign) {
-      foreach (Customer::all() as $customer) {
-        $message = parseTemplatePlaceholders($campaign->message, [
-          'name' => $customer->name,
-          'contact_number' => env('APP_CONTACT_PERSON'),
-          'store_name' => env('APP_NAME'),
-          'image_url' => $campaign->image_url ?? '',
-        ]);
+    try {
+      $campaign = Campaign::findOrFail($id);
+      if ($campaign) {
+        foreach (Customer::all() as $customer) {
+          $message = parseTemplatePlaceholders($campaign->message, [
+            'name' => $customer->name,
+            'contact_number' => env('APP_CONTACT_PERSON'),
+            'store_name' => env('APP_NAME'),
+            'image_url' => $campaign->image_url ?? '',
+          ]);
 
-        $this->rapiwha->sendMessage($customer->phone, $message, $campaign->image);
+          $response = $this->rapiwha->sendMessage($customer->phone, $message);
+          $data = json_decode($response->getContent());
+          if ($data->success) {
+            $this->dispatch('showSuccess', message: 'Info Produk Berhasil Dikirim');
+          } else {
+            $this->dispatch('showError', message: $data->message);
+          }
+        }
+
+        $this->dispatch(
+          'showSuccess',
+          message: 'Campaign berhasil terkirim ke pelanggan'
+        );
+      } else {
+        $this->dispatch('showError', message: 'Campaign tidak ditemukan');
       }
-
-      $this->dispatch('showSuccess', message: 'Campaign berhasil terkirim ke pelanggan');
-    } else {
-      $this->dispatch('showError', message: 'Campaign tidak ditemukan');
+    } catch (\Exception $e) {
+      $this->dispatch('showError', message: $e->getMessage());
     }
   }
 
