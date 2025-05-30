@@ -14,12 +14,15 @@ if (!function_exists('storagePath')) {
 }
 
 if (!function_exists('imageUri')) {
-  function imageUri(string $path): string
+  function imageUri(string $path): ?string
   {
+    $storage_path = storage_path('app/public/' . $path);
+    if (!file_exists($storage_path)) {
+      return null;
+    }
     $file = Storage::disk('public')->get($path);
-
     // Dapatkan MIME type
-    $mime = mime_content_type($path);
+    $mime = mime_content_type($storage_path);
 
     // Encode ke base64
     $base64 = base64_encode($file);
