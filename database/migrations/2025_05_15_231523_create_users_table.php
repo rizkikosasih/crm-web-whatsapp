@@ -21,12 +21,12 @@ return new class extends Migration {
       $table->unsignedBigInteger('role_id');
       $table->text('address')->nullable();
       $table->string('avatar', 255)->nullable();
-      $table->timestamp('created_at')->nullable();
-      $table->timestamp('updated_at')->nullable();
       $table->timestamp('last_login_at')->nullable();
       $table->string('last_login_ip', 45)->nullable();
       $table->boolean('is_active')->default(true);
       $table->boolean('is_delete')->default(false);
+      $table->timestamps();
+      $table->softDeletes();
       $table->index('username', 'idx_username', 'hash');
       $table->index('email', 'idx_email', 'hash');
       $table->index('id', 'idx_id', 'hash');

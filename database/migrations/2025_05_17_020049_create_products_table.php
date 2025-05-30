@@ -20,6 +20,7 @@ return new class extends Migration {
       $table->string('image', 255)->nullable();
       $table->string('image_url', 255)->nullable();
       $table->timestamps();
+      $table->softDeletes();
     });
   }
 

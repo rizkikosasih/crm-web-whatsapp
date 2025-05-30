@@ -16,6 +16,7 @@ return new class extends Migration {
       $table->string('phone', 16)->unique(); // nomor WhatsApp
       $table->string('notes')->nullable();
       $table->timestamps();
+      $table->softDeletes();
     });
   }
 

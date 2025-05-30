@@ -19,6 +19,7 @@ return new class extends Migration {
       $table->tinyInteger('status')->default(0);
       $table->string('proof_of_payment')->nullable();
       $table->timestamps();
+      $table->softDeletes();
     });
   }
 

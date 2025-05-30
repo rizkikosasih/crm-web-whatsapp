@@ -15,6 +15,7 @@ return new class extends Migration {
       $table->string('image_url', 255)->nullable();
       $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
       $table->timestamps();
+      $table->softDeletes();
     });
   }
 

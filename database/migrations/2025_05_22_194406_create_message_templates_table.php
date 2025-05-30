@@ -17,6 +17,7 @@ return new class extends Migration {
       $table->enum('type', ['order', 'product', 'campaign'])->default('campaign');
       $table->boolean('is_active')->default(true);
       $table->timestamps();
+      $table->softDeletes();
     });
   }
 

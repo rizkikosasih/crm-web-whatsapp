@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Message extends Model
 {
-  use HasFactory;
+  use HasFactory, SoftDeletes;
 
   protected $fillable = [
     'customer_id',
@@ -20,6 +21,9 @@ class Message extends Model
 
   protected $casts = [
     'sent_at' => 'datetime',
+    'created_at' => 'datetime',
+    'updated_at' => 'datetime',
+    'deleted_at' => 'datetime',
   ];
 
   protected static function booted()

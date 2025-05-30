@@ -17,6 +17,7 @@ return new class extends Migration {
       $table->integer('quantity');
       $table->decimal('price', 12, 2); // harga saat transaksi
       $table->timestamps();
+      $table->softDeletes();
     });
   }
 

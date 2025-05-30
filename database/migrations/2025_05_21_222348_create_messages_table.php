@@ -16,6 +16,7 @@ return new class extends Migration {
       $table->enum('status', ['sent', 'delivered', 'read', 'failed'])->default('sent');
       $table->timestamp('sent_at')->nullable();
       $table->timestamps();
+      $table->softDeletes();
     });
   }
 
