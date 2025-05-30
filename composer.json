@@ -32,7 +32,8 @@
       "Database\\Seeders\\": "database/seeders/"
     },
     "files": [
-      "app/Helpers/global.php"
+      "app/Helpers/global.php",
+      "app/Helpers/Chart.php"
     ]
   },
   "autoload-dev": {
@@ -74,3 +75,4 @@
   "minimum-stability": "stable",
   "prefer-stable": true
 }
+
