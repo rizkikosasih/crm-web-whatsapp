@@ -23,59 +23,61 @@
             @endif
 
             <form wire:submit.prevent="save">
-              <x-form.input-horizontal
-                id="name"
-                name="name"
-                label="Nama Produk"
-                placeholder="Masukan Nama Produk"
-                customClass="form-control-sm"
-                wire:model.defer="name"
-              />
+              <x-overlay wire:target='save'>
+                <x-form.input-horizontal
+                  id="name"
+                  name="name"
+                  label="Nama Produk"
+                  placeholder="Masukan Nama Produk"
+                  customClass="form-control-sm"
+                  wire:model.defer="name"
+                />
 
-              <x-form.input-horizontal
-                id="sku"
-                name="sku"
-                label="SKU Produk"
-                placeholder="Masukan SKU Produk"
-                customClass="form-control-sm"
-                wire:model.defer="sku"
-              />
+                <x-form.input-horizontal
+                  id="sku"
+                  name="sku"
+                  label="SKU Produk"
+                  placeholder="Masukan SKU Produk"
+                  customClass="form-control-sm"
+                  wire:model.defer="sku"
+                />
 
-              <x-form.input-horizontal
-                id="price"
-                name="price"
-                label="Harga"
-                placeholder="Masukan Harga"
-                customClass="form-control-sm number-only"
-                wire:model.defer="price"
-              />
+                <x-form.input-horizontal
+                  id="price"
+                  name="price"
+                  label="Harga"
+                  placeholder="Masukan Harga"
+                  customClass="form-control-sm number-only"
+                  wire:model.defer="price"
+                />
 
-              <x-form.input-horizontal
-                id="stock"
-                name="stock"
-                label="Stock"
-                placeholder="Masukan Stock"
-                customClass="form-control-sm number-only"
-                maxlength="3"
-                wire:model.defer="stock"
-              />
+                <x-form.input-horizontal
+                  id="stock"
+                  name="stock"
+                  label="Stock"
+                  placeholder="Masukan Stock"
+                  customClass="form-control-sm number-only"
+                  maxlength="3"
+                  wire:model.defer="stock"
+                />
 
-              <x-form.textarea-horizontal
-                id="description"
-                name="description"
-                label="Deskripsi Produk"
-                placeholder="Masukan Deskripsi Produk"
-                wire:model.defer="description"
-              />
+                <x-form.textarea-horizontal
+                  id="description"
+                  name="description"
+                  label="Deskripsi Produk"
+                  placeholder="Masukan Deskripsi Produk"
+                  wire:model.defer="description"
+                />
 
-              <x-form.image-horizontal
-                id="image"
-                name="image"
-                label="Gambar"
-                :preview="$image"
-                path="{{ $image ?? null }}"
-                wire:model.defer="image"
-              />
+                <x-form.image-horizontal
+                  id="image"
+                  name="image"
+                  label="Gambar"
+                  :preview="$image"
+                  path="{{ $image ?? null }}"
+                  wire:model.defer="image"
+                />
+              </x-overlay>
 
               <hr>
 
@@ -130,42 +132,44 @@
             </div>
 
             <div class="table-responsive">
-              <table class="table table-striped table-bordered">
-                <x-table.header :columns="$tableHeader" />
+              <x-overlay wire:target='search, perPage, $refresh'>
+                <table class="table table-striped table-bordered">
+                  <x-table.header :columns="$tableHeader" />
 
-                <tbody>
-                  @forelse ($items as $index => $item)
-                    <tr>
-                      <td class="text-center">{{ $index + $items->firstItem() }}</td>
-                      <td>{{ $item->name }} ( {{ $item->sku }} )</td>
-                      <td class="text-center">
-                        <x-button.primary customClass="btn-sm circle">
-                          {{ $item->stock }}
-                        </x-button.primary>
-                      </td>
-                      <td class="text-end">{{ rupiah($item->price) }}</td>
-                      <td class="text-center">
-                        <x-preview-image path="{{ $item->image }}" />
-                      </td>
-                      <td class="actions">
-                        <div class="d-flex justify-content-center align-items-center gap-2">
-                          <x-link.icon-primary wire:click="edit({{ $item->id }})" customClass="tooltips" title="Ubah">
-                            <i class="fas fa-pencil"></i>
-                          </x-link.icon-primary>
+                  <tbody>
+                    @forelse ($items as $index => $item)
+                      <tr>
+                        <td class="text-center">{{ $index + $items->firstItem() }}</td>
+                        <td>{{ $item->name }} ( {{ $item->sku }} )</td>
+                        <td class="text-center">
+                          <x-button.primary customClass="btn-sm circle">
+                            {{ $item->stock }}
+                          </x-button.primary>
+                        </td>
+                        <td class="text-end">{{ rupiah($item->price) }}</td>
+                        <td class="text-center">
+                          <x-preview-image path="{{ $item->image }}" />
+                        </td>
+                        <td class="actions">
+                          <div class="d-flex justify-content-center align-items-center gap-2">
+                            <x-link.icon-primary wire:click="edit({{ $item->id }})" customClass="tooltips" title="Ubah">
+                              <i class="fas fa-pencil"></i>
+                            </x-link.icon-primary>
 
-                          <x-link.icon-success wire:click="$dispatch('showWhatsappModal', { id: {{ $item->id }} })" customClass="tooltips" title="Kirim Sebagai Pesan">
-                            <i class="fab fa-whatsapp"></i>
-                          </x-link.icon-success>
-                        </div>
-                      </td>
-                    </tr>
-                  @empty
-                    <tr>
-                      <td colspan="{{ sizeof($tableHeader) }}" class="text-center">Data Kosong</td>
-                    </tr>
-                  @endforelse
-                </tbody>
-              </table>
+                            <x-link.icon-success wire:click="$dispatch('showWhatsappModal', { id: {{ $item->id }} })" customClass="tooltips" title="Kirim Sebagai Pesan">
+                              <i class="fab fa-whatsapp"></i>
+                            </x-link.icon-success>
+                          </div>
+                        </td>
+                      </tr>
+                    @empty
+                      <tr>
+                        <td colspan="{{ sizeof($tableHeader) }}" class="text-center">Data Kosong</td>
+                      </tr>
+                    @endforelse
+                  </tbody>
+                </table>
+              </x-overlay>
             </div>
 
             {{ $items->links('partials.pagination.bootstrap4') }}

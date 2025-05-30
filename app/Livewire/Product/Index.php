@@ -117,6 +117,7 @@ class Index extends Component
     $this->image = $product->image;
     $this->isEdit = true;
     $this->dispatch('scrollToTop');
+    $this->dispatch('clearError');
   }
 
   public function resetForm()
