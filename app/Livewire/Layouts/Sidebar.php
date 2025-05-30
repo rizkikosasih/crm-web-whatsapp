@@ -18,7 +18,6 @@ class Sidebar extends Component
       'children' => function ($query) use ($roleId) {
         $query
           ->active()
-          ->notDelete()
           ->whereHas('roles', function ($q) use ($roleId) {
             $q->where('role_id', $roleId);
           })
@@ -26,7 +25,6 @@ class Sidebar extends Component
       },
     ])
       ->active()
-      ->notDelete()
       ->whereNull('parent_id')
       ->whereHas('roles', function ($query) use ($roleId) {
         $query->where('role_id', $roleId);

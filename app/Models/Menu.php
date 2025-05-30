@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Menu extends Model
 {
-  use HasFactory;
+  use HasFactory, SoftDeletes;
 
   protected $fillable = [
     'parent_id',
@@ -16,7 +17,6 @@ class Menu extends Model
     'position',
     'is_active',
     'is_sidebar',
-    'is_delete',
   ];
 
   /**
@@ -27,6 +27,7 @@ class Menu extends Model
   protected $casts = [
     'created_at' => 'datetime',
     'updated_at' => 'datetime',
+    'deleted_at' => 'datetime',
   ];
 
   // Relasi untuk child menu
@@ -48,11 +49,6 @@ class Menu extends Model
   public function scopeActive($query)
   {
     return $query->where('is_active', true);
-  }
-
-  public function scopeNotDelete($query)
-  {
-    return $query->where('is_delete', false);
   }
 
   public function scopeSidebar($query)

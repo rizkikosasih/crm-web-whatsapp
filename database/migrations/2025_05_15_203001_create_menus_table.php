@@ -20,8 +20,8 @@ return new class extends Migration {
       $table->string('slug', 50)->nullable();
       $table->boolean('is_active')->default(true);
       $table->boolean('is_sidebar')->default(true);
-      $table->boolean('is_delete')->default(false);
       $table->timestamps();
+      $table->softDeletes();
 
       //Relasi Table
       $table->foreign('parent_id')->references('id')->on('menus')->onDelete('cascade');
