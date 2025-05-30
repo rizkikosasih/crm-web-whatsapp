@@ -53,7 +53,6 @@ Route::middleware(['auth', 'role'])->group(function () {
         ->where('id', '[0-9]+')
         ->name('transaksi-order-detail');
     });
-    Route::get('message', App\Livewire\Message\Index::class)->name('transaksi-message');
   });
 
   Route::prefix('report')->group(function () {

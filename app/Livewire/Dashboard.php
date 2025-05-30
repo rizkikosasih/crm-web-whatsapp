@@ -3,22 +3,41 @@
 namespace App\Livewire;
 
 use App\Helpers\ChartHelper;
+use App\Models\Message;
 use App\Models\Order;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Dashboard extends Component
 {
+  use WithPagination;
+
   #[Locked]
   public $title = 'Dashboard';
 
+  #[Locked]
+  public $messageHeader = [
+    ['name' => 'No'],
+    ['name' => 'Pelanggan'],
+    ['name' => 'Dikirim'],
+    ['name' => 'Isi Pesan'],
+    ['name' => 'Gambar'],
+    ['name' => 'Tanggal Kirim'],
+  ];
+
+  public $perPage = 5;
+  public $search;
+
   public function mount()
   {
-    $this->items = $this->getItemsProperty();
+    $this->orderByStatus = $this->getOrderByStatusProperty();
+    $this->charts = $this->getChartsProperty();
+    $this->messages = $this->getMessagesProperty();
   }
 
-  public function getItemsProperty(): array
+  public function getOrderByStatusProperty(): array
   {
     /* Small Box */
     $statusConfig = [
@@ -63,7 +82,11 @@ class Dashboard extends Component
       ];
     }
 
-    /* Chart */
+    return $orderByStatus;
+  }
+
+  public function getChartsProperty(): array
+  {
     $statusLabels = [
       0 => 'Belum Bayar',
       1 => 'Sudah Bayar',
@@ -100,7 +123,7 @@ class Dashboard extends Component
       ->pluck('total_quantity', 'product_name')
       ->all();
 
-    $charts = [
+    return [
       [
         'title' => 'Grafik Pesanan',
         'id' => 'orderCharts',
@@ -121,19 +144,41 @@ class Dashboard extends Component
         ),
       ],
     ];
-
-    return [$orderByStatus, $charts];
   }
 
-  protected function updated()
+  public function getMessagesProperty()
   {
-    $this->items = $this->getItemsProperty();
+    return Message::with('customer')
+      ->with('user')
+      ->when($this->search, function ($q) {
+        $q->whereHas('customer', function ($q2) {
+          $q2->where('name', 'like', '%' . $this->search . '%');
+        })->orWhereHas('user', function ($q2) {
+          $q2->where('name', 'like', '%' . $this->search . '%');
+        });
+      })
+      ->latest()
+      ->paginate($this->perPage);
+  }
+
+  public function updated($propertyName)
+  {
+    if (in_array($propertyName, ['search', 'perPage'])) {
+      $this->messages = $this->getMessagesProperty();
+    } else {
+      // $this->items = $this->getItemsProperty();
+    }
   }
 
   public function render()
   {
-    $items = $this->items;
+    $messages = $this->messages;
+    $orderByStatus = $this->orderByStatus;
+    $charts = $this->charts;
 
-    return view('livewire.dashboard.index', compact(['items']));
+    return view(
+      'livewire.dashboard.index',
+      compact(['orderByStatus', 'charts', 'messages'])
+    );
   }
 }
