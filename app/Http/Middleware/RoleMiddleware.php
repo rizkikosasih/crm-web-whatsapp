@@ -45,10 +45,7 @@ class RoleMiddleware
     }
 
     // Ambil menu saat ini
-    $menu = Menu::where('slug', $slug)->first();
-    if (!$menu) {
-      return abort(404);
-    }
+    $menu = Menu::where('slug', $slug)->where('is_active', true)->firstOrFail();
 
     // Cek akses menu berdasarkan role di tabel menu_roles
     $hasAccess = MenuRole::where('role_id', $role_id)
