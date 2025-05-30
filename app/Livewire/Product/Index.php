@@ -140,6 +140,13 @@ class Index extends Component
     $this->dispatch('showWhatsappModal', id: $id);
   }
 
+  public function updated($propertyName)
+  {
+    if (in_array($propertyName, ['search', 'perPage', 'page'])) {
+      $this->dispatch('clearError');
+    }
+  }
+
   public function render()
   {
     $items = Product::when($this->search, function ($query) {
