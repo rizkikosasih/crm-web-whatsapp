@@ -4,6 +4,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use App\Models\WhatsappApiSetting;
+use Illuminate\Support\Facades\Route;
 
 if (!function_exists('storagePath')) {
   function storagePath(string $path): string
@@ -18,7 +19,7 @@ if (!function_exists('imageUri')) {
     $file = Storage::disk('public')->get($path);
 
     // Dapatkan MIME type
-    $mime = Storage::disk('public')->mimeType($path);
+    $mime = mime_content_type($path);
 
     // Encode ke base64
     $base64 = base64_encode($file);
