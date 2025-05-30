@@ -17,18 +17,20 @@ class Sidebar extends Component
     $this->menus = Menu::with([
       'children' => function ($query) use ($roleId) {
         $query
-          ->where('is_active', true)
+          ->active()
+          ->notDelete()
           ->whereHas('roles', function ($q) use ($roleId) {
             $q->where('role_id', $roleId);
           })
           ->orderBy('position', 'asc');
       },
     ])
+      ->active()
+      ->notDelete()
       ->whereNull('parent_id')
       ->whereHas('roles', function ($query) use ($roleId) {
         $query->where('role_id', $roleId);
       })
-      ->where('is_active', true)
       ->orderBy('position', 'asc')
       ->get();
   }

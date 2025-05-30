@@ -35,7 +35,6 @@ class Menu extends Model
     return $this->hasMany(Menu::class, 'parent_id');
   }
 
-  // Relasi untuk parent menu
   public function parent()
   {
     return $this->belongsTo(Menu::class, 'parent_id');
@@ -44,5 +43,25 @@ class Menu extends Model
   public function roles()
   {
     return $this->belongsToMany(Role::class, 'menu_roles');
+  }
+
+  public function scopeActive($query)
+  {
+    return $query->where('is_active', true);
+  }
+
+  public function scopeNotDelete($query)
+  {
+    return $query->where('is_delete', false);
+  }
+
+  public function scopeSidebar($query)
+  {
+    return $query->where('is_sidebar', true);
+  }
+
+  public function scopeNavbar($query)
+  {
+    return $query->where('is_sidebar', false);
   }
 }

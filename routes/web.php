@@ -75,5 +75,7 @@ Route::middleware(['auth', 'role'])->group(function () {
         'setting-user-profile'
       );
     });
+
+    Route::get('menu', App\Livewire\Menu\Index::class)->name('setting-menu');
   });
 });
