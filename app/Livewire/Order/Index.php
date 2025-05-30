@@ -14,7 +14,7 @@ class Index extends Component
 
   public $dateStart;
   public $dateEnd;
-  public $status = '';
+  public $status;
   public $search = '';
   public $perPage = 10;
 
@@ -36,6 +36,11 @@ class Index extends Component
     ['name' => 'Tanggal'],
     ['name' => '<i class="fas fa-cogs"></i>', 'class' => 'actions'],
   ];
+
+  public function mount()
+  {
+    $this->status = request()->query('status', '');
+  }
 
   public function render()
   {
