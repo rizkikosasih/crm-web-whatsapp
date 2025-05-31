@@ -28,8 +28,8 @@ window.swalWithBsBtn = Swal.mixin({
 /** AdminLTE 3 */
 import 'admin-lte';
 
-document.addEventListener('livewire:navigated', function () {
-  /** Initialize Tooltip */
+/** Initialize Tooltip */
+function initializedTooltips() {
   $('.tooltip').remove();
   $(document).tooltip({
     selector: '.tooltips',
@@ -43,6 +43,10 @@ document.addEventListener('livewire:navigated', function () {
       return 'top';
     },
   });
+}
+
+document.addEventListener('livewire:navigated', function () {
+  initializedTooltips();
 
   /** Fixing Bug Sidebar */
   function fixingSidebar() {
@@ -92,4 +96,9 @@ document.addEventListener('livewire:initialized', function () {
         }
       });
   });
+});
+
+Livewire.on('refreshWithTooltips', function () {
+  $wire.refresh();
+  initializedTooltips();
 });

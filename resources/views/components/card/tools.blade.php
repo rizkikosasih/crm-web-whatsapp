@@ -14,7 +14,7 @@
   @endif
 
   @if ($refresh)
-    <x-button color="tool" class="tooltips" title="Refresh" wire:click="$refresh">
+    <x-button color="tool" class="tooltips" title="Refresh" wire:click="Livewire.dispatch('refreshWithTooltips')">
       <i class="fas fa-refresh"></i>
     </x-button>
   @endif
