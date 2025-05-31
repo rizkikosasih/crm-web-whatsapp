@@ -39,7 +39,7 @@
             <div class="card card-outline card-primary">
               <div class="card-header">
                 <div class="card-title">{{ $chart['title'] }}</div>
-                <x-card.tools minus="true"/>
+                <x-card.tools minus="true" url="{{ url('dashboard') }}" urlTitle="Refresh" urlIcon="fas fa-refresh" />
               </div>
               <div class="card-body text-justify">
                 <canvas id="{{ $chart['id'] }}" wire:ignore></canvas>
@@ -58,7 +58,7 @@
           <div class="card-header">
             <div class="card-title">Histori Pesan Keluar</div>
 
-            <x-card.tools minus="true"/>
+            <x-card.tools minus="true" refresh="true"/>
           </div>
 
           <div class="card-body text-justify">

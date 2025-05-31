@@ -8,20 +8,20 @@
 
 <div class="card-tools">
   @if ($url)
-    <a href="{{ $url }}" class="btn btn-tool tooltips" title="{{ $urlTitle }}" wire:navigate>
+    <x-link.button href="{{ $url }}" color="tool" class="tooltips" title="{{ $urlTitle}}" wire:navigate>
       <i class="{{ $urlIcon }}"></i>
-    </a>
+    </x-link.button>
   @endif
 
   @if ($refresh)
-    <button type="button" class="btn btn-tool tooltips" title="Refresh" wire:click="$refresh">
+    <x-button color="tool" class="tooltips" title="Refresh" wire:click="$refresh">
       <i class="fas fa-refresh"></i>
-    </button>
+    </x-button>
   @endif
 
   @if ($minus)
-    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+    <x-button color="tool" data-card-widget="collapse">
       <i class="fas fa-minus"></i>
-    </button>
+    </x-button>
   @endif
 </div>
