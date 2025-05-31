@@ -2,12 +2,14 @@
   'refresh' => null,
   'minus' => null,
   'url' => null,
+  'urlIcon' => 'fas fa-backward-step',
+  'urlTitle' => 'Kembali',
 ])
 
 <div class="card-tools">
   @if ($url)
-    <a href="{{ $url }}" class="btn btn-tool tooltips" title="Kembali" title wire:navigate>
-      <i class="fas fa-backward-step"></i>
+    <a href="{{ $url }}" class="btn btn-tool tooltips" title="{{ $urlTitle }}" wire:navigate>
+      <i class="{{ $urlIcon }}"></i>
     </a>
   @endif
 
