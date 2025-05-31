@@ -45,7 +45,7 @@
                         <td>{{ $item->name }}</td>
                         <td><i class="{{ $item->icon }}"></i> {{ $item->icon }}</td>
                         <td class="actions">
-                          <div class="d-flex justify-content-center align-items-center gap-2">
+                          <div class="btn-group">
                             <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
                               <input
                                 type="checkbox"

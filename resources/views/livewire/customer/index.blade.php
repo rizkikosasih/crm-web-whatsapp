@@ -48,13 +48,13 @@
               />
 
               <x-form.button-container customClass="justify-content-end">
-                <x-button.danger wire:click="resetForm">
+                <x-button.custom wire:click="resetForm" color="danger">
                   Batal
-                </x-button.danger>
+                </x-button.custom>
 
-                <x-button.primary type="submit">
+                <x-button.custom type="submit" color="primary">
                   Simpan
-                </x-button.primary>
+                </x-button.custom>
               </x-form.button-container>
             </form>
           </div>
@@ -100,10 +100,10 @@
                       <td>{{ $item->name }}</td>
                       <td>{{ $item->phone }}</td>
                       <td class="actions">
-                        <div class="d-flex justify-content-center align-items-center gap-2">
-                          <x-link.icon-primary wire:click="edit({{$item->id}})" customClass="tooltips" title="Ubah">
+                        <div class="btn-group">
+                          <x-button.custom wire:click="edit({{$item->id}})" color="primary" size="sm" class="tooltips" title="Ubah">
                             <i class="fas fa-pencil"></i>
-                          </x-link.icon-primary>
+                          </x-button.custom>
                         </div>
                       </td>
                     </tr>
@@ -118,11 +118,8 @@
 
             {{ $items->links('partials.pagination.bootstrap4') }}
           </div>
-          <!-- /. card body -->
         </div>
       </div>
     </div>
-    <!--/. row -->
   </div>
-  <!--/. container-fluid -->
 </section>

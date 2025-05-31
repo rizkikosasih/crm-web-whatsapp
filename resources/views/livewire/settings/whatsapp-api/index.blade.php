@@ -45,9 +45,9 @@
               <hr>
 
               <x-form.button-container customClass="justify-content-end">
-                <x-button.primary type="submit">
+                <x-button.custom type="submit" color="primary">
                   Simpan
-                </x-button.primary>
+                </x-button.custom>
               </x-form.button-container>
             </form>
           </div>

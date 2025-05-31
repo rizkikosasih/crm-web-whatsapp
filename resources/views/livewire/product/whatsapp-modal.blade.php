@@ -54,10 +54,15 @@
                     <td>{{ $item['name'] }}</td>
                     <td>{{ $item['phone'] }}</td>
                     <td class="actions">
-                      <div class="d-flex justify-content-center align-items-center gap-2">
-                        <x-link.icon-success customClass="tooltips" title="Kirim Info Produk" wire:click="sendWA({{$item['phone']}})">
+                      <div class="btn-group">
+                        <x-button.custom
+                          class="tooltips"
+                          title="Kirim Info Produk"
+                          wire:click="sendWA({{$item['phone']}})"
+                          color="success"
+                        >
                           <i class="fas fa-paper-plane"></i>
-                        </x-link.icon-success>
+                        </x-button.custom>
                       </div>
                     </td>
                   </tr>

@@ -44,15 +44,27 @@
               </div>
 
               <div class="col-auto px-0">
-                <x-button.primary wire:click="exportXls" customClass="tooltips" title="Export ke Excel">
+                <x-button.custom
+                  wire:click="exportXls"
+                  class="tooltips"
+                  title="Export ke Excel"
+                  color="primary"
+                  wire:loading.attr="disabled"
+                >
                   <i class="fas fa-file-excel"></i>
-                </x-button.primary>
+                </x-button.custom>
               </div>
 
               <div class="col-auto px-0">
-                <x-button.default wire:click="$refresh" customClass="tooltips btn-info" title="Refresh Halaman">
+                <x-button.custom
+                  wire:click="$refresh"
+                  class="tooltips"
+                  title="Refresh Halaman"
+                  color="info"
+                  wire:loading.attr="disabled"
+                >
                   <i class="fas fa-refresh"></i>
-                </x-button.default>
+                </x-button.custom>
               </div>
             </div>
 
@@ -67,9 +79,9 @@
                       <td class="text-end">{{ dateIndo($item->order_date) }}</td>
                       <td>{{ $item->customer->name }}</td>
                       <td class="text-center">
-                        <x-button.default customClass="btn-sm btn-{{ $colorStatus[$item->status] }}">
+                        <x-button.custom color="{{ $colorStatus[$item->status] }}" size="sm">
                           {{ $statusList[$item->status] }}
-                        </x-button.default>
+                        </x-button.custom>
                       </td>
                       <td class="text-center">{{ $item->orderItems->sum('quantity') }}</td>
                       <td class="text-end">{{ rupiah($item->total_amount) }}</td>

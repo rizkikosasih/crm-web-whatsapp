@@ -10,13 +10,13 @@
       <div class="col-12 m-1 p-1">
         <div class="card card-primary card-outline">
           <div class="card-header">
-            <x-link.button-danger
+            <x-link.button
               url="{{ url('transaksi/order') }}"
-              customClass="btn-sm"
-              wire:navigate
+              color="danger"
+              size="sm"
             >
               <i class="fas fa-arrow-left"></i> Kembali
-            </x-link.button-danger>
+            </x-link.button>
           </div>
 
           <div class="card-body text-justify">
@@ -56,9 +56,9 @@
               </div>
               <div class="col-md-3">
                 <label>&nbsp;</label>
-                <x-button.primary customClass="btn-block" wire:click='addProduct'>
+                <x-button.custom class="btn-block" color="primary" wire:click="addProduct">
                   Tambah
-                </x-button.primary>
+                </x-button.custom>
               </div>
             </div>
 
@@ -84,14 +84,16 @@
                         <td class="text-center">{{ $item['quantity'] }}</td>
                         <td class="text-end">{{ rupiah($item['price'] * $item['quantity']) }}</td>
                         <td class="actions">
-                          <div class="d-flex justify-content-center gap-2">
-                            <x-button.danger
-                              customClass="btn-sm tooltips"
+                          <div class="btn-group">
+                            <x-button.custom
+                              class="tooltips"
+                              color="danger"
+                              size="sm"
                               wire:click="removeItem({{ $index }})"
                               title="Hapus Item"
                             >
                               <i class="fas fa-remove"></i>
-                            </x-button.danger>
+                            </x-button.custom>
                           </div>
                         </td>
                       </tr>
@@ -108,15 +110,12 @@
                 </table>
               </div>
 
-              <button class="btn btn-success" wire:click="save">Simpan Order</button>
+              <x-button.custom wire:click="save" color="success">Simpan Order</x-button.custom>
             @endif
           </div>
-          <!-- /. card body -->
         </div>
       </div>
     </div>
-    <!--/. row -->
   </div>
-  <!--/. container-fluid -->
 </section>
 

@@ -82,21 +82,19 @@
               <hr>
 
               <x-form.button-container customClass="justify-content-end">
-                <x-button.danger wire:click="resetForm" wire:loading.attr="disabled" wire:target="image, save">
+                <x-button.custom wire:click="resetForm" wire:loading.attr="disabled" wire:target="image, save" color="danger">
                   Batal
-                </x-button.danger>
+                </x-button.custom>
 
-                <x-button.primary type="submit" wire:loading.attr="disabled" wire:target="image, save">
+                <x-button.custom type="submit" wire:loading.attr="disabled" wire:target="image, save" color="primary">
                   Simpan
-                </x-button.primary>
+                </x-button.custom>
               </x-form.button-container>
             </form>
           </div>
-          <!-- /. card body -->
         </div>
       </div>
     </div>
-    <!--/. row -->
   </div>
 
   <div class="container-fluid" id="list">
@@ -142,23 +140,35 @@
                         <td class="text-center">{{ $index + $items->firstItem() }}</td>
                         <td>{{ $item->name }} ( {{ $item->sku }} )</td>
                         <td class="text-center">
-                          <x-button.primary customClass="btn-sm circle">
+                          <x-button.custom color="primary" size="sm" class="circle">
                             {{ $item->stock }}
-                          </x-button.primary>
+                          </x-button.custom>
                         </td>
                         <td class="text-end">{{ rupiah($item->price) }}</td>
                         <td class="text-center">
                           <x-preview-image path="{{ $item->image }}" />
                         </td>
                         <td class="actions">
-                          <div class="d-flex justify-content-center align-items-center gap-2">
-                            <x-link.icon-primary wire:click="edit({{ $item->id }})" customClass="tooltips" title="Ubah">
+                          <div class="btn-group">
+                            <x-button.custom
+                              wire:click="edit({{ $item->id }})"
+                              class="tooltips"
+                              title="Ubah"
+                              color="primary"
+                              size="sm"
+                            >
                               <i class="fas fa-pencil"></i>
-                            </x-link.icon-primary>
+                            </x-button.custom>
 
-                            <x-link.icon-success wire:click="$dispatch('showWhatsappModal', { id: {{ $item->id }} })" customClass="tooltips" title="Kirim Sebagai Pesan">
+                            <x-button.custom
+                              wire:click="$dispatch('showWhatsappModal', { id: {{ $item->id }} })"
+                              class="tooltips"
+                              title="Kirim Sebagai Pesan"
+                              color="success"
+                              size="sm"
+                            >
                               <i class="fab fa-whatsapp"></i>
-                            </x-link.icon-success>
+                            </x-button.custom>
                           </div>
                         </td>
                       </tr>
@@ -174,13 +184,10 @@
 
             {{ $items->links('partials.pagination.bootstrap4') }}
           </div>
-          <!-- /. card body -->
         </div>
       </div>
     </div>
-    <!--/. row -->
   </div>
-  <!--/. container-fluid -->
 
   <livewire:product.whatsapp-modal />
 </section>

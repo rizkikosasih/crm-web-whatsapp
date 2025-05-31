@@ -6,9 +6,9 @@
       <div class="col-12 m-1 p-1">
         <div class="card card-primary card-outline">
           <div class="card-header">
-            <x-link.button-primary url="{{ url('transaksi/order/create') }}" customClass="btn-sm">
+            <x-link.button url="{{ url('transaksi/order/create') }}" color="primary" size="sm">
               <i class="fas fa-plus"></i> Buat Pesanan
-            </x-link.button-primary>
+            </x-link.button>
 
             <x-card.tools refresh="true" />
           </div>
@@ -83,17 +83,19 @@
                       <td class="text-center">{{ $index + $items->firstItem() }}</td>
                       <td>{{ $customer->name }}</td>
                       <td class="text-center">
-                        <x-button.default customClass="btn-sm btn-{{ $colorStatus[$item->status] }}">
+                        <x-button.custom color="{{ $colorStatus[$item->status] }}" size="sm">
                           {{ $statusList[$item->status] }}
-                        </x-button.default>
+                        </x-button.custom>
                       </td>
                       <td class="text-end">{{ rupiah($item->total_amount) }}</td>
                       <td class="text-end">{{ dateIndo($item->order_date) }}</td>
                       <td class="actions">
-                        <div class="d-flex justify-content-center align-items-center gap-2">
-                          <x-link.icon-primary
+                        <div class="btn-group">
+                          <x-link.icon
+                            color="primary"
+                            size="sm"
+                            class="tooltips"
                             url="{{ url('transaksi/order/detail/' . $item->id) }}"
-                            customClass="tooltips"
                             title="{{ in_array($item->status, [3,4]) ? 'Lihat Detail' : 'Update Status' }}"
                           >
                             @if (in_array($item->status, [3,4]))
@@ -101,7 +103,7 @@
                             @else
                               <i class="fas fa-pencil"></i>
                             @endif
-                          </x-link.icon-primary>
+                          </x-link.icon>
                         </div>
                       </td>
                     </tr>
@@ -116,12 +118,9 @@
 
             {{ $items->links('partials.pagination.bootstrap4') }}
           </div>
-          <!-- /. card body -->
         </div>
       </div>
     </div>
-    <!--/. row -->
   </div>
-  <!--/. container-fluid -->
 </section>
 

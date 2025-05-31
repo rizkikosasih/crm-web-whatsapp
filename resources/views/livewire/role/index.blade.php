@@ -28,13 +28,13 @@
               </x-overlay>
 
               <x-form.button-container customClass="justify-content-end">
-                <x-button.danger wire:click="resetForm">
+                <x-button.custom wire:click="resetForm" color="danger">
                   Batal
-                </x-button.danger>
+                </x-button.custom>
 
-                <x-button.primary type="submit">
+                <x-button.custom type="submit" color="primary">
                   Simpan
-                </x-button.primary>
+                </x-button.custom>
               </x-form.button-container>
             </form>
           </div>
@@ -81,13 +81,25 @@
                         <td>{{ $item->name }}</td>
                         <td class="actions">
                           <div class="btn-group">
-                            <x-link.button-default customClass="btn-sm btn-warning tooltips" url="{{ url('setting/role/' . $item->id) }}" title="Akses Menu">
+                            <x-link.button
+                              url="{{ url('setting/role/' . $item->id) }}"
+                              size="sm"
+                              color="warning"
+                              class="tooltips"
+                              title="Akses Menu"
+                            >
                               <i class="fas fa-key"></i>
-                            </x-link.button-default>
+                            </x-link.button>
 
-                            <x-button.primary wire:click="edit({{$item->id}})" customClass="btn-sm tooltips" title="Ubah">
+                            <x-button.custom
+                              wire:click="edit({{$item->id}})"
+                              class="btn-sm tooltips"
+                              title="Ubah"
+                              color="primary"
+                              size="sm"
+                            >
                               <i class="fas fa-pencil"></i>
-                            </x-button.primary>
+                            </x-button.custom>
                           </div>
                         </td>
                       </tr>
@@ -103,11 +115,8 @@
 
             {{ $items->links('partials.pagination.bootstrap4') }}
           </div>
-          <!-- /. card body -->
         </div>
       </div>
     </div>
-    <!--/. row -->
   </div>
-  <!--/. container-fluid -->
 </section>

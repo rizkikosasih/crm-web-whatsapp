@@ -70,13 +70,13 @@
               />
 
               <x-form.button-container customClass="justify-content-end">
-                <x-button.danger wire:click="resetForm">
+                <x-button.custom wire:click="resetForm" color="danger">
                   Batal
-                </x-button.danger>
+                </x-button.custom>
 
-                <x-button.primary type="submit">
+                <x-button.custom type="submit" color="primary">
                   Simpan
-                </x-button.primary>
+                </x-button.custom>
               </x-form.button-container>
             </form>
           </div>
@@ -139,19 +139,26 @@
                       <td>{{ $item->email }}</td>
                       <td>{{ $item->phone }}</td>
                       <td class="text-center">
-                        <x-button.default
+                        <x-button.custom
                           wire:click="confirmActive({{ $item->id }}, {{ $item->is_active }})"
-                          customClass="btn-sm btn-{{ $colorStatus[$item->is_active] }}"
+                          color="{{ $colorStatus[$item->is_active] }}"
+                          size="sm"
                         >
                           {{ $statusList[$item->is_active] }}
-                        </x-button.default>
+                        </x-button.custom>
                       </td>
                       <td>{{ $item->role->name }}</td>
                       <td class="actions">
-                        <div class="d-flex justify-content-center align-items-center gap-2">
-                          <x-link.icon-primary wire:click="edit({{$item->id}})" customClass="tooltips" title="Ubah">
+                        <div class="btn-group">
+                          <x-button.custom
+                            wire:click="edit({{ $item->id }})"
+                            class="tooltips"
+                            title="Ubah"
+                            color="primary"
+                            size="sm"
+                          >
                             <i class="fas fa-pencil"></i>
-                          </x-link.icon-primary>
+                          </x-button.custom>
                         </div>
                       </td>
                     </tr>

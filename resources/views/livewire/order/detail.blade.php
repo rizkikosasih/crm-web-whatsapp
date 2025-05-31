@@ -10,11 +10,7 @@
       <div class="col-12 m-1 p-1">
         <div class="card card-primary card-outline">
           <div class="card-header">
-            <x-link.button-danger customClass="btn-sm" url="{{ url('transaksi/order') }}" wire:navigate>
-              <i class="fas fa-arrow-left"></i> Kembali
-            </x-link.button-danger>
-
-            <x-card.tools refresh="true"/>
+            <x-card.tools refresh="true" url="{{ url('transaksi/order') }}"/>
           </div>
 
           <div class="card-body text-justify">
@@ -38,9 +34,9 @@
                 <td>Status</td>
                 <td>:</td>
                 <td>
-                  <x-button.default customClass="btn-sm btn-{{ $colorStatus[$order->status] }}">
+                  <x-button.custom color="{{ $colorStatus[$order->status] }}" size="sm">
                     {{ $statusList[$order->status] }}
-                  </x-button.default>
+                  </x-button.custom>
                 </td>
               </tr>
               @if ($order->status > 0 && $order->status < 4)
@@ -74,7 +70,16 @@
                 </select>
 
                 <div class="col-sm-3">
-                  <button class="btn btn-sm btn-primary btn-block" wire:click="updateStatus" wire:loading.attr="disabled" wire:target="proof_of_payment">Update</button>
+                  <x-button.custom
+                    class="btn-block"
+                    color="primary"
+                    size="sm"
+                    wire:click="updateStatus"
+                    wire:loading.attr="disabled"
+                    wire:target="proof_of_payment"
+                  >
+                    Update
+                  </x-button.custom>
                 </div>
               </div>
 
@@ -130,10 +135,7 @@
             </div>
           </div>
         </div>
-        <!-- /. card body -->
       </div>
     </div>
-    <!--/. row -->
   </div>
-  <!--/. container-fluid -->
 </section>
