@@ -96,6 +96,7 @@
                       <td>{!! nl2br(e($item->message)) !!}</td>
                       <td class="text-center">
                         @if($item->image)
+                          <x-preview-image></x-preview-image>
                           <a
                             href="{{ imageUri($item->image ?? 'images/no-image.svg') }}"
                             data-toggle="lightbox"
@@ -135,19 +136,17 @@
 </section>
 
 @section('page-script')
-  @vite(['resources/plugins/chart.js'])
+  @vite(['resources/plugins/chart.js', 'resources/js/ekko-lightbox.js'])
 
   @verbatim
     <script>
       function initCharts() {
         const chartConfigs = @json($charts);
         chartConfigs.forEach(chart => {
-          if (chart.show) {
-            const selectorId = document.getElementById(chart.id);
-            if (selectorId) {
-              const ctx = selectorId.getContext('2d');
-              new Chart(ctx, chart.config);
-            }
+          const selectorId = document.getElementById(chart.id);
+          if (chart.show && selectorId) {
+            const ctx = selectorId.getContext('2d');
+            new Chart(ctx, chart.config);
           }
         });
       }

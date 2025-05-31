@@ -3,20 +3,22 @@
   'imageTitle' => 'Perbesar',
   'width' => '30px',
   'height' => 'auto',
-  'customClass' => '',
+  'customClass' => null,
 ])
 
 <a
-  href="{{ imageUri($path ?: 'images/no-image.svg') }}"
+  href="{{ imageUri($path) }}"
   data-toggle="lightbox"
   class="tooltips"
   title="{{ $imageTitle }}"
 >
   <img
-    class="img-rounded"
     width="{{ $width }}"
     height="{{ $height }}"
-    src="{{ imageUri($path ?: 'images/no-image.svg') }}"
-    @class([ $customClass ])
+    src="{{ imageUri($path) }}"
+    {{  $attributes->merge([
+      'class' => 'img-rounded',
+      $customClass
+    ]) }}
   />
 </a>
