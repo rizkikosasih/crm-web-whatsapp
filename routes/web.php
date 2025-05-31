@@ -77,5 +77,12 @@ Route::middleware(['auth', 'role'])->group(function () {
     });
 
     Route::get('menu', App\Livewire\Menu\Index::class)->name('setting-menu');
+
+    Route::prefix('role')->group(function () {
+      Route::get('/', App\Livewire\Role\Index::class)->name('setting-role');
+      Route::get('/{id}', App\Livewire\Role\Access::class)
+        ->name('setting-role-access')
+        ->where('id', '[0-9]+');
+    });
   });
 });
