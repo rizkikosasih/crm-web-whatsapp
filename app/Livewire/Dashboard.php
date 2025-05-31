@@ -125,7 +125,7 @@ class Dashboard extends Component
 
     return [
       [
-        'title' => 'Grafik Pesanan',
+        'title' => 'Grafik Pesanan 1 Bulan Terakhir',
         'id' => 'orderCharts',
         'config' => ChartHelper::prepareChartConfig(
           'Grafik Pesanan',
@@ -136,7 +136,7 @@ class Dashboard extends Component
         'show' => $orderData ? true : false,
       ],
       [
-        'title' => 'Grafik Penjualan Produk',
+        'title' => 'Grafik Penjualan Produk 1 Bulan Terakhir',
         'id' => 'productCharts',
         'config' => ChartHelper::prepareChartConfig(
           'Grafik Penjualan Produk',
@@ -167,8 +167,7 @@ class Dashboard extends Component
   {
     if (in_array($propertyName, ['search', 'perPage'])) {
       $this->messages = $this->getMessagesProperty();
-    } else {
-      // $this->items = $this->getItemsProperty();
+      $this->dispatch('refreshChart');
     }
   }
 

@@ -42,7 +42,7 @@
                 <x-card.tools minus="true"/>
               </div>
               <div class="card-body text-justify">
-                <canvas id="{{ $chart['id'] }}"></canvas>
+                <canvas id="{{ $chart['id'] }}" wire:ignore></canvas>
               </div>
             </div>
           </div>
@@ -127,20 +127,28 @@
   @vite(['resources/plugins/chart.js', 'resources/js/ekko-lightbox.js'])
 
   @verbatim
-    <script>
-      function initCharts() {
-        const chartConfigs = @json($charts);
-        chartConfigs.forEach(chart => {
-          const selectorId = document.getElementById(chart.id);
-          if (chart.show && selectorId) {
-            const ctx = selectorId.getContext('2d');
-            new Chart(ctx, chart.config);
-          }
-        });
-      }
+  <script>
+    const renderedCharts = {};
 
-      // document.addEventListener('DOMContentLoaded', initCharts);
-      document.addEventListener('livewire:navigated', initCharts);
-    </script>
+    function initCharts() {
+      const chartConfigs = @json($charts);
+
+      chartConfigs.forEach(chart => {
+        const canvas = document.getElementById(chart.id);
+        if (chart.show && canvas) {
+          const ctx = canvas.getContext('2d');
+
+          if (renderedCharts[chart.id]) {
+            renderedCharts[chart.id].destroy();
+          }
+
+          renderedCharts[chart.id] = new Chart(ctx, chart.config);
+        }
+      });
+    }
+
+    document.addEventListener('livewire:navigated', initCharts);
+    Livewire.on('refreshChart', initCharts);
+  </script>
   @verbatim
 @endsection
