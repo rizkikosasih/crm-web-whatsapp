@@ -69,14 +69,15 @@ class Detail extends Component
         $messages = [];
 
         try {
+          $rules['proof_of_payment'] = 'required';
+          $messages['proof_of_payment.required'] = 'Bukti bayar wajib diisi';
           if ($this->proof_of_payment instanceof TemporaryUploadedFile) {
-            $rules['proof_of_payment'] = 'required|image|max:2048';
-            $messages['proof_of_payment.required'] = 'Bukti Bayar Tidak Boleh Kosong';
+            $rules['proof_of_payment'] = 'image|max:2048';
             $messages['proof_of_payment.image'] =
               'Format file yang diperbolehkan hanya gambar';
             $messages['proof_of_payment.max'] = 'Ukuran gambar maksimal 2MB';
-            $this->validate($rules, $messages);
           }
+          $this->validate($rules, $messages);
 
           $imagePath = null;
           if ($this->proof_of_payment instanceof TemporaryUploadedFile) {
