@@ -120,15 +120,6 @@ class MenuSeeder extends Seeder
         'roles' => ['super-admin', 'admin'],
       ],
       [
-        'name' => 'Pesan Keluar',
-        'icon' => 'fas fa-envelope-open',
-        'route' => '/transaksi/message',
-        'slug' => 'transaksi-message',
-        'position' => 2,
-        'parent' => 'Transaksi',
-        'roles' => ['super-admin', 'admin'],
-      ],
-      [
         'name' => 'Penjualan',
         'icon' => 'fas fa-chart-simple',
         'route' => '/report/order',
