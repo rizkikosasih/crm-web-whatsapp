@@ -33,7 +33,7 @@
               </div>
 
               <div class="col-auto px-0">
-                <x-button.custom
+                <x-button
                   wire:click="exportXls"
                   class="tooltips"
                   title="Export ke Excel"
@@ -41,17 +41,17 @@
                   wire:loading.attr="disabled"
                 >
                   <i class="fas fa-file-excel"></i>
-                </x-button.custom>
+                </x-button>
               </div>
 
               <div class="col-auto px-0">
-                <x-button.custom
+                <x-button
                   wire:click="$refresh" title="Refresh Halaman"
                   wire:loading.attr="disabled"
                   color="info"
                 >
                   <i class="fas fa-refresh"></i>
-                </x-button.custom>
+                </x-button>
               </div>
             </div>
 

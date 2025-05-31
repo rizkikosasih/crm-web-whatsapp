@@ -82,13 +82,13 @@
               <hr>
 
               <x-form.button-container customClass="justify-content-end">
-                <x-button.custom wire:click="resetForm" wire:loading.attr="disabled" wire:target="image, save" color="danger">
+                <x-button wire:click="resetForm" wire:loading.attr="disabled" wire:target="image, save" color="danger">
                   Batal
-                </x-button.custom>
+                </x-button>
 
-                <x-button.custom type="submit" wire:loading.attr="disabled" wire:target="image, save" color="primary">
+                <x-button type="submit" wire:loading.attr="disabled" wire:target="image, save" color="primary">
                   Simpan
-                </x-button.custom>
+                </x-button>
               </x-form.button-container>
             </form>
           </div>
@@ -140,9 +140,9 @@
                         <td class="text-center">{{ $index + $items->firstItem() }}</td>
                         <td>{{ $item->name }} ( {{ $item->sku }} )</td>
                         <td class="text-center">
-                          <x-button.custom color="primary" size="sm" class="circle">
+                          <x-button color="primary" size="sm" class="circle">
                             {{ $item->stock }}
-                          </x-button.custom>
+                          </x-button>
                         </td>
                         <td class="text-end">{{ rupiah($item->price) }}</td>
                         <td class="text-center">
@@ -150,7 +150,7 @@
                         </td>
                         <td class="actions">
                           <div class="btn-group">
-                            <x-button.custom
+                            <x-button
                               wire:click="edit({{ $item->id }})"
                               class="tooltips"
                               title="Ubah"
@@ -158,9 +158,9 @@
                               size="sm"
                             >
                               <i class="fas fa-pencil"></i>
-                            </x-button.custom>
+                            </x-button>
 
-                            <x-button.custom
+                            <x-button
                               wire:click="$dispatch('showWhatsappModal', { id: {{ $item->id }} })"
                               class="tooltips"
                               title="Kirim Sebagai Pesan"
@@ -168,7 +168,7 @@
                               size="sm"
                             >
                               <i class="fab fa-whatsapp"></i>
-                            </x-button.custom>
+                            </x-button>
                           </div>
                         </td>
                       </tr>

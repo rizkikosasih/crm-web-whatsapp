@@ -55,14 +55,14 @@
                     <td>{{ $item['phone'] }}</td>
                     <td class="actions">
                       <div class="btn-group">
-                        <x-button.custom
+                        <x-button
                           class="tooltips"
                           title="Kirim Info Produk"
                           wire:click="sendWA({{$item['phone']}})"
                           color="success"
                         >
                           <i class="fas fa-paper-plane"></i>
-                        </x-button.custom>
+                        </x-button>
                       </div>
                     </td>
                   </tr>

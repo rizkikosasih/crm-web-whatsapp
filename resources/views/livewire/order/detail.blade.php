@@ -34,9 +34,9 @@
                 <td>Status</td>
                 <td>:</td>
                 <td>
-                  <x-button.custom color="{{ $colorStatus[$order->status] }}" size="sm">
+                  <x-button color="{{ $colorStatus[$order->status] }}" size="sm">
                     {{ $statusList[$order->status] }}
-                  </x-button.custom>
+                  </x-button>
                 </td>
               </tr>
               @if ($order->status > 0 && $order->status < 4)
@@ -70,7 +70,7 @@
                 </select>
 
                 <div class="col-sm-3">
-                  <x-button.custom
+                  <x-button
                     class="btn-block"
                     color="primary"
                     size="sm"
@@ -79,7 +79,7 @@
                     wire:target="proof_of_payment"
                   >
                     Update
-                  </x-button.custom>
+                  </x-button>
                 </div>
               </div>
 

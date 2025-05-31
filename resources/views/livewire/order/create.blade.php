@@ -56,9 +56,9 @@
               </div>
               <div class="col-md-3">
                 <label>&nbsp;</label>
-                <x-button.custom class="btn-block" color="primary" wire:click="addProduct">
+                <x-button class="btn-block" color="primary" wire:click="addProduct">
                   Tambah
-                </x-button.custom>
+                </x-button>
               </div>
             </div>
 
@@ -85,7 +85,7 @@
                         <td class="text-end">{{ rupiah($item['price'] * $item['quantity']) }}</td>
                         <td class="actions">
                           <div class="btn-group">
-                            <x-button.custom
+                            <x-button
                               class="tooltips"
                               color="danger"
                               size="sm"
@@ -93,7 +93,7 @@
                               title="Hapus Item"
                             >
                               <i class="fas fa-remove"></i>
-                            </x-button.custom>
+                            </x-button>
                           </div>
                         </td>
                       </tr>
@@ -110,7 +110,7 @@
                 </table>
               </div>
 
-              <x-button.custom wire:click="save" color="success">Simpan Order</x-button.custom>
+              <x-button wire:click="save" color="success">Simpan Order</x-button>
             @endif
           </div>
         </div>

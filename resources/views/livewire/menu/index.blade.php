@@ -79,13 +79,13 @@
               </x-overlay>
 
               <x-form.button-container customClass="justify-content-end">
-                <x-button.custom wire:click="resetForm" color="danger">
+                <x-button wire:click="resetForm" color="danger">
                   Batal
-                </x-button.custom>
+                </x-button>
 
-                <x-button.custom type="submit" color="primary">
+                <x-button type="submit" color="primary">
                   Simpan
-                </x-button.custom>
+                </x-button>
               </x-form.button-container>
             </form>
           </div>
@@ -135,17 +135,17 @@
                         <td>{{ $item->route }}</td>
                         <td>{{ $item->slug }}</td>
                         <td class="text-center">
-                          <x-button.custom
+                          <x-button
                             wire:click="confirmActive({{ $item->id }}, {{ $item->is_active }})"
                             color="{{ $colorStatus[$item->is_active] }}"
                             size="sm"
                           >
                             {{ $statusList[$item->is_active] }}
-                          </x-button.custom>
+                          </x-button>
                         </td>
                         <td class="actions">
                           <div class="btn-group">
-                            <x-button.custom
+                            <x-button
                               wire:click="edit({{$item->id}})"
                               class="tooltips"
                               title="Ubah"
@@ -153,9 +153,9 @@
                               size="sm"
                             >
                               <i class="fas fa-pencil"></i>
-                            </x-button.custom>
+                            </x-button>
 
-                            <x-button.custom
+                            <x-button
                               wire:click="confirmDelete({{$item->id}})"
                               class="tooltips"
                               title="Hapus"
@@ -163,7 +163,7 @@
                               size="sm"
                             >
                               <i class="fas fa-trash"></i>
-                            </x-button.custom>
+                            </x-button>
                           </div>
                         </td>
                       </tr>

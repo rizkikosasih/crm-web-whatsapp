@@ -95,9 +95,9 @@
 
                   <div class="form-group row">
                     <div class="offset-sm-3 col-sm-9">
-                      <x-button.custom type="submit" wire:loading.attr="disabled" wire:target="avatar, updateProfile" color="danger">
+                      <x-button type="submit" wire:loading.attr="disabled" wire:target="avatar, updateProfile" color="danger">
                         Submit
-                      </x-button.custom>
+                      </x-button>
                     </div>
                   </div>
                 </form>
@@ -140,9 +140,9 @@
 
                   <div class="form-group row">
                     <div class="offset-sm-3 col-sm-9">
-                      <x-button.custom type="submit" color="danger">
+                      <x-button type="submit" color="danger">
                         Ubah Password
-                      </x-button.custom>
+                      </x-button>
                     </div>
                   </div>
                 </form>

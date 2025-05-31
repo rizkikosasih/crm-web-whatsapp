@@ -83,9 +83,9 @@
                       <td class="text-center">{{ $index + $items->firstItem() }}</td>
                       <td>{{ $customer->name }}</td>
                       <td class="text-center">
-                        <x-button.custom color="{{ $colorStatus[$item->status] }}" size="sm">
+                        <x-button color="{{ $colorStatus[$item->status] }}" size="sm">
                           {{ $statusList[$item->status] }}
-                        </x-button.custom>
+                        </x-button>
                       </td>
                       <td class="text-end">{{ rupiah($item->total_amount) }}</td>
                       <td class="text-end">{{ dateIndo($item->order_date) }}</td>
