@@ -12,7 +12,7 @@
   @endif
 
   @if ($refresh)
-    <button type="button" class="btn btn-tool" wire:click="$refresh">
+    <button type="button" class="btn btn-tool tooltips" title="Refresh" wire:click="$refresh">
       <i class="fas fa-refresh"></i>
     </button>
   @endif
