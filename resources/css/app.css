@@ -50,3 +50,13 @@ table.order-detail tr td:last-child {
   justify-content: center;
   gap: 10px;
 }
+
+.custom-switch .custom-control-label::after,
+.custom-switch .custom-control-label::before {
+  cursor: pointer;
+}
+
+th.actions,
+td.actions {
+  text-align: center;
+}
