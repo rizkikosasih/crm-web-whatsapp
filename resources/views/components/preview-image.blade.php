@@ -11,12 +11,13 @@
   data-toggle="lightbox"
   class="tooltips"
   title="{{ $imageTitle }}"
+  {{ $attributes }}
 >
   <img
     width="{{ $width }}"
     height="{{ $height }}"
     src="{{ imageUri($path) }}"
-    {{  $attributes->merge([
+    {{  $attributes->class([
       'class' => 'img-rounded',
       $customClass
     ]) }}
