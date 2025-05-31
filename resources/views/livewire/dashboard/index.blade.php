@@ -96,19 +96,7 @@
                       <td>{!! nl2br(e($item->message)) !!}</td>
                       <td class="text-center">
                         @if($item->image)
-                          <x-preview-image></x-preview-image>
-                          <a
-                            href="{{ imageUri($item->image ?? 'images/no-image.svg') }}"
-                            data-toggle="lightbox"
-                            class="tooltips"
-                            title="Perbesar"
-                          >
-                            <img
-                              class="img-rounded"
-                              style="width:30px;height:auto"
-                              src="{{ imageUri($item->image ?? 'images/no-image.svg') }}"
-                            />
-                          </a>
+                          <x-preview-image path="{{ $item->image }}" />
                         @else
                           -
                         @endif
