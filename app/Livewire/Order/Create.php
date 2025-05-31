@@ -27,13 +27,6 @@ class Create extends Component
   /* format: [['product_id' => 1, 'name' => '...', 'price' => 1000, 'quantity' => 2]] */
   public $orderItems = [];
 
-  protected RapiwhaApiService $rapiwha;
-
-  public function __construct()
-  {
-    $this->rapiwha = new RapiwhaApiService();
-  }
-
   public function selectCustomer($id, $name)
   {
     $this->customer_id = $id;
@@ -94,7 +87,7 @@ class Create extends Component
     $this->orderItems = array_values($this->orderItems);
   }
 
-  public function save()
+  public function save(RapiwhaApiService $rapiwha)
   {
     if (empty($this->customer_id) || empty($this->orderItems)) {
       $this->dispatch('showError', message: 'Customer dan produk harus dipilih.');
@@ -163,7 +156,7 @@ class Create extends Component
         'contact_number' => env('APP_CONTACT_PERSON'),
       ]);
 
-      $this->rapiwha->sendMessage($customer->phone, $message);
+      $rapiwha->sendMessage($customer->phone, $message);
 
       DB::commit();
 

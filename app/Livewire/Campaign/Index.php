@@ -47,13 +47,6 @@ class Index extends Component
 
   public $isEdit = false;
 
-  protected RapiwhaApiService $rapiwha;
-
-  public function __construct()
-  {
-    $this->rapiwha = new RapiwhaApiService();
-  }
-
   public function save(GoogleDriveService $googleDriveService)
   {
     $this->validate();
@@ -121,7 +114,7 @@ class Index extends Component
     $this->dispatch('clearError');
   }
 
-  public function sendWA($id)
+  public function sendWA($id, RapiwhaApiService $rapiwha)
   {
     try {
       $campaign = Campaign::findOrFail($id);
@@ -134,7 +127,7 @@ class Index extends Component
             'image_url' => $campaign->image_url ?? '',
           ]);
 
-          $response = $this->rapiwha->sendMessage($customer->phone, $message);
+          $response = $rapiwha->sendMessage($customer->phone, $message);
           $data = json_decode($response->getContent());
           if ($data->success) {
             $this->dispatch('showSuccess', message: 'Info Produk Berhasil Dikirim');

@@ -31,13 +31,6 @@ class Detail extends Component
 
   public Order $order;
 
-  protected RapiwhaApiService $rapiwha;
-
-  public function __construct()
-  {
-    $this->rapiwha = new RapiwhaApiService();
-  }
-
   public function mount($id)
   {
     $this->order = Order::with(['customer', 'orderItems.product'])->findOrFail($id);
@@ -57,7 +50,7 @@ class Detail extends Component
     };
   }
 
-  public function updateStatus()
+  public function updateStatus(RapiwhaApiService $rapiwha)
   {
     if ($this->selectedStatus == $this->order->status) {
       return;
@@ -139,7 +132,7 @@ class Detail extends Component
           'contact_number' => env('APP_CONTACT_PERSON'),
         ]);
 
-        $this->rapiwha->sendMessage($this->order->customer->phone, $message);
+        $rapiwha->sendMessage($this->order->customer->phone, $message);
       }
     } catch (\Exception $e) {
       $this->dispatch('showError', message: 'Exception: ' . $e->getMessage());

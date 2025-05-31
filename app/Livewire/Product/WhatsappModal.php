@@ -34,13 +34,6 @@ class WhatsappModal extends Component
 
   protected $listeners = ['showWhatsappModal'];
 
-  protected RapiwhaApiService $rapiwha;
-
-  public function __construct()
-  {
-    $this->rapiwha = new RapiwhaApiService();
-  }
-
   public function showWhatsappModal($id)
   {
     $product = Product::find($id);
@@ -85,7 +78,7 @@ class WhatsappModal extends Component
     $this->reset();
   }
 
-  public function sendWA($phone)
+  public function sendWA($phone, RapiwhaApiService $rapiwha)
   {
     $template = MessageTemplate::where(['id' => 1, 'type' => 'product'])->first();
 
@@ -104,7 +97,7 @@ class WhatsappModal extends Component
       $message .= "\n\nKlik untuk melihat gambar:\n" . $imageUrl;
     }
 
-    $response = $this->rapiwha->sendMessage($phone, $message);
+    $response = $rapiwha->sendMessage($phone, $message);
 
     if ($response->isSuccessful()) {
       $this->dispatch('showSuccess', message: 'Info Produk Berhasil Dikirim');
@@ -119,4 +112,3 @@ class WhatsappModal extends Component
     return view('livewire.product.whatsapp-modal');
   }
 }
-
