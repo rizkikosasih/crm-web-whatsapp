@@ -133,6 +133,7 @@ class Dashboard extends Component
           $orderData,
           $statusLabels
         ),
+        'show' => $orderData ? true : false,
       ],
       [
         'title' => 'Grafik Penjualan Produk',
@@ -142,6 +143,7 @@ class Dashboard extends Component
           'doughnut',
           $productSales
         ),
+        'show' => $orderData ? true : false,
       ],
     ];
   }

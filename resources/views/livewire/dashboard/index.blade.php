@@ -34,17 +34,19 @@
   <div class="container-fluid" id="row2">
     <div class="row">
       @foreach ($charts as $chart)
-        <div class="col-md-6 mb-4">
-          <div class="card card-outline card-primary">
-            <div class="card-header">
-              <div class="card-title">{{ $chart['title'] }}</div>
-              <x-card.tools minus="true"/>
-            </div>
-            <div class="card-body text-justify">
-              <canvas id="{{ $chart['id'] }}"></canvas>
+        @if($chart['show'])
+          <div class="col-md-6 mb-4">
+            <div class="card card-outline card-primary">
+              <div class="card-header">
+                <div class="card-title">{{ $chart['title'] }}</div>
+                <x-card.tools minus="true"/>
+              </div>
+              <div class="card-body text-justify">
+                <canvas id="{{ $chart['id'] }}"></canvas>
+              </div>
             </div>
           </div>
-        </div>
+        @endif
       @endforeach
     </div>
   </div>
@@ -137,14 +139,21 @@
 
   @verbatim
     <script>
-      document.addEventListener('DOMContentLoaded', function () {
+      function initCharts() {
         const chartConfigs = @json($charts);
-
         chartConfigs.forEach(chart => {
-          const ctx = document.getElementById(chart.id).getContext('2d');
-          new Chart(ctx, chart.config);
+          if (chart.show) {
+            const selectorId = document.getElementById(chart.id);
+            if (selectorId) {
+              const ctx = selectorId.getContext('2d');
+              new Chart(ctx, chart.config);
+            }
+          }
         });
-      });
+      }
+
+      // document.addEventListener('DOMContentLoaded', initCharts);
+      document.addEventListener('livewire:navigated', initCharts);
     </script>
   @verbatim
 @endsection
