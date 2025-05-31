@@ -25,7 +25,16 @@ class RoleMiddleware
     // Ambil route saat ini
     $slug = Route::currentRouteName();
     $explodeRoute = explode('-', $slug);
-    $actions = ['add', 'create', 'edit', 'update', 'delete', 'active', 'detail'];
+    $actions = [
+      'add',
+      'create',
+      'edit',
+      'update',
+      'delete',
+      'active',
+      'detail',
+      'access',
+    ];
     $pattern = '/(' . implode('|', $actions) . ')/i';
 
     $slugParts = [];
