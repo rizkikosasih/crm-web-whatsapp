@@ -5,15 +5,11 @@
   'size' => null,
 ])
 
-<a
-  href="{{ $url }}"
-  @if($url != 'javascript:;') wire:navigate @endif
-  {{ $attributes->class([
-    'btn',
-    "btn-$color" => filled($color),
-    "btn-$size" => filled($size),
-    $customClass
-  ]) }}
->
+<a {{ $attributes->merge(['href' => $url, 'wire:navigate' => $url != 'javascript:;'])->class([
+  'btn',
+  "btn-$color" => filled($color),
+  "btn-$size" => filled($size),
+  $customClass
+]) }}>
   {{ $slot }}
 </a>
