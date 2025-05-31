@@ -85,13 +85,10 @@
               </table>
             </div>
           </div>
-          <!-- /. card body -->
         </div>
       </div>
     </div>
-    <!--/. row -->
   </div>
-  <!--/. container-fluid -->
 </section>
 
 

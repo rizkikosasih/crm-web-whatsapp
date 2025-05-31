@@ -72,11 +72,8 @@
 
             {{ $items->links('partials.pagination.bootstrap4') }}
           </div>
-          <!-- /. card body -->
         </div>
       </div>
     </div>
-    <!--/. row -->
   </div>
-  <!--/. container-fluid -->
 </section>

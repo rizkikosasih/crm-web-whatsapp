@@ -47,7 +47,6 @@
         </div>
       @endforeach
     </div>
-    <!--/. row -->
   </div>
 
   <div class="container-fluid" id="row3">

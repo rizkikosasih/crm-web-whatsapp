@@ -40,7 +40,6 @@
             <strong><i class="fas fa-phone mr-1"></i> No Handphone</strong>
             <p class="text-muted">{{ Str::replaceFirst('0', '+62', $phone) }}</p>
           </div>
-          {{-- /.card-body --}}
         </div>
       </div>
       {{-- Right Content --}}
@@ -52,7 +51,7 @@
               <li class="nav-item"><a @class(["nav-link", 'active' => $isPasswordVisible ]) href="#password" data-toggle="tab">Password</a></li>
             </ul>
           </div>
-          {{-- /.card-header --}}
+
           <div class="card-body">
             <div class="tab-content">
               <div @class(["tab-pane", 'active' => !$isPasswordVisible ]) id="settings">
@@ -103,7 +102,6 @@
                   </div>
                 </form>
               </div>
-              {{-- /.settings --}}
 
               <div @class(["tab-pane", 'active' => $isPasswordVisible ]) id="password">
                 <form wire:submit="updatePassword" class="form-change-password">
@@ -149,12 +147,9 @@
                   </div>
                 </form>
               </div>
-              {{-- /.password --}}
             </div>
-            <!-- /.tab-content -->
-          </div><!-- /.card-body -->
+          </div>
         </div>
-        {{-- /.card --}}
       </div>
     </div>
   </div>
