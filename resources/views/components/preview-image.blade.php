@@ -6,20 +6,20 @@
   'customClass' => null,
 ])
 
+@php
+  $path = $path ?: 'images/no-image.svg';
+@endphp
+
 <a
   href="{{ imageUri($path) }}"
   data-toggle="lightbox"
   class="tooltips"
   title="{{ $imageTitle }}"
-  {{ $attributes }}
 >
   <img
     width="{{ $width }}"
     height="{{ $height }}"
     src="{{ imageUri($path) }}"
-    {{  $attributes->class([
-      'class' => 'img-rounded',
-      $customClass
-    ]) }}
+    @class([ 'img-rounded', $customClass ])
   />
 </a>
