@@ -1,69 +1,61 @@
 ✅ LANGKAH 1: Masuk ke Google Cloud Console
-Buka https://console.cloud.google.com/
+Buka: https://console.cloud.google.com/
 Pastikan kamu sudah login dan memilih project yang aktif (misalnya: crm-wa-460906)
 
 ✅ LANGKAH 2: Aktifkan Google Drive API
 Jika belum aktif:
 
-Buka: https://console.cloud.google.com/apis/library
-
-Cari Google Drive API
-
-Klik Enable
+1. Buka: https://console.cloud.google.com/apis/library
+2. Cari: Google Drive API
+3. Klik: Enable
 
 ✅ LANGKAH 3: Buat Service Account
-Buka menu: IAM & Admin > Service Accounts
-Langsung ke halaman ini
-
-Klik Create Service Account
-
-Isi:
-
-Service account name: misalnya crm-drive-uploader
-
-Service account ID akan otomatis terisi
-
-Klik Create and continue
-
-(Langkah optional berikutnya bisa dilewati, atau beri role Editor / Storage Admin)
-
-Klik Done
+1. Buka menu: IAM & Admin > Service Accounts
+   Atau langsung ke: https://console.cloud.google.com/iam-admin/serviceaccounts
+2. Klik: Create Service Account
+3. Isi:
+   - Service account name: misalnya crm-drive-uploader
+   - Service account ID akan otomatis terisi
+4. Klik: Create and Continue
+5. (Optional) Tambahkan role: Editor atau Storage Admin
+6. Klik: Done
 
 ✅ LANGKAH 4: Buat Kunci (Key) JSON
-Di daftar service account, cari akun yang baru kamu buat (misalnya crm-drive-uploader@...)
+1. Cari service account yang sudah dibuat (misalnya crm-drive-uploader@...)
+2. Klik ikon tiga titik di kolom kanan → Manage keys
+3. Klik Add Key → Create new key
+4. Pilih: JSON → Klik Create
 
-Klik 3 titik di kolom kanan → Manage keys
+➡️ Simpan file JSON ke dalam proyek Laravel Anda di:
+   storage/app/public/google-service-account.json
 
-Klik Add Key → Create new key
+Jika ingin pakai terminal (Linux/macOS):
 
-Pilih JSON lalu klik Create
+mv ~/Downloads/your-service-account-file.json storage/app/public/google-service-account.json
 
-📝 Catatan Penting
-🧩 Jika Kamu Ingin Akses Folder di Google Drive Pribadi
-Service account tidak bisa langsung akses Google Drive user.
+(Ganti nama file sesuai dengan yang Anda unduh)
 
+📝 CATATAN PENTING:
+🧩 Agar Service Account Bisa Akses Folder Google Drive Pribadi:
+
+Service account TIDAK otomatis bisa akses folder Google Drive user.
 Solusi:
 
-Buat folder di akun Google Drive kamu
+1. Buat folder di Google Drive Anda
+2. Klik kanan → Share
+3. Masukkan alamat client_email dari service account
+   Contoh: crm-drive-uploader@project-id.iam.gserviceaccount.com
+4. Beri akses: Editor
 
-Klik kanan → Share → Masukkan client_email dari service account (misalnya crm-drive-uploader@project-id.iam.gserviceaccount.com)
+✅ Sekarang service account bisa upload ke folder tersebut.
 
-Beri izin Editor
+➤ MENDAPATKAN FOLDER ID dari URL Google Drive
 
-Sekarang service account bisa upload ke folder tersebut.
+1. Buka folder Google Drive di browser
+2. Contoh URL:
+   https://drive.google.com/drive/folders/1A2B3C4D5E6F7G8H9I
+3. Maka folder ID adalah:
+   1A2B3C4D5E6F7G8H9I
 
-➤ Mendapatkan Folder ID Manual dari URL Google Drive
-Jika kamu sudah membuat folder di Google Drive secara manual:
-
-Langkah:
-Buka folder tersebut di browser
-
-Lihat URL di address bar, contoh:
-
-https://drive.google.com/drive/folders/1A2B3C4D5E6F7G8H9I
-
-Maka ID folder-nya adalah:
-
-1A2B3C4D5E6F7G8H9I
-
-📌 Itu yang kamu masukkan ke GOOGLE_DRIVE_FOLDER_ID di .env Laravel-mu.
+📌 Tambahkan ke file .env Laravel Anda:
+GOOGLE_DRIVE_FOLDER_ID=1A2B3C4D5E6F7G8H9I
