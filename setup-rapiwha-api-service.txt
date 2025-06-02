@@ -1,0 +1,16 @@
+Cara Setup Rapiwha
+
+1. Login atau Registrasi Akun Rapiwha
+   Kunjungi: https://panel.rapiwha.com/landing/login.php
+   Silakan login jika sudah memiliki akun, atau lakukan pendaftaran terlebih dahulu.
+
+2. Tautkan Perangkat dengan QR Code
+   Setelah berhasil login, lakukan pemindaian QR Code (QRIS) untuk menautkan perangkat WhatsApp Anda.
+
+3. Nonaktifkan Incoming Message
+   Masuk ke menu My Number, lalu nonaktifkan opsi "Incoming Message" agar pesan masuk tidak diteruskan ke webhook.
+
+4. Salin API Key ke File .env
+   Salin API Key yang tersedia, lalu masukkan ke dalam file .env proyek Anda dengan format berikut:
+
+RAPIWHA_KEY=isi_api_key_anda
