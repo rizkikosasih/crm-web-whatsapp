@@ -133,7 +133,7 @@ if (!function_exists('waApiKey')) {
   function waApiKey(): ?string
   {
     $setting = WhatsappApiSetting::first();
-    return $setting ? $setting->key : config('services.rapiwha.key');
+    return $setting->key != '-' ? $setting->key : config('services.rapiwha.key');
   }
 }
 
@@ -141,6 +141,6 @@ if (!function_exists('waApiUrl')) {
   function waApiUrl(): ?string
   {
     $setting = WhatsappApiSetting::first();
-    return $setting ? $setting->url : config('services.rapiwha.url');
+    return $setting->url != '-' ? $setting->url : config('services.rapiwha.url');
   }
 }
