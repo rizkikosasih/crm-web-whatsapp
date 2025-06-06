@@ -18,12 +18,6 @@ class CustomerSeeder extends Seeder
     $faker = Faker::create(env('APP_FAKE_LOCALE'));
 
     DB::table('customers')->insert([
-      'name' => 'Rizki',
-      'phone' => '6285777838862',
-      'created_at' => now(),
-    ]);
-
-    DB::table('customers')->insert([
       'name' => 'Menda',
       'phone' => '6285291111124',
       'created_at' => now(),
