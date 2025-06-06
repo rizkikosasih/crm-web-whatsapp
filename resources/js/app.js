@@ -30,7 +30,7 @@ import 'admin-lte';
 
 /** Initialize Tooltip */
 function initializedTooltips() {
-  $('.tooltip').remove();
+  // $('.tooltip').remove();
   $(document).tooltip({
     selector: '.tooltips',
     container: 'body',
@@ -98,7 +98,8 @@ document.addEventListener('livewire:initialized', function () {
   });
 });
 
-Livewire.on('refreshWithTooltips', function () {
-  $wire.refresh();
+window.addEventListener('refresh-with-tooltips', () => {
+  Livewire.dispatch('refresh');
+
   initializedTooltips();
 });
