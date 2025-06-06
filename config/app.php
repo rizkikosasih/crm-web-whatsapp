@@ -183,6 +183,7 @@ return [
     /*
      * Package Service Providers...
      */
+    App\Providers\ServiceBindingProvider::class,
 
     /*
      * Application Service Providers...
