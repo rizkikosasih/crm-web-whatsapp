@@ -128,7 +128,7 @@
 
   @verbatim
   <script>
-    const renderedCharts = {};
+    window.renderedCharts = window.renderedCharts || {};
 
     function initCharts() {
       const chartConfigs = @json($charts);
@@ -138,11 +138,11 @@
         if (chart.show && canvas) {
           const ctx = canvas.getContext('2d');
 
-          if (renderedCharts[chart.id]) {
+          if (window.renderedCharts[chart.id]) {
             renderedCharts[chart.id].destroy();
           }
 
-          renderedCharts[chart.id] = new Chart(ctx, chart.config);
+          window.renderedCharts[chart.id] = new Chart(ctx, chart.config);
         }
       });
     }
