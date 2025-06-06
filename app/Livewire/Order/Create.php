@@ -6,7 +6,7 @@ use App\Models\Customer;
 use App\Models\MessageTemplate;
 use App\Models\Product;
 use App\Models\Order;
-use App\Services\Api\Implements\RapiwhaApiService;
+use App\Services\Api\SendMessageApiServiceInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Locked;
@@ -87,7 +87,7 @@ class Create extends Component
     $this->orderItems = array_values($this->orderItems);
   }
 
-  public function save(RapiwhaApiService $rapiwha)
+  public function save(SendMessageApiServiceInterface $rapiwha)
   {
     if (empty($this->customer_id) || empty($this->orderItems)) {
       $this->dispatch('showError', message: 'Customer dan produk harus dipilih.');

@@ -3,7 +3,7 @@
 namespace App\Livewire\Product;
 
 use App\Models\Product;
-use App\Services\Api\Implements\GoogleDriveService;
+use App\Services\Api\GoogleDriveServiceInterface;
 use Google\Service\AdMob\App;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Locked;
@@ -52,7 +52,7 @@ class Index extends Component
   public $search;
   public $perPage = 10;
 
-  public function save(GoogleDriveService $googleDriveService)
+  public function save(GoogleDriveServiceInterface $googleDriveService)
   {
     $this->validate();
 

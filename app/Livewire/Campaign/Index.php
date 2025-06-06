@@ -4,8 +4,8 @@ namespace App\Livewire\Campaign;
 
 use App\Models\Campaign;
 use App\Models\Customer;
-use App\Services\Api\Implements\GoogleDriveService;
-use App\Services\Api\Implements\RapiwhaApiService;
+use App\Services\Api\GoogleDriveServiceInterface;
+use App\Services\Api\SendMessageApiServiceInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -47,7 +47,7 @@ class Index extends Component
 
   public $isEdit = false;
 
-  public function save(GoogleDriveService $googleDriveService)
+  public function save(GoogleDriveServiceInterface $googleDriveService)
   {
     $this->validate();
 
@@ -114,7 +114,7 @@ class Index extends Component
     $this->dispatch('clearError');
   }
 
-  public function sendWA($id, RapiwhaApiService $rapiwha)
+  public function sendWA($id, SendMessageApiServiceInterface $rapiwha)
   {
     try {
       $campaign = Campaign::findOrFail($id);

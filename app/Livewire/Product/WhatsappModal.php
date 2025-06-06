@@ -5,7 +5,7 @@ namespace App\Livewire\Product;
 use App\Models\Customer;
 use App\Models\MessageTemplate;
 use App\Models\Product;
-use App\Services\Api\Implements\RapiwhaApiService;
+use App\Services\Api\SendMessageApiServiceInterface;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
 
@@ -78,7 +78,7 @@ class WhatsappModal extends Component
     $this->reset();
   }
 
-  public function sendWA($phone, RapiwhaApiService $rapiwha)
+  public function sendWA($phone, SendMessageApiServiceInterface $rapiwha)
   {
     $template = MessageTemplate::where(['id' => 1, 'type' => 'product'])->first();
 

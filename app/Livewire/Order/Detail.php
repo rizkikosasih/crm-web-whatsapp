@@ -4,7 +4,7 @@ namespace App\Livewire\Order;
 
 use App\Models\MessageTemplate;
 use App\Models\Order;
-use App\Services\Api\Implements\RapiwhaApiService;
+use App\Services\Api\SendMessageApiServiceInterface;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
@@ -50,7 +50,7 @@ class Detail extends Component
     };
   }
 
-  public function updateStatus(RapiwhaApiService $rapiwha)
+  public function updateStatus(SendMessageApiServiceInterface $rapiwha)
   {
     if ($this->selectedStatus == $this->order->status) {
       return;
