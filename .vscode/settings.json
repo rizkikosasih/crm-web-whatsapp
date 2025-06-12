@@ -17,5 +17,6 @@
   "prettier.ignorePath": ".prettierignore",
   "prettier.configPath": ".prettierrc.json",
   "intelephense.environment.includePaths": ["vendor/**/*.php"],
-  "intelephense.files.maxSize": 5000000
+  "intelephense.files.maxSize": 5000000,
+  "npm.packageManager": "auto"
 }
