@@ -24,7 +24,6 @@ return new class extends Migration {
       $table->timestamp('last_login_at')->nullable();
       $table->string('last_login_ip', 45)->nullable();
       $table->boolean('is_active')->default(true);
-      $table->boolean('is_delete')->default(false);
       $table->timestamps();
       $table->softDeletes();
       $table->index('username', 'idx_username', 'hash');

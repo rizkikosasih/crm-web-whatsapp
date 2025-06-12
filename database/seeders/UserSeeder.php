@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
@@ -17,26 +18,25 @@ class UserSeeder extends Seeder
   {
     DB::beginTransaction();
 
+    // delete avatar user
     $folder = storage_path('app/public/images/avatars');
     File::cleanDirectory($folder);
 
-    DB::table('users')->insert([
-      'name' => 'Rizki Kosasih',
-      'username' => 'rizki',
-      'email' => 'rizki@example.com',
-      'phone' => '08123456789',
-      'password' => Hash::make('rizki123'),
-      'created_at' => Carbon::now()->subDays(7),
+    User::factory()->create([
+      'name' => 'Testing Super Admin',
+      'username' => 'testing',
+      'email' => 'testing@example.com',
+      'phone' => '628123456789',
+      'password' => Hash::make('testing123'),
       'role_id' => 1,
     ]);
 
-    DB::table('users')->insert([
+    User::factory()->create([
       'name' => 'Administrator',
       'username' => 'admin',
       'email' => 'admin@example.com',
-      'phone' => '08987654321',
+      'phone' => '628987654321',
       'password' => Hash::make('admin123'),
-      'created_at' => Carbon::now()->subDays(10),
       'role_id' => 2,
     ]);
 
