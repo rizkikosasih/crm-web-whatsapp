@@ -21,6 +21,7 @@ class MenuSeeder extends Seeder
     $roles = [
       'super-admin' => Role::create(['name' => 'Super Admin']),
       'admin' => Role::create(['name' => 'Admin']),
+      'owner' => Role::create(['name' => 'Pemilik Toko']),
     ];
 
     // Header Menus
@@ -28,27 +29,27 @@ class MenuSeeder extends Seeder
       [
         'name' => '-',
         'position' => 1,
-        'roles' => ['super-admin', 'admin'],
+        'roles' => ['super-admin', 'admin', 'owner'],
       ],
       [
         'name' => 'Master',
         'position' => 2,
-        'roles' => ['super-admin'],
+        'roles' => ['super-admin', 'admin', 'owner'],
       ],
       [
         'name' => 'Transaksi',
         'position' => 3,
-        'roles' => ['super-admin', 'admin'],
+        'roles' => ['super-admin', 'admin', 'owner'],
       ],
       [
         'name' => 'Laporan',
         'position' => 4,
-        'roles' => ['super-admin'],
+        'roles' => ['super-admin', 'owner'],
       ],
       [
         'name' => 'Pengaturan',
         'position' => 5,
-        'roles' => ['super-admin'],
+        'roles' => ['super-admin', 'owner'],
       ],
     ];
 
@@ -81,7 +82,7 @@ class MenuSeeder extends Seeder
         'slug' => 'dashboard',
         'position' => 1,
         'parent' => '-',
-        'roles' => ['super-admin', 'admin'],
+        'roles' => ['super-admin', 'admin', 'owner'],
       ],
       [
         'name' => 'Pelanggan',
@@ -90,7 +91,7 @@ class MenuSeeder extends Seeder
         'slug' => 'master-customer',
         'position' => 1,
         'parent' => 'Master',
-        'roles' => ['super-admin'],
+        'roles' => ['super-admin', 'admin', 'owner'],
       ],
       [
         'name' => 'Produk',
@@ -99,7 +100,7 @@ class MenuSeeder extends Seeder
         'slug' => 'master-product',
         'position' => 2,
         'parent' => 'Master',
-        'roles' => ['super-admin'],
+        'roles' => ['super-admin', 'admin', 'owner'],
       ],
       [
         'name' => 'Campaign Broadcast',
@@ -108,7 +109,7 @@ class MenuSeeder extends Seeder
         'slug' => 'master-campaign',
         'position' => 3,
         'parent' => 'Master',
-        'roles' => ['super-admin'],
+        'roles' => ['super-admin', 'admin', 'owner'],
       ],
       [
         'name' => 'Pesanan',
@@ -117,7 +118,7 @@ class MenuSeeder extends Seeder
         'slug' => 'transaksi-order',
         'position' => 1,
         'parent' => 'Transaksi',
-        'roles' => ['super-admin', 'admin'],
+        'roles' => ['super-admin', 'admin', 'owner'],
       ],
       [
         'name' => 'Penjualan',
@@ -126,7 +127,7 @@ class MenuSeeder extends Seeder
         'slug' => 'report-order',
         'position' => 1,
         'parent' => 'Laporan',
-        'roles' => ['super-admin'],
+        'roles' => ['super-admin', 'owner'],
       ],
       [
         'name' => 'Penjualan Per Produk',
@@ -135,7 +136,7 @@ class MenuSeeder extends Seeder
         'slug' => 'report-product',
         'position' => 2,
         'parent' => 'Laporan',
-        'roles' => ['super-admin'],
+        'roles' => ['super-admin', 'owner'],
       ],
       [
         'name' => 'Template Pesan',
@@ -154,6 +155,7 @@ class MenuSeeder extends Seeder
         'position' => 2,
         'parent' => 'Pengaturan',
         'roles' => ['super-admin'],
+        'owner',
       ],
       [
         'name' => 'Role',

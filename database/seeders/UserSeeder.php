@@ -40,6 +40,15 @@ class UserSeeder extends Seeder
       'role_id' => 2,
     ]);
 
+    User::factory()->create([
+      'name' => 'Pemilik Toko',
+      'username' => 'owner',
+      'email' => 'owner@example.com',
+      'phone' => '628918273645',
+      'password' => Hash::make('owner123'),
+      'role_id' => 3,
+    ]);
+
     DB::commit();
   }
 }

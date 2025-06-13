@@ -16,11 +16,6 @@ class CustomerSeeder extends Seeder
   {
     DB::beginTransaction();
 
-    Customer::create([
-      'name' => 'Menda',
-      'phone' => '6285291111124',
-    ]);
-
     Customer::factory()->count(5)->create();
 
     DB::commit();
