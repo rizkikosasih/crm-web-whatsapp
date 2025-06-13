@@ -130,7 +130,7 @@
             </div>
 
             <div class="table-responsive">
-              <x-overlay wire:target='search, perPage'>
+              <x-overlay wire:target='search, perPage, gotoPage'>
                 <table class="table table-striped table-bordered">
                   <x-table.header :columns="$tableHeader" />
 

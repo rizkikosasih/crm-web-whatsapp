@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Customer;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Faker\Factory as Faker;
@@ -15,21 +16,12 @@ class CustomerSeeder extends Seeder
   {
     DB::beginTransaction();
 
-    $faker = Faker::create(env('APP_FAKE_LOCALE'));
-
-    DB::table('customers')->insert([
+    Customer::create([
       'name' => 'Menda',
       'phone' => '6285291111124',
-      'created_at' => now(),
     ]);
 
-    foreach (range(1, 5) as $index) {
-      DB::table('customers')->insert([
-        'name' => $faker->name(),
-        'phone' => $faker->regexify('628[1-9][0-9]{8,9}'),
-        'created_at' => now(),
-      ]);
-    }
+    Customer::factory()->count(5)->create();
 
     DB::commit();
   }
