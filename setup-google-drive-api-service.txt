@@ -1,61 +1,95 @@
+📖 Panduan Integrasi Google Drive API untuk Laravel
 ✅ LANGKAH 1: Masuk ke Google Cloud Console
 Buka: https://console.cloud.google.com/
-Pastikan kamu sudah login dan memilih project yang aktif (misalnya: crm-wa-460906)
+
+Login dengan akun Google Anda.
+
+Pilih project yang aktif (contoh: crm-wa-460906)
+
+📌 Jika belum punya project, lakukan langkah berikut untuk membuatnya:
+
+Klik ikon dropdown di bagian atas → New Project
+
+Isi:
+
+Project Name → bebas, misalnya crm-drive
+
+Location/Organization → default atau sesuai kebutuhan
+
+Klik Create
+
+Setelah selesai → klik lagi dropdown → pilih project yang baru dibuat
 
 ✅ LANGKAH 2: Aktifkan Google Drive API
-Jika belum aktif:
+Buka: https://console.cloud.google.com/apis/library
 
-1. Buka: https://console.cloud.google.com/apis/library
-2. Cari: Google Drive API
-3. Klik: Enable
+Di kolom pencarian, ketik: Google Drive API
+
+Klik hasilnya → Klik tombol Enable
 
 ✅ LANGKAH 3: Buat Service Account
-1. Buka menu: IAM & Admin > Service Accounts
-   Atau langsung ke: https://console.cloud.google.com/iam-admin/serviceaccounts
-2. Klik: Create Service Account
-3. Isi:
-   - Service account name: misalnya crm-drive-uploader
-   - Service account ID akan otomatis terisi
-4. Klik: Create and Continue
-5. (Optional) Tambahkan role: Editor atau Storage Admin
-6. Klik: Done
+Buka: IAM & Admin → Service Accounts
+atau langsung ke: https://console.cloud.google.com/iam-admin/serviceaccounts
+
+Klik tombol Create Service Account
+
+Isi formulir:
+
+Service account name: misalnya crm-drive-uploader
+
+Service account ID → otomatis terisi
+
+Klik Create and Continue
+
+Pilih Role (opsional tetapi disarankan) → Editor atau Storage Admin
+
+Klik Done
 
 ✅ LANGKAH 4: Buat Kunci (Key) JSON
-1. Cari service account yang sudah dibuat (misalnya crm-drive-uploader@...)
-2. Klik ikon tiga titik di kolom kanan → Manage keys
-3. Klik Add Key → Create new key
-4. Pilih: JSON → Klik Create
+Temukan Service Account yang sudah dibuat → klik ikon tiga titik → Manage keys
 
-➡️ Simpan file JSON ke dalam proyek Laravel Anda di:
-   storage/app/public/google-service-account.json
+Klik tombol Add Key → Create new key
 
-Jika ingin pakai terminal (Linux/macOS):
+Pilih tipe: JSON → Klik Create
 
-mv ~/Downloads/your-service-account-file.json storage/app/public/google-service-account.json
+File JSON akan diunduh otomatis
 
-(Ganti nama file sesuai dengan yang Anda unduh)
+Ubah nama file menjadi:
+google-service-account.json
 
-📝 CATATAN PENTING:
-🧩 Agar Service Account Bisa Akses Folder Google Drive Pribadi:
+Pindahkan file tersebut ke dalam Laravel project Anda:
+storage/app/public/google-service-account.json
 
-Service account TIDAK otomatis bisa akses folder Google Drive user.
-Solusi:
+📝 CATATAN PENTING: Mengizinkan Service Account Akses Folder Google Drive
+Secara default service account tidak bisa akses folder Google Drive pribadi.
+Agar bisa upload, lakukan langkah berikut:
 
-1. Buat folder di Google Drive Anda
-2. Klik kanan → Share
-3. Masukkan alamat client_email dari service account
-   Contoh: crm-drive-uploader@project-id.iam.gserviceaccount.com
-4. Beri akses: Editor
+Buat folder baru di Google Drive Anda
 
-✅ Sekarang service account bisa upload ke folder tersebut.
+Klik kanan pada folder → Share
 
-➤ MENDAPATKAN FOLDER ID dari URL Google Drive
+Masukkan alamat email dari client_email di file JSON
+Contoh: crm-drive-uploader@project-id.iam.gserviceaccount.com
 
-1. Buka folder Google Drive di browser
-2. Contoh URL:
-   https://drive.google.com/drive/folders/1A2B3C4D5E6F7G8H9I
-3. Maka folder ID adalah:
-   1A2B3C4D5E6F7G8H9I
+Beri akses sebagai: Editor
 
-📌 Tambahkan ke file .env Laravel Anda:
+✅ LANGKAH 5: Mendapatkan Folder ID Google Drive
+Buka folder Google Drive di browser
+
+Contoh URL:
+https://drive.google.com/drive/folders/1A2B3C4D5E6F7G8H9I
+
+Folder ID adalah bagian akhir URL:
+→ 1A2B3C4D5E6F7G8H9I
+
+✅ LANGKAH 6: Tambahkan Konfigurasi ke File .env Laravel
+Tambahkan variabel berikut ke file .env:
+
+ini
+Salin
+Edit
 GOOGLE_DRIVE_FOLDER_ID=1A2B3C4D5E6F7G8H9I
+🚀 SELESAI!
+Sekarang aplikasi Laravel Anda siap melakukan upload file ke folder Google Drive melalui Service Account.
+
+Kalau mau, saya bisa buatkan contoh implementasi kode upload-nya di Laravel ✔️
