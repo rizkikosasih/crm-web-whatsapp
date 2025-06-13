@@ -1,11 +1,10 @@
-
 <h1 align="center">CRM Web WhatsApp</h1>
 
 <h2>📦 Requirements</h2>
-<p>Pastikan kamu sudah menginstal versi berikut:</p>
+<p>Pastikan perangkat Anda telah terinstal versi berikut:</p>
 <ul>
-  <li><strong>PHP</strong> >= 8.1</li>
-  <li><strong>Node.js</strong> >= 18.20</li>
+  <li><strong>PHP</strong> ≥ 8.1</li>
+  <li><strong>Node.js</strong> ≥ 18.20</li>
   <li><strong>MySQL</strong></li>
 </ul>
 
@@ -13,51 +12,53 @@
 
 <h2>⚙️ Instalasi</h2>
 <ol>
-  <li>Buka terminal, lalu masuk ke direktori proyek:
-    <pre><code>cd path/to/project</code></pre>
-  </li>
-  <li>Salin file <code>.env.example</code> menjadi <code>.env</code>:
-    <pre><code>cp .env.example .env</code></pre>
-  </li>
-  <li>Install dependensi PHP:
-    <pre><code>composer install</code></pre>
-  </li>
-  <li>Install dependensi frontend (Node.js):
-    <pre><code>npm install</code></pre>
-  </li>
-  <li>Link Storage <pre><code>php artisan storage:link</code></pre></li>
   <li>Buat database baru di MySQL dengan nama:
     <pre><code>crm</code></pre>
   </li>
-  <li>Jalankan perintah migrasi database:
-    <pre><code>php artisan app:migrate</code></pre>
-  </li>
+  <li>Jalankan perintah instalasi sesuai dengan sistem operasi yang digunakan:</li>
 </ol>
+
+<table>
+<thead>
+<tr><th>Sistem Operasi</th><th>Perintah</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>Windows</strong></td><td>Jalankan file <code>scripts/install.cmd</code> (klik dua kali atau via CMD)</td></tr>
+<tr><td><strong>Linux/macOS</strong></td><td>Buka terminal, lalu jalankan:<br><code>./scripts/install.sh</code></td></tr>
+</tbody>
+</table>
 
 <hr />
 
 <h2>🚀 Menjalankan Aplikasi</h2>
 <ol>
-  <li>Jalankan frontend Vite dev server:
-    <pre><code>npm run dev</code></pre>
-  </li>
-  <li>Buka terminal baru, lalu jalankan backend Laravel:
-    <pre><code>php artisan serve</code></pre>
-  </li>
-  <li>Buka browser dan akses:
-    <pre><code>http://localhost:8000</code></pre>
-  </li>
+  <li>Jalankan aplikasi sesuai dengan sistem operasi yang digunakan:</li>
 </ol>
+
+<table>
+<thead>
+<tr><th>Sistem Operasi</th><th>Perintah</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>Windows</strong></td><td>Jalankan file <code>scripts/run.cmd</code></td></tr>
+<tr><td><strong>Linux/macOS</strong></td><td>Buka terminal, lalu jalankan:<br><code>./scripts/run.sh</code></td></tr>
+</tbody>
+</table>
+
+<p>Setelah proses berjalan, aplikasi akan otomatis terbuka di browser default Anda.</p>
 
 <hr />
 
 <h2>📝 Catatan Tambahan</h2>
 <ul>
-  <li>Pastikan koneksi database sudah disesuaikan di file <code>.env</code>.</li>
+  <li>Pastikan konfigurasi koneksi database sudah sesuai di file <code>.env</code>.</li>
   <li>Jika terjadi error saat menjalankan <code>php artisan app:migrate</code>, periksa:
     <ul>
-      <li>Apakah database <code>crm</code> sudah dibuat</li>
-      <li>Apakah konfigurasi <code>.env</code> sesuai</li>
+      <li>Pastikan database <code>crm</code> sudah dibuat.</li>
+      <li>Pastikan pengaturan database di file <code>.env</code> sudah benar.</li>
     </ul>
+  </li>
+  <li>Jika file <code>install.sh</code> atau <code>run.sh</code> tidak bisa dijalankan di Linux/macOS, berikan izin eksekusi terlebih dahulu:
+    <pre><code>chmod +x scripts/*.sh</code></pre>
   </li>
 </ul>

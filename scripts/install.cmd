@@ -1,6 +1,6 @@
 @echo off
 title Laravel Setup Starter
-cd /d %~dp0
+cd /d %~dp0\..
 
 echo ==============================
 echo Salin .env.example ke .env
