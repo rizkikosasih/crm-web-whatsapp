@@ -101,49 +101,51 @@
             </div>
 
             <div class="table-responsive">
-              <table class="table table-striped table-bordered">
-                <x-table.header :columns="$tableHeader" />
+              <x-overlay wire:target='sendWA'>
+                <table class="table table-striped table-bordered">
+                  <x-table.header :columns="$tableHeader" />
 
-                <tbody>
-                  @forelse ($items as $index => $item)
-                    <tr>
-                      <td class="text-center">{{ $index + $items->firstItem() }}</td>
-                      <td>{{ $item->title }}</td>
-                      <td>{!! nl2br(e($item->message)) !!}</td>
-                      <td class="text-center">
-                        <x-preview-image path="{{ $item->image }}"/>
-                      </td>
-                      <td class="actions">
-                        <div class="btn-group">
-                          <x-button
-                            wire:click="edit({{ $item->id }})"
-                            class="tooltips"
-                            title="Ubah"
-                            color="primary"
-                            size="sm"
-                          >
-                            <i class="fas fa-pencil"></i>
-                          </x-button>
+                  <tbody>
+                    @forelse ($items as $index => $item)
+                      <tr>
+                        <td class="text-center">{{ $index + $items->firstItem() }}</td>
+                        <td>{{ $item->title }}</td>
+                        <td>{!! nl2br(e($item->message)) !!}</td>
+                        <td class="text-center">
+                          <x-preview-image path="{{ $item->image }}"/>
+                        </td>
+                        <td class="actions">
+                          <div class="btn-group">
+                            <x-button
+                              wire:click="edit({{ $item->id }})"
+                              class="tooltips"
+                              title="Ubah"
+                              color="primary"
+                              size="sm"
+                            >
+                              <i class="fas fa-pencil"></i>
+                            </x-button>
 
-                          <x-button
-                            wire:click="sendWA({{ $item->id }})"
-                            class="tooltips"
-                            title="Kirim Whatsapp Ke Semua Pelanggan"
-                            color="success"
-                            size="sm"
-                          >
-                            <i class="fab fa-whatsapp"></i>
-                          </x-button>
-                        </div>
-                      </td>
-                    </tr>
-                  @empty
-                    <tr>
-                      <td colspan="{{ sizeof($tableHeader) }}" class="text-center">Data Kosong</td>
-                    </tr>
-                  @endforelse
-                </tbody>
-              </table>
+                            <x-button
+                              wire:click="sendWA({{ $item->id }})"
+                              class="tooltips"
+                              title="Kirim Whatsapp Ke Semua Pelanggan"
+                              color="success"
+                              size="sm"
+                            >
+                              <i class="fab fa-whatsapp"></i>
+                            </x-button>
+                          </div>
+                        </td>
+                      </tr>
+                    @empty
+                      <tr>
+                        <td colspan="{{ sizeof($tableHeader) }}" class="text-center">Data Kosong</td>
+                      </tr>
+                    @endforelse
+                  </tbody>
+                </table>
+              </x-overlay>
             </div>
 
             {{ $items->links('partials.pagination.bootstrap4') }}

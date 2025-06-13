@@ -44,35 +44,37 @@
 
         @if ($idProduct)
           <div class="table-responsive">
-            <table class="table table-striped table-bordered">
-              <x-table.header :columns="$tableHeader" />
+            <x-overlay wire:target='sendWA'>
+              <table class="table table-striped table-bordered">
+                <x-table.header :columns="$tableHeader" />
 
-              <tbody>
-                @forelse ($items['data'] as $item)
-                  <tr>
-                    <td class="text-center">{{ $item['id'] }}</td>
-                    <td>{{ $item['name'] }}</td>
-                    <td>{{ $item['phone'] }}</td>
-                    <td class="actions">
-                      <div class="btn-group">
-                        <x-button
-                          class="tooltips"
-                          title="Kirim Info Produk"
-                          wire:click="sendWA({{$item['phone']}})"
-                          color="success"
-                        >
-                          <i class="fas fa-paper-plane"></i>
-                        </x-button>
-                      </div>
-                    </td>
-                  </tr>
-                @empty
-                  <tr>
-                    <td colspan="{{ sizeof($tableHeader) }}" class="text-center">Data Kosong</td>
-                  </tr>
-                @endforelse
-              </tbody>
-            </table>
+                <tbody>
+                  @forelse ($items['data'] as $item)
+                    <tr>
+                      <td class="text-center">{{ $item['id'] }}</td>
+                      <td>{{ $item['name'] }}</td>
+                      <td>{{ $item['phone'] }}</td>
+                      <td class="actions">
+                        <div class="btn-group">
+                          <x-button
+                            class="tooltips"
+                            title="Kirim Info Produk"
+                            wire:click="sendWA({{$item['phone']}})"
+                            color="success"
+                          >
+                            <i class="fas fa-paper-plane"></i>
+                          </x-button>
+                        </div>
+                      </td>
+                    </tr>
+                  @empty
+                    <tr>
+                      <td colspan="{{ sizeof($tableHeader) }}" class="text-center">Data Kosong</td>
+                    </tr>
+                  @endforelse
+                </tbody>
+              </table>
+            </x-overlay>
           </div>
         @endif
       </div>
