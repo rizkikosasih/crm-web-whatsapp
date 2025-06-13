@@ -1,9 +1,9 @@
 @echo off
 title Laravel + Vite Starter
-echo ===============================
-echo Menjalankan Laravel + Vite Dev Server (1 Terminal)...
 cd /d %~dp0
 
+echo Menjalankan Laravel + Vite Dev Server...
 yarn dev-all
 
-pause
+echo Membuka browser...
+start "" http://localhost:8000
