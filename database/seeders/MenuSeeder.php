@@ -154,7 +154,7 @@ class MenuSeeder extends Seeder
         'slug' => 'setting-user',
         'position' => 2,
         'parent' => 'Pengaturan',
-        'roles' => ['super-admin'],
+        'roles' => ['super-admin', 'owner'],
         'owner',
       ],
       [
