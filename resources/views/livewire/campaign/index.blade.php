@@ -128,7 +128,7 @@
                           <x-button
                             wire:click="sendWA({{ $item->id }})"
                             class="tooltips"
-                            title="Kirim Whatsapp"
+                            title="Kirim Whatsapp Ke Semua Pelanggan"
                             color="success"
                             size="sm"
                           >

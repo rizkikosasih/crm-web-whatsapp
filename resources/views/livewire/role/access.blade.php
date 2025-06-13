@@ -42,6 +42,7 @@
                     @forelse ($items as $index => $item)
                       <tr>
                         <td class="text-center">{{ $index + $items->firstItem() }}</td>
+                        <td>{{ $item->parent?->name ?? '-' }}</td>
                         <td>{{ $item->name }}</td>
                         <td><i class="{{ $item->icon }}"></i> {{ $item->icon }}</td>
                         <td class="actions">

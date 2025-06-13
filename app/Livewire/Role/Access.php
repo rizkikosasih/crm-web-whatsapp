@@ -19,6 +19,7 @@ class Access extends Component
   #[Locked]
   public $tableHeader = [
     ['name' => 'No'],
+    ['name' => 'Parent'],
     ['name' => 'Nama'],
     ['name' => 'Icon'],
     ['name' => '<i class="fas fa-cogs"></i>', 'class' => 'actions'],
@@ -54,9 +55,10 @@ class Access extends Component
 
   public function render()
   {
-    $items = Menu::when($this->search, function ($q) {
-      $q->where('name', 'like', '%' . $this->search . '%');
-    })
+    $items = Menu::with('parent')
+      ->when($this->search, function ($q) {
+        $q->where('name', 'like', '%' . $this->search . '%');
+      })
       ->select([
         'menus.*',
         DB::raw(
