@@ -192,10 +192,14 @@ class Index extends Component
       ->when($this->filterRole, function ($q) {
         $q->where('role_id', '=', $this->filterRole);
       })
+      ->where('id', '!=', 1)
+      ->where('id', '!=', auth()->id())
       ->latest()
       ->paginate($this->perPage);
 
-    $roles = Role::all()->pluck('name', 'id')->toArray();
+    $roles = Role::whereRaw('LOWER(name) != ?', ['super admin'])
+      ->pluck('name', 'id')
+      ->toArray();
 
     return view('livewire.user.index', compact(['items', 'roles']));
   }
