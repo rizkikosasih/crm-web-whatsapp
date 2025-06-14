@@ -1,20 +1,37 @@
-<div @class(['form-group', $parentClass ?? ''])>
+@props([
+  'parentClass' => null,
+  'customClass' => null,
+  'label' => null,
+  'name' => null,
+  'type' => 'text',
+  'horizontal' => false,
+])
+
+<div @class(['form-group', 'row' => $horizontal, $parentClass])>
   @isset($label)
-    <label for="{{ $name }}" class="fw-bold">{!! $label !!}</label>
+    <label for="{{ $name }}" class="fw-bold @if($horizontal) col-sm-3 @endif">{!! $label !!}</label>
   @endisset
 
-  <input
-    type="{{ $type ?? 'text' }}"
-    id="{{ $name }}"
-    @class([
-      'form-control',
-      $customClass ?? '',
-      'is-invalid' => $errors->has($name),
-    ])
-    {{ $attributes }}
-  />
+  @if($horizontal)
+    <div class="col-sm-9">
+  @endif
 
-  @error($name)
-    <x-alert.text-danger customClass="mt-2">{{ $message }}</x-alert.text-danger>
-  @enderror
-</div>
+    <input
+      type="{{ $type ?? 'text' }}"
+      id="{{ $name }}"
+      @class([
+        'form-control',
+        $customClass ?? '',
+        'is-invalid' => $errors->has($name),
+      ])
+      {{ $attributes }}
+    />
+
+    @error($name)
+      <x-alert.text-danger customClass="mt-2">{{ $message }}</x-alert.text-danger>
+    @enderror
+
+  @if($horizontal)
+    </div>
+  @endif
+</>

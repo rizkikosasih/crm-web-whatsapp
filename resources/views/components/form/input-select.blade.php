@@ -3,7 +3,6 @@
   'customClass' => null,
   'label' => null,
   'name' => null,
-  'type' => 'text',
   'horizontal' => false,
   'options' => [],
   'optionHeader' => null,
