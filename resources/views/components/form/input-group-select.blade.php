@@ -3,7 +3,6 @@
   'id' => null,
   'label' => null,
   'parentClass' => null,
-  'customClass' => null,
   'options' => [],
   'optionHeader' => null,
   'prependText' => null,
@@ -19,12 +18,10 @@
     <select
       name="{{ $name }}"
       id="{{ $id ?? $name }}"
-      @class([
+      {{ $attributes->class([
         'form-control',
-        $customClass ?? '',
         'is-invalid' => $errors->has($name),
-      ])
-      {{ $attributes }}
+      ]) }}
     >
       @if($optionHeader)
         <option value="">{{ $optionHeader }}</option>
@@ -41,6 +38,6 @@
   </div>
 
   @error($name)
-    <x-alert.danger customClass="mt-2">{{ $message }}</x-alert.danger>
+    <x-alert.danger class="mt-2">{{ $message }}</x-alert.danger>
   @enderror
 </div>

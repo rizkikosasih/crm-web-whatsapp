@@ -1,6 +1,5 @@
 @props([
   'parentClass' => null,
-  'customClass' => null,
   'label' => null,
   'name' => null,
   'horizontal' => false,
@@ -21,12 +20,10 @@
     <select
       name="{{ $name }}"
       id="{{ $id ?? $name }}"
-      @class([
+      {{ $attributes->class([
         'form-control',
-        $customClass ?? '',
         'is-invalid' => $errors->has($name),
-      ])
-      {{ $attributes }}
+      ]) }}
     >
       @if($optionHeader)
         <option value="">{{ $optionHeader }}</option>
@@ -38,7 +35,7 @@
     </select>
 
     @error($name)
-      <x-alert.danger customClass="mt-2">{{ $message }}</x-alert.danger>
+      <x-alert.danger class="mt-2">{{ $message }}</x-alert.danger>
     @enderror
 
   @if($horizontal)

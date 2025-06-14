@@ -3,7 +3,6 @@
   'id' => null,
   'placeholder' => null,
   'type' => 'text',
-  'customClass' => null,
   'parentClass' => null,
   'appendText' => null,
   'prependText' => null,
@@ -21,14 +20,12 @@
 
     <input
       type="{{ $type }}"
-      @class([
-        'form-control',
-        $customClass ?? '',
-        'is-invalid' => $errors->has($name),
-      ])
       id="{{ $id ?? $name }}"
       placeholder="{{ $placeholder }}"
-      {{ $attributes }}
+      {{ $attributes->class([
+        'form-control',
+        'is-invalid' => $errors->has($name),
+      ]) }}
     >
 
     @if($appendText)
@@ -41,6 +38,6 @@
   </div>
 
   @error($name)
-    <x-alert.text-danger>{{ $message }}</x-alert.text-danger>
+    <x-alert.text-danger class="mt-2">{{ $message }}</x-alert.text-danger>
   @enderror
 </div>

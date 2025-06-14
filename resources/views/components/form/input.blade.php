@@ -1,6 +1,5 @@
 @props([
   'parentClass' => null,
-  'customClass' => null,
   'label' => null,
   'name' => null,
   'type' => 'text',
@@ -19,16 +18,14 @@
     <input
       type="{{ $type ?? 'text' }}"
       id="{{ $name }}"
-      @class([
+      {{ $attributes->class([
         'form-control',
-        $customClass ?? '',
         'is-invalid' => $errors->has($name),
-      ])
-      {{ $attributes }}
+      ]) }}
     />
 
     @error($name)
-      <x-alert.text-danger customClass="mt-2">{{ $message }}</x-alert.text-danger>
+      <x-alert.text-danger class="mt-2">{{ $message }}</x-alert.text-danger>
     @enderror
 
   @if($horizontal)

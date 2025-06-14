@@ -25,7 +25,7 @@
                 name="apiKey"
                 label="API Key"
                 placeholder="Masukkan API Key"
-                customClass="form-control-sm"
+                class="form-control-sm"
                 wire:model.defer="apiKey"
                 horizontal="true"
               />
@@ -35,14 +35,14 @@
                 name="apiUrl"
                 label="API URL"
                 placeholder="Masukkan API URL dengan https://"
-                customClass="form-control-sm"
+                class="form-control-sm"
                 wire:model.defer="apiUrl"
                 horizontal="true"
               />
 
               <hr>
 
-              <x-form.button-container customClass="justify-content-end">
+              <x-form.button-container class="justify-content-end">
                 <x-button type="submit" color="primary">
                   Simpan
                 </x-button>

@@ -3,9 +3,8 @@
   'id' => null,
   'name' => null,
   'parentClass' => null,
-  'customClass' => null,
   'onSelect' => null,
-  'placeholder' => null,
+  'placeholder' => 'Cari ...',
   'searchModel' => null,
   'selectedNameModel' => null,
   'selectedName' => null,
@@ -27,12 +26,8 @@
       type="text"
       @isset($id) id="{{ $id }}" @endisset
       name="{{ $name }}"
-      @class([
-        'form-control',
-        $customClass ?? '',
-        'is-invalid' => $errors->has($name),
-      ])
-      placeholder="{{ $placeholder ?? 'Cari...' }}"
+      placeholder="{{ $placeholder }}"
+      {{ $attributes->class(['form-control', 'is-invalid' => $errors->has($name)]) }}
       wire:model.live.debounce.250ms="{{ $searchModel }}"
       wire:focus="$set('{{ $selectedNameModel }}', '')"
       value="{{ $selectedName }}"
@@ -65,7 +60,7 @@
   @endif
 
   @error($name)
-    <x-alert.text-danger customClass="mt-2">{{ $message }}</x-alert.text-danger>
+    <x-alert.text-danger class="mt-2">{{ $message }}</x-alert.text-danger>
   @enderror
 </div>
 

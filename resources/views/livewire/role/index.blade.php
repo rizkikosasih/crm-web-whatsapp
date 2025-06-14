@@ -27,7 +27,7 @@
                 />
               </x-overlay>
 
-              <x-form.button-container customClass="justify-content-end">
+              <x-form.button-container class="justify-content-end">
                 <x-button wire:click="resetForm" color="danger">
                   Batal
                 </x-button>

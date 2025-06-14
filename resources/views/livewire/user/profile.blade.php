@@ -18,7 +18,7 @@
                 imageTitle="Perbesar"
                 width="128px"
                 height="128px"
-                customClass="profile-user-img img-fluid img-circle"
+                class="profile-user-img img-fluid img-circle"
               />
             </div>
 
@@ -77,7 +77,7 @@
                     label="No Handphone"
                     placeholder="Masukan No Handphone Anda"
                     wire:model.defer="phone"
-                    customClass="number-only"
+                    class="number-only"
                     horizontal="true"
                   />
 
@@ -96,7 +96,20 @@
                     path="{{ $avatar ?: 'images/no-image.svg' }}"
                     wire:model.defer="avatar"
                     horizontal="true"
-                  />
+                  >
+                    @php
+                      $imageUri = isLivewireTemporaryFile($avatar) ? $avatar->temporaryUrl() : imageUri($avatar ?: 'images/no-image.svg');
+                    @endphp
+
+                    <a href="{{ $imageUri }}" data-toggle="lightbox" class="tooltips" title="Perbesar">
+                      <img
+                        src="{{ $imageUri }}"
+                        class="img-rounded"
+                        width="100"
+                        height="auto"
+                      >
+                    </a>
+                  </x-form.image>
 
                   <div class="form-group row">
                     <div class="offset-sm-3 col-sm-9">

@@ -34,7 +34,7 @@
                 id="phone"
                 label="No Handphone <small>(contoh: 6285123456789)</small>"
                 placeholder="Masukan no handphone"
-                customClass="number-only"
+                class="number-only"
                 wire:model.defer="phone"
               />
 
@@ -47,7 +47,7 @@
                 wire:model.defer="notes"
               />
 
-              <x-form.button-container customClass="justify-content-end">
+              <x-form.button-container class="justify-content-end">
                 <x-button wire:click="resetForm" color="danger">
                   Batal
                 </x-button>

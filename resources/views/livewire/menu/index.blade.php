@@ -50,7 +50,7 @@
                   type="number"
                   label="Urutan Menu"
                   placeholder="Masukan urutan menu"
-                  customClass="number-only"
+                  class="number-only"
                   wire:model.defer="position"
                   horizontal="true"
                 />
@@ -83,7 +83,7 @@
                 />
               </x-overlay>
 
-              <x-form.button-container customClass="justify-content-end">
+              <x-form.button-container class="justify-content-end">
                 <x-button wire:click="resetForm" color="danger">
                   Batal
                 </x-button>

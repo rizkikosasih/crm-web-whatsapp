@@ -28,7 +28,7 @@
           type="password"
           placeholder="Password"
           parentClass="mb-3"
-          customClass="toggle-password"
+          class="toggle-password"
           wire:model.defer="password"
         />
 

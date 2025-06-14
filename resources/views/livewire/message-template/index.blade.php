@@ -26,7 +26,7 @@
                 name="titleTemplate"
                 label="Judul Template"
                 placeholder="Masukan Judul Template"
-                customClass="form-control-sm"
+                class="form-control-sm"
                 wire:model.defer="titleTemplate"
                 horizontal="true"
               />
@@ -35,7 +35,7 @@
                 id="type"
                 name="type"
                 label="Tipe Template"
-                customClass="form-control-sm"
+                class="form-control-sm"
                 wire:model.defer="type"
                 :options="['campaign' => 'Campaign Broadcast', 'product' => 'Produk', 'order' => 'Pemesanan']"
                 selected="{{ $this->type }}"
@@ -54,7 +54,7 @@
 
               <hr>
 
-              <x-form.button-container customClass="justify-content-end">
+              <x-form.button-container class="justify-content-end">
                 <x-button wire:click="resetForm" color="danger">
                   Batal
                 </x-button>

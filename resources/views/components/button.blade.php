@@ -1,6 +1,5 @@
 @props([
   'type' => 'button',
-  'customClass' => null,
   'color' => 'default',
   'size' => null
 ])
@@ -10,8 +9,7 @@
   {{ $attributes->class([
     'btn',
     "btn-$color" => filled($color),
-    "btn-$size" => filled($size),
-    $customClass
+    "btn-$size" => filled($size)
   ]) }}
 >
   {{ $slot }}

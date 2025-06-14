@@ -1,6 +1,5 @@
 @props([
   'parentClass' => null,
-  'customClass' => null,
   'label' => null,
   'name' => null,
   'horizontal' => false,
@@ -16,16 +15,14 @@
   @endif
 
     <textarea
-      @class([
+      {{ $attributes->class([
         'form-control',
         'is-invalid' => $errors->has($name),
-        $customClass,
-      ])
-      {{ $attributes }}
+      ]) }}
     ></textarea>
 
     @error($name)
-      <x-alert.text-danger customClass="mt-2">{{ $message }}</x-alert.text-danger>
+      <x-alert.text-danger class="mt-2">{{ $message }}</x-alert.text-danger>
     @enderror
 
   @if ($horizontal)
