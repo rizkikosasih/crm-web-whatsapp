@@ -34,4 +34,4 @@
   @if($horizontal)
     </div>
   @endif
-</>
+</div>
