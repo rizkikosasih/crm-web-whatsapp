@@ -16,7 +16,14 @@ class GoogleDriveService implements GoogleDriveServiceInterface
   public function __construct()
   {
     $client = new GoogleClient();
-    $client->setAuthConfig(storage_path('app/public/google-service-account.json'));
+    $serviceAccountPath = storage_path('app/public/google-service-account.json');
+    if (!file_exists($serviceAccountPath)) {
+      throw new Exception(
+        "Google Drive Service Account file not found at: {$serviceAccountPath}"
+      );
+    }
+
+    $client->setAuthConfig($serviceAccountPath);
     $client->addScope(Drive::DRIVE);
     $this->service = new Drive($client);
   }
