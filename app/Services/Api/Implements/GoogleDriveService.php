@@ -16,7 +16,15 @@ class GoogleDriveService implements GoogleDriveServiceInterface
   public function __construct()
   {
     $client = new GoogleClient();
-    $client->setAuthConfig(storage_path('app/public/google-service-account.json'));
+
+    $serviceAccountPath = storage_path('app/public/google-service-account.json');
+    if (!file_exists($serviceAccountPath)) {
+      throw new Exception(
+        "Google Drive Service Account file not found at: {$serviceAccountPath}"
+      );
+    }
+
+    $client->setAuthConfig($serviceAccountPath);
     $client->addScope(Drive::DRIVE);
     $this->service = new Drive($client);
   }
@@ -33,17 +41,18 @@ class GoogleDriveService implements GoogleDriveServiceInterface
 
   protected function findFolder(string $folderName, ?string $parentFolderId): ?string
   {
-    $query =
-      "mimeType = 'application/vnd.google-apps.folder' and name = '" .
-      addslashes($folderName) .
-      "' and trashed = false";
+    $query = sprintf(
+      "mimeType = 'application/vnd.google-apps.folder' and name = '%s' and trashed = false",
+      addslashes($folderName)
+    );
     if ($parentFolderId) {
-      $query .= " and '$parentFolderId' in parents";
+      $query .= " and '{$parentFolderId}' in parents";
     }
 
     $results = $this->service->files->listFiles([
       'q' => $query,
       'fields' => 'files(id, name)',
+      'pageSize' => 1,
     ]);
 
     $files = $results->getFiles();
@@ -55,26 +64,27 @@ class GoogleDriveService implements GoogleDriveServiceInterface
     $folderMetadata = new DriveFile([
       'name' => $folderName,
       'mimeType' => 'application/vnd.google-apps.folder',
-      'parents' => [$parentFolderId],
+      'parents' => $parentFolderId ? [$parentFolderId] : [],
     ]);
 
     $folder = $this->service->files->create($folderMetadata, [
       'fields' => 'id',
     ]);
 
-    return $folder->id;
+    return $folder->getId();
   }
 
   protected function findFileIdByName(string $fileName, ?string $folderId = null): ?string
   {
-    $query = "name = '" . addslashes($fileName) . "' and trashed = false";
+    $query = sprintf("name = '%s' and trashed = false", addslashes($fileName));
     if ($folderId) {
-      $query .= " and '$folderId' in parents";
+      $query .= " and '{$folderId}' in parents";
     }
 
     $results = $this->service->files->listFiles([
       'q' => $query,
       'fields' => 'files(id, name)',
+      'pageSize' => 1,
     ]);
 
     $files = $results->getFiles();
@@ -83,45 +93,34 @@ class GoogleDriveService implements GoogleDriveServiceInterface
 
   protected function getFileIdFromUrl(string $url): ?string
   {
-    // Memastikan URL adalah valid dan memiliki parameter ID
+    // 1. From query parameter `id`
     $parts = parse_url($url);
-    if (!isset($parts['query'])) {
-      return null;
+    if (isset($parts['query'])) {
+      parse_str($parts['query'], $queryParams);
+      if (isset($queryParams['id'])) {
+        return $queryParams['id'];
+      }
     }
 
-    parse_str($parts['query'], $queryParams);
-    return $queryParams['id'] ?? null; // Mengembalikan file ID atau null jika tidak ditemukan
+    // 2. From URL format /d/FILE_ID/
+    if (preg_match('#/d/([a-zA-Z0-9_-]+)#', $url, $matches)) {
+      return $matches[1];
+    }
+
+    return null;
   }
 
-  /**
-   * Delete a file from Google Drive by its file ID.
-   *
-   * @param string $fileId Google Drive File ID.
-   * @return bool True if deletion was successful.
-   * @throws Exception
-   */
   public function delete(string $fileIdOrFileUrl): bool
   {
     try {
-      $fileId = $this->getFileIdFromUrl($fileIdOrFileUrl);
+      $fileId = $this->getFileIdFromUrl($fileIdOrFileUrl) ?? $fileIdOrFileUrl;
       $this->service->files->delete($fileId);
       return true;
-    } catch (Exception $e) {
+    } catch (Exception) {
       return false;
     }
   }
 
-  /**
-   * Upload a file to Google Drive.
-   *
-   * @param string $filePath Local file path relative to 'storage/app/public'.
-   * @param string $fileName Name for the file in Google Drive.
-   * @param string|null $folderName Optional folder name in Google Drive.
-   * @param string|null $parentFolderId Optional folder ID.
-   * @param bool $isPublic Whether the file should be publicly accessible.
-   * @return string Public URL to access the uploaded file.
-   * @throws Exception
-   */
   public function upload(
     string $filePath,
     string $fileName,
@@ -130,7 +129,11 @@ class GoogleDriveService implements GoogleDriveServiceInterface
     bool $isPublic = true
   ): string {
     try {
-      $localPath = storage_path('app/public/' . $filePath);
+      $localPath = storage_path('app/public/' . ltrim($filePath, '/'));
+
+      if (!file_exists($localPath)) {
+        throw new Exception("File not found: {$localPath}");
+      }
 
       $parentFolderId = $parentFolderId ?? env('GOOGLE_DRIVE_FOLDER_ID');
       $targetFolderId = $this->resolveFolder($folderName, $parentFolderId);
@@ -142,7 +145,7 @@ class GoogleDriveService implements GoogleDriveServiceInterface
 
       $file = $this->service->files->create($fileMetadata, [
         'data' => file_get_contents($localPath),
-        'mimeType' => mime_content_type($localPath),
+        'mimeType' => mime_content_type($localPath) ?: 'application/octet-stream',
         'uploadType' => 'multipart',
         'fields' => 'id',
       ]);
@@ -152,12 +155,12 @@ class GoogleDriveService implements GoogleDriveServiceInterface
           'type' => 'anyone',
           'role' => 'reader',
         ]);
-        $this->service->permissions->create($file->id, $permission);
+        $this->service->permissions->create($file->getId(), $permission);
       }
 
-      return 'https://drive.google.com/uc?export=view&id=' . $file->id;
+      return 'https://drive.google.com/uc?export=view&id=' . $file->getId();
     } catch (Exception $e) {
-      throw new Exception('Google Drive upload failed: ' . $e->getMessage());
+      throw new Exception('Google Drive upload failed: ' . $e->getMessage(), 0, $e);
     }
   }
 }
