@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class overlay extends Component
+class PreviewImage extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class overlay extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.overlay');
+        return view('components.preview-image');
     }
 }
