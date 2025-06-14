@@ -1,12 +1,12 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\Link;
 
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class card.refresh-tool extends Component
+class Icon extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class card.refresh-tool extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.card.refresh-tool');
+        return view('components.link.icon');
     }
 }

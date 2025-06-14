@@ -1,12 +1,12 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\Scripts;
 
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class card.tools extends Component
+class ModalHandler extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class card.tools extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.card.tools');
+        return view('components.scripts.modal-handler');
     }
 }

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\Card;
 
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class form.input extends Component
+class RefreshTool extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class form.input extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.form.input');
+        return view('components.card.refresh-tool');
     }
 }

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\Alert;
 
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class form.button-container extends Component
+class Success extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class form.button-container extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.form.button-container');
+        return view('components.alert.success');
     }
 }

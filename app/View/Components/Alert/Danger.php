@@ -1,12 +1,12 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\Alert;
 
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class link.icon extends Component
+class Danger extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class link.icon extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.link.icon');
+        return view('components.alert.danger');
     }
 }

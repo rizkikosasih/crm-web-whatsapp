@@ -1,12 +1,12 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\Card;
 
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class alert.danger extends Component
+class Tools extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class alert.danger extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.alert.danger');
+        return view('components.card.tools');
     }
 }

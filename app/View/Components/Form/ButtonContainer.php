@@ -1,12 +1,12 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\Form;
 
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class form.input-horizontal extends Component
+class ButtonContainer extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class form.input-horizontal extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.form.input-horizontal');
+        return view('components.form.button-container');
     }
 }

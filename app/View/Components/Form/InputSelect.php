@@ -1,12 +1,12 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\Form;
 
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class table.header extends Component
+class InputSelect extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class table.header extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.table.header');
+        return view('components.form.input-select');
     }
 }
