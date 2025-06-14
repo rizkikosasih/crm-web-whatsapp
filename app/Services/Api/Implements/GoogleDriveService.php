@@ -11,21 +11,25 @@ use Google\Service\Drive\Permission;
 
 class GoogleDriveService implements GoogleDriveServiceInterface
 {
-  protected Drive $service;
+  protected ?Drive $service = null;
 
-  public function __construct()
+  protected function getService(): Drive
   {
-    $client = new GoogleClient();
-    $serviceAccountPath = storage_path('app/public/google-service-account.json');
-    if (!file_exists($serviceAccountPath)) {
-      throw new Exception(
-        "Google Drive Service Account file not found at: {$serviceAccountPath}"
-      );
-    }
+    if (!$this->service) {
+      $client = new GoogleClient();
+      $serviceAccountPath = storage_path('app/public/google-service-account.json');
 
-    $client->setAuthConfig($serviceAccountPath);
-    $client->addScope(Drive::DRIVE);
-    $this->service = new Drive($client);
+      if (!file_exists($serviceAccountPath)) {
+        throw new Exception(
+          "Google Drive Service Account file not found at: {$serviceAccountPath}"
+        );
+      }
+
+      $client->setAuthConfig($serviceAccountPath);
+      $client->addScope(Drive::DRIVE);
+      $this->service = new Drive($client);
+    }
+    return $this->service;
   }
 
   protected function resolveFolder(?string $folderName, ?string $parentFolderId): string
@@ -48,7 +52,9 @@ class GoogleDriveService implements GoogleDriveServiceInterface
       $query .= " and '$parentFolderId' in parents";
     }
 
-    $results = $this->service->files->listFiles([
+    $service = $this->getService();
+
+    $results = $service->files->listFiles([
       'q' => $query,
       'fields' => 'files(id, name)',
     ]);
@@ -65,7 +71,9 @@ class GoogleDriveService implements GoogleDriveServiceInterface
       'parents' => [$parentFolderId],
     ]);
 
-    $folder = $this->service->files->create($folderMetadata, [
+    $service = $this->getService();
+
+    $folder = $service->files->create($folderMetadata, [
       'fields' => 'id',
     ]);
 
@@ -79,7 +87,9 @@ class GoogleDriveService implements GoogleDriveServiceInterface
       $query .= " and '$folderId' in parents";
     }
 
-    $results = $this->service->files->listFiles([
+    $service = $this->getService();
+
+    $results = $service->files->listFiles([
       'q' => $query,
       'fields' => 'files(id, name)',
     ]);
@@ -90,14 +100,19 @@ class GoogleDriveService implements GoogleDriveServiceInterface
 
   protected function getFileIdFromUrl(string $url): ?string
   {
-    // Memastikan URL adalah valid dan memiliki parameter ID
+    // Ambil dari query parameter
     $parts = parse_url($url);
-    if (!isset($parts['query'])) {
-      return null;
+    parse_str($parts['query'] ?? '', $queryParams);
+    if (isset($queryParams['id'])) {
+      return $queryParams['id'];
     }
 
-    parse_str($parts['query'], $queryParams);
-    return $queryParams['id'] ?? null; // Mengembalikan file ID atau null jika tidak ditemukan
+    // Ambil dari URL format .../d/{id}/
+    if (preg_match('#/d/([a-zA-Z0-9_-]+)#', $url, $matches)) {
+      return $matches[1];
+    }
+
+    return null;
   }
 
   /**
@@ -111,7 +126,9 @@ class GoogleDriveService implements GoogleDriveServiceInterface
   {
     try {
       $fileId = $this->getFileIdFromUrl($fileIdOrFileUrl);
-      $this->service->files->delete($fileId);
+      $service = $this->getService();
+
+      $service->files->delete($fileId);
       return true;
     } catch (Exception $e) {
       return false;
@@ -147,7 +164,9 @@ class GoogleDriveService implements GoogleDriveServiceInterface
         'parents' => [$targetFolderId],
       ]);
 
-      $file = $this->service->files->create($fileMetadata, [
+      $service = $this->getService();
+
+      $file = $service->files->create($fileMetadata, [
         'data' => file_get_contents($localPath),
         'mimeType' => mime_content_type($localPath),
         'uploadType' => 'multipart',
