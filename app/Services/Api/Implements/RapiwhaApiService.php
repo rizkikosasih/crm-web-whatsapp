@@ -23,19 +23,17 @@ class RapiwhaApiService implements SendMessageApiServiceInterface
   public function sendMessage(
     string $number,
     string $text,
-    ?string $image = ''
-  ): JsonResponse {
-    DB::beginTransaction();
-
+    bool $isObject = true
+  ): array|object {
     try {
+      DB::beginTransaction();
+
       $customer = Customer::where('phone', $number)->first();
       if (!$customer) {
-        return response()->json(
-          [
-            'success' => false,
-            'message' => 'Nomor Handphone tidak ditemukan dalam daftar pelanggan',
-          ],
-          404
+        return $this->formatResponse(
+          false,
+          'Nomor Handphone tidak ditemukan dalam daftar pelanggan',
+          $isObject
         );
       }
 
@@ -69,31 +67,42 @@ class RapiwhaApiService implements SendMessageApiServiceInterface
             'customer_id' => $customer->id,
             'user_id' => Auth::id(),
             'message' => e($text),
-            'image' => $image ?: null,
+            'image' => null,
           ]);
         }
 
         DB::commit();
-        return response()->json($result, $response->status());
+        return $this->formatResponse(
+          $result['success'],
+          $result['description'],
+          $isObject
+        );
       }
 
-      return response()->json(
-        [
-          'success' => false,
-          'message' => $response->status() . ': ' . $response->body(),
-        ],
-        500
+      return $this->formatResponse(
+        false,
+        $response->status() . ': ' . $response->body(),
+        $isObject
       );
     } catch (\Exception $e) {
       DB::rollBack();
       logger('HTTP Error: ' . $e->getMessage());
-      return response()->json(
-        [
-          'success' => false,
-          'message' => $e->getMessage(),
-        ],
-        500
-      );
+      return $this->formatResponse(false, $e->getMessage(), $isObject);
     }
+  }
+
+  protected function formatResponse(
+    bool $success,
+    string $message,
+    bool $asObject = true,
+    array $data = []
+  ): array|object {
+    $result = [
+      'success' => $success,
+      'message' => $message,
+      'data' => $data,
+    ];
+
+    return $asObject ? (object) $result : $result;
   }
 }
