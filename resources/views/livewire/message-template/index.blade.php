@@ -21,16 +21,17 @@
             @endif
 
             <form wire:submit.prevent="save">
-              <x-form.input-horizontal
+              <x-form.input
                 id="titleTemplate"
                 name="titleTemplate"
                 label="Judul Template"
                 placeholder="Masukan Judul Template"
                 customClass="form-control-sm"
                 wire:model.defer="titleTemplate"
+                horizontal="true"
               />
 
-              <x-form.input-select-horizontal
+              <x-form.input-select
                 id="type"
                 name="type"
                 label="Tipe Template"
@@ -38,15 +39,17 @@
                 wire:model.defer="type"
                 :options="['campaign' => 'Campaign Broadcast', 'product' => 'Produk', 'order' => 'Pemesanan']"
                 selected="{{ $this->type }}"
+                horizontal="true"
               />
 
-              <x-form.textarea-horizontal
+              <x-form.textarea
                 id="body"
                 name="body"
                 label="Isi Pesan"
                 placeholder="Masukan Isi Pesan"
                 rows="6"
                 wire:model.defer="body"
+                horizontal="true"
               />
 
               <hr>

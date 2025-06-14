@@ -20,27 +20,25 @@
             @endif
 
             <form wire:submit.prevent="save">
-              <x-form.input-horizontal
+              <x-form.input
                 id="apiKey"
                 name="apiKey"
                 label="API Key"
                 placeholder="Masukkan API Key"
                 customClass="form-control-sm"
                 wire:model.defer="apiKey"
+                horizontal="true"
               />
 
-              <x-form.input-horizontal
+              <x-form.input
                 id="apiUrl"
                 name="apiUrl"
                 label="API URL"
                 placeholder="Masukkan API URL dengan https://"
                 customClass="form-control-sm"
                 wire:model.defer="apiUrl"
-              >
-                <x-slot name="prepend">
-                  <span class="input-group-text text-muted">https://</span>
-                </x-slot>
-              </x-form.input-horizontal>
+                horizontal="true"
+              />
 
               <hr>
 

@@ -35,15 +35,16 @@
                   onSelect="selectParent"
                 />
 
-                <x-form.input-horizontal
+                <x-form.input
                   name="name"
                   id="name"
                   label="Nama Menu"
                   placeholder="Masukan nama menu"
                   wire:model.defer="name"
+                  horizontal="true"
                 />
 
-                <x-form.input-horizontal
+                <x-form.input
                   name="position"
                   id="position"
                   type="number"
@@ -51,30 +52,34 @@
                   placeholder="Masukan urutan menu"
                   customClass="number-only"
                   wire:model.defer="position"
+                  horizontal="true"
                 />
 
-                <x-form.input-horizontal
+                <x-form.input
                   name="icon"
                   id="icon"
                   label="Icon <small>(<a href='https://fontawesome.com/v6/icons' target='_blank'>Font Awesome</a>)</small>"
                   placeholder="Masukan icon menu"
                   wire:model.defer="icon"
+                  horizontal="true"
                 />
 
-                <x-form.input-horizontal
+                <x-form.input
                   name="route"
                   id="route"
                   label="Route"
                   placeholder="Masukan route menu"
                   wire:model.defer="route"
+                  horizontal="true"
                 />
 
-                <x-form.input-horizontal
+                <x-form.input
                   name="slug"
                   id="slug"
                   label="Slug"
                   placeholder="Masukan slug menu"
                   wire:model.defer="slug"
+                  horizontal="true"
                 />
               </x-overlay>
 

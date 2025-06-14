@@ -56,41 +56,46 @@
             <div class="tab-content">
               <div @class(["tab-pane", 'active' => !$isPasswordVisible ]) id="settings">
                 <form class="form-profile" wire:submit.prevent="updateProfile">
-                  <x-form.input-horizontal
+                  <x-form.input
                     name="name"
                     label="Nama"
                     placeholder="Masukan Nama Anda"
                     wire:model.defer="name"
+                    horizontal="true"
                   />
 
-                  <x-form.input-horizontal
+                  <x-form.input
                     name="email"
                     label="Email"
                     placeholder="Masukan Email Anda"
                     wire:model.defer="email"
+                    horizontal="true"
                   />
 
-                  <x-form.input-horizontal
+                  <x-form.input
                     name="phone"
                     label="No Handphone"
                     placeholder="Masukan No Handphone Anda"
                     wire:model.defer="phone"
                     customClass="number-only"
+                    horizontal="true"
                   />
 
-                  <x-form.textarea-horizontal
+                  <x-form.textarea
                     name="address"
                     label="Alamat"
                     placeholder="Masukan Alamat Anda"
                     wire:model.defer="address"
+                    horizontal="true"
                   />
 
-                  <x-form.image-horizontal
+                  <x-form.image
                     name="avatar"
                     label="Foto Profil"
                     :preview="$avatar"
                     path="{{ $avatar ?: 'images/no-image.svg' }}"
                     wire:model.defer="avatar"
+                    horizontal="true"
                   />
 
                   <div class="form-group row">
@@ -105,28 +110,31 @@
 
               <div @class(["tab-pane", 'active' => $isPasswordVisible ]) id="password">
                 <form wire:submit="updatePassword" class="form-change-password">
-                  <x-form.input-horizontal
+                  <x-form.input
                     name="currentPassword"
                     label="Password Saat Ini"
                     type="password"
                     placeholder="Masukan Password Saat Ini"
                     wire:model.defer="password"
+                    horizontal="true"
                   />
 
-                  <x-form.input-horizontal
+                  <x-form.input
                     name="newPassword"
                     label="Password Baru"
                     type="password"
                     placeholder="Masukan Password Baru"
                     wire:model.defer="passwordNew"
+                    horizontal="true"
                   />
 
-                  <x-form.input-horizontal
+                  <x-form.input
                     name="confirmPassword"
                     label="Konfirmasi Password Baru"
                     type="password"
                     placeholder="Masukan Konfirmasi Password Baru"
                     wire:model.defer="passwordConfirm"
+                    horizontal="true"
                   />
 
                   <div class="form-group row">

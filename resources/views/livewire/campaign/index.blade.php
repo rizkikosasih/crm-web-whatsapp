@@ -23,31 +23,34 @@
             @endif
 
             <form wire:submit.prevent="save">
-              <x-form.input-horizontal
+              <x-form.input
                 id="campaignTitle"
                 name="campaignTitle"
                 label="Judul Campaign"
                 placeholder="Masukan Judul Campaign"
                 customClass="form-control-sm"
                 wire:model.defer="campaignTitle"
+                horizontal="true"
               />
 
-              <x-form.textarea-horizontal
+              <x-form.textarea
                 id="campaignMessage"
                 name="campaignMessage"
                 label="Pesan Campaign"
                 rows="6"
                 placeholder="Masukan Pesan Campaign"
                 wire:model.defer="campaignMessage"
+                horizontal="true"
               />
 
-              <x-form.image-horizontal
+              <x-form.image
                 id="image"
                 name="image"
                 label="Gambar"
                 :preview="$image"
                 path="{{ $image ?? null }}"
                 wire:model.defer="image"
+                horizontal="true"
               />
 
               <hr>

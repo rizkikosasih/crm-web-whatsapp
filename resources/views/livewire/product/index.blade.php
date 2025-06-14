@@ -24,34 +24,37 @@
 
             <form wire:submit.prevent="save">
               <x-overlay wire:target='save'>
-                <x-form.input-horizontal
+                <x-form.input
                   id="name"
                   name="name"
                   label="Nama Produk"
                   placeholder="Masukan Nama Produk"
                   customClass="form-control-sm"
                   wire:model.defer="name"
+                  horizontal="true"
                 />
 
-                <x-form.input-horizontal
+                <x-form.input
                   id="sku"
                   name="sku"
                   label="SKU Produk"
                   placeholder="Masukan SKU Produk"
                   customClass="form-control-sm"
                   wire:model.defer="sku"
+                  horizontal="true"
                 />
 
-                <x-form.input-horizontal
+                <x-form.input
                   id="price"
                   name="price"
                   label="Harga"
                   placeholder="Masukan Harga"
                   customClass="form-control-sm number-only"
                   wire:model.defer="price"
+                  horizontal="true"
                 />
 
-                <x-form.input-horizontal
+                <x-form.input
                   id="stock"
                   name="stock"
                   label="Stock"
@@ -59,23 +62,26 @@
                   customClass="form-control-sm number-only"
                   maxlength="3"
                   wire:model.defer="stock"
+                  horizontal="true"
                 />
 
-                <x-form.textarea-horizontal
+                <x-form.textarea
                   id="description"
                   name="description"
                   label="Deskripsi Produk"
                   placeholder="Masukan Deskripsi Produk"
                   wire:model.defer="description"
+                  horizontal="true"
                 />
 
-                <x-form.image-horizontal
+                <x-form.image
                   id="image"
                   name="image"
                   label="Gambar"
                   :preview="$image"
                   path="{{ $image ?? null }}"
                   wire:model.defer="image"
+                  horizontal="true"
                 />
               </x-overlay>
 
