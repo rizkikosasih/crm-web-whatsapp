@@ -16,7 +16,7 @@ cd /d "%~dp0\.." || (
 echo 📦 Install Dependensi ...
 if not exist ".env" copy ".env.example" ".env"
 
-composer install && npm install && php artisan storage:link && php artisan app:migrate && (
+composer install && npm install && php artisan key:generate && php artisan storage:link && php artisan app:migrate && (
   echo ==============================
   echo ✅ Setup Selesai
   echo ==============================
