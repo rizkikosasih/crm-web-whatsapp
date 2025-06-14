@@ -3,37 +3,58 @@
 namespace App\Services\Api\Implements;
 
 use App\Services\Api\GoogleDriveServiceInterface;
+use Firebase\JWT\JWT;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use Exception;
-use Google\Client as GoogleClient;
-use Google\Service\Drive;
-use Google\Service\Drive\DriveFile;
-use Google\Service\Drive\Permission;
 
 class GoogleDriveService implements GoogleDriveServiceInterface
 {
-  protected ?Drive $service = null;
+  protected string $serviceAccountPath;
+  protected Client $http;
 
-  protected function getService(): Drive
+  public function __construct()
   {
-    if (!$this->service) {
-      $client = new GoogleClient();
-      $serviceAccountPath = storage_path('app/public/google-service-account.json');
-
-      if (!file_exists($serviceAccountPath)) {
-        throw new Exception(
-          "Google Drive Service Account file not found at: {$serviceAccountPath}"
-        );
-      }
-
-      $client->setAuthConfig($serviceAccountPath);
-      $client->addScope(Drive::DRIVE);
-      $this->service = new Drive($client);
-    }
-    return $this->service;
+    $this->serviceAccountPath = storage_path('app/public/google-service-account.json');
+    $this->http = new Client();
   }
 
-  protected function resolveFolder(?string $folderName, ?string $parentFolderId): string
+  protected function getAccessToken(): string
   {
+    $account = json_decode(file_get_contents($this->serviceAccountPath), true);
+    $now = time();
+    $payload = [
+      'iss' => $account['client_email'],
+      'scope' => 'https://www.googleapis.com/auth/drive',
+      'aud' => 'https://oauth2.googleapis.com/token',
+      'iat' => $now,
+      'exp' => $now + 3600,
+    ];
+
+    $jwt = JWT::encode($payload, $account['private_key'], 'RS256');
+
+    $response = $this->http->post('https://oauth2.googleapis.com/token', [
+      'form_params' => [
+        'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+        'assertion' => $jwt,
+      ],
+    ]);
+
+    $data = json_decode($response->getBody(), true);
+    return $data['access_token'];
+  }
+
+  protected function getHeaders(): array
+  {
+    return [
+      'Authorization' => 'Bearer ' . $this->getAccessToken(),
+    ];
+  }
+
+  protected function resolveFolder(
+    ?string $folderName,
+    ?string $parentFolderId = null
+  ): string {
     if (!$folderName) {
       return $parentFolderId ?? env('GOOGLE_DRIVE_FOLDER_ID');
     }
@@ -42,110 +63,51 @@ class GoogleDriveService implements GoogleDriveServiceInterface
     return $existing ?? $this->createFolder($folderName, $parentFolderId);
   }
 
-  protected function findFolder(string $folderName, ?string $parentFolderId): ?string
-  {
-    $query =
-      "mimeType = 'application/vnd.google-apps.folder' and name = '" .
-      addslashes($folderName) .
-      "' and trashed = false";
+  protected function findFolder(
+    string $folderName,
+    ?string $parentFolderId = null
+  ): ?string {
+    $query = "mimeType='application/vnd.google-apps.folder' and name='{$folderName}' and trashed=false";
     if ($parentFolderId) {
-      $query .= " and '$parentFolderId' in parents";
+      $query .= " and '{$parentFolderId}' in parents";
     }
 
-    $service = $this->getService();
-
-    $results = $service->files->listFiles([
-      'q' => $query,
-      'fields' => 'files(id, name)',
+    $response = $this->http->get('https://www.googleapis.com/drive/v3/files', [
+      'headers' => $this->getHeaders(),
+      'query' => [
+        'q' => $query,
+        'fields' => 'files(id, name)',
+        'spaces' => 'drive',
+      ],
     ]);
 
-    $files = $results->getFiles();
-    return count($files) > 0 ? $files[0]->getId() : null;
+    $data = json_decode($response->getBody(), true);
+    return count($data['files']) > 0 ? $data['files'][0]['id'] : null;
   }
 
-  protected function createFolder(string $folderName, ?string $parentFolderId): string
-  {
-    $folderMetadata = new DriveFile([
+  protected function createFolder(
+    string $folderName,
+    ?string $parentFolderId = null
+  ): string {
+    $folderMetadata = [
       'name' => $folderName,
       'mimeType' => 'application/vnd.google-apps.folder',
-      'parents' => [$parentFolderId],
+    ];
+    if ($parentFolderId) {
+      $folderMetadata['parents'] = [$parentFolderId];
+    }
+
+    $response = $this->http->post('https://www.googleapis.com/drive/v3/files', [
+      'headers' => array_merge($this->getHeaders(), [
+        'Content-Type' => 'application/json',
+      ]),
+      'body' => json_encode($folderMetadata),
     ]);
 
-    $service = $this->getService();
-
-    $folder = $service->files->create($folderMetadata, [
-      'fields' => 'id',
-    ]);
-
-    return $folder->id;
+    $data = json_decode($response->getBody(), true);
+    return $data['id'];
   }
 
-  protected function findFileIdByName(string $fileName, ?string $folderId = null): ?string
-  {
-    $query = "name = '" . addslashes($fileName) . "' and trashed = false";
-    if ($folderId) {
-      $query .= " and '$folderId' in parents";
-    }
-
-    $service = $this->getService();
-
-    $results = $service->files->listFiles([
-      'q' => $query,
-      'fields' => 'files(id, name)',
-    ]);
-
-    $files = $results->getFiles();
-    return count($files) > 0 ? $files[0]->getId() : null;
-  }
-
-  protected function getFileIdFromUrl(string $url): ?string
-  {
-    // Ambil dari query parameter
-    $parts = parse_url($url);
-    parse_str($parts['query'] ?? '', $queryParams);
-    if (isset($queryParams['id'])) {
-      return $queryParams['id'];
-    }
-
-    // Ambil dari URL format .../d/{id}/
-    if (preg_match('#/d/([a-zA-Z0-9_-]+)#', $url, $matches)) {
-      return $matches[1];
-    }
-
-    return null;
-  }
-
-  /**
-   * Delete a file from Google Drive by its file ID.
-   *
-   * @param string $fileId Google Drive File ID.
-   * @return bool True if deletion was successful.
-   * @throws Exception
-   */
-  public function delete(string $fileIdOrFileUrl): bool
-  {
-    try {
-      $fileId = $this->getFileIdFromUrl($fileIdOrFileUrl);
-      $service = $this->getService();
-
-      $service->files->delete($fileId);
-      return true;
-    } catch (Exception $e) {
-      return false;
-    }
-  }
-
-  /**
-   * Upload a file to Google Drive.
-   *
-   * @param string $filePath Local file path relative to 'storage/app/public'.
-   * @param string $fileName Name for the file in Google Drive.
-   * @param string|null $folderName Optional folder name in Google Drive.
-   * @param string|null $parentFolderId Optional folder ID.
-   * @param bool $isPublic Whether the file should be publicly accessible.
-   * @return string Public URL to access the uploaded file.
-   * @throws Exception
-   */
   public function upload(
     string $filePath,
     string $fileName,
@@ -155,37 +117,90 @@ class GoogleDriveService implements GoogleDriveServiceInterface
   ): string {
     try {
       $localPath = storage_path('app/public/' . $filePath);
+      $folderId = $this->resolveFolder(
+        $folderName,
+        $parentFolderId ?? env('GOOGLE_DRIVE_FOLDER_ID')
+      );
 
-      $parentFolderId = $parentFolderId ?? env('GOOGLE_DRIVE_FOLDER_ID');
-      $targetFolderId = $this->resolveFolder($folderName, $parentFolderId);
-
-      $fileMetadata = new DriveFile([
+      $fileMetadata = [
         'name' => $fileName,
-        'parents' => [$targetFolderId],
-      ]);
+        'parents' => [$folderId],
+      ];
 
-      $service = $this->getService();
+      $multipart = [
+        [
+          'name' => 'metadata',
+          'contents' => json_encode($fileMetadata),
+          'headers' => ['Content-Type' => 'application/json'],
+        ],
+        [
+          'name' => 'file',
+          'contents' => fopen($localPath, 'r'),
+          'headers' => ['Content-Type' => mime_content_type($localPath)],
+        ],
+      ];
 
-      $file = $service->files->create($fileMetadata, [
-        'data' => file_get_contents($localPath),
-        'mimeType' => mime_content_type($localPath),
-        'uploadType' => 'multipart',
-        'fields' => 'id',
-      ]);
+      $response = $this->http->post(
+        'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',
+        [
+          'headers' => $this->getHeaders(),
+          'multipart' => $multipart,
+        ]
+      );
+
+      $data = json_decode($response->getBody(), true);
 
       if ($isPublic) {
-        $permission = new Permission([
-          'type' => 'anyone',
-          'role' => 'reader',
-        ]);
-
-        $service = $this->getService();
-        $service->permissions->create($file->id, $permission);
+        $this->setPublicPermission($data['id']);
       }
 
-      return 'https://drive.google.com/uc?export=view&id=' . $file->id;
-    } catch (Exception $e) {
+      return 'https://drive.google.com/uc?export=view&id=' . $data['id'];
+    } catch (GuzzleException | Exception $e) {
       throw new Exception('Google Drive upload failed: ' . $e->getMessage());
     }
+  }
+
+  protected function setPublicPermission(string $fileId): void
+  {
+    $this->http->post("https://www.googleapis.com/drive/v3/files/{$fileId}/permissions", [
+      'headers' => array_merge($this->getHeaders(), [
+        'Content-Type' => 'application/json',
+      ]),
+      'body' => json_encode([
+        'role' => 'reader',
+        'type' => 'anyone',
+      ]),
+    ]);
+  }
+
+  public function delete(string $fileIdOrFileUrl): bool
+  {
+    try {
+      $fileId = $this->getFileIdFromUrl($fileIdOrFileUrl);
+      if (!$fileId) {
+        throw new Exception("Invalid Google Drive file ID or URL: {$fileIdOrFileUrl}");
+      }
+
+      $this->http->delete("https://www.googleapis.com/drive/v3/files/{$fileId}", [
+        'headers' => $this->getHeaders(),
+      ]);
+
+      return true;
+    } catch (GuzzleException | Exception $e) {
+      throw new Exception('Google Drive delete failed: ' . $e->getMessage());
+    }
+  }
+
+  protected function getFileIdFromUrl(string $url): ?string
+  {
+    $parts = parse_url($url);
+    parse_str($parts['query'] ?? '', $queryParams);
+    if (isset($queryParams['id'])) {
+      return $queryParams['id'];
+    }
+    if (preg_match('#/d/([a-zA-Z0-9_-]+)#', $url, $matches)) {
+      return $matches[1];
+    }
+    return null;
   }
 }
