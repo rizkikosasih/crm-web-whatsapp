@@ -1,35 +1,37 @@
 #!/bin/bash
 
-# Pindah ke root proyek Laravel
-cd "$(dirname "$0")/.." || exit 1
-
-echo "============================================"
-echo "      Laravel Setup Starter (Linux/macOS)"
-echo "============================================"
+# Laravel Setup Starter
+echo "=============================="
+echo "Laravel Setup Starter"
+echo "=============================="
 echo ""
 
-# ✅ Install dependensi PHP
-echo "📦 Install dependensi PHP (composer install)..."
-composer update --lock || composer install || read -p "Tekan ENTER untuk keluar..."
-echo ""
+# Change to project root directory
+cd "$(dirname "$0")/.." || {
+  echo "❌ Failed to change to project root directory."
+  exit 1
+}
 
-# ✅ Install dependensi Node.js (npm/yarn otomatis)
-echo "📦 Install dependensi frontend (Node.js)..."
-npm install || read -p "Tekan ENTER untuk keluar..."
-echo ""
+echo "📦 Installing Dependencies..."
+if [ ! -f ".env" ]; then
+  cp ".env.example" ".env"
+fi
 
-# ✅ Buat symbolic link storage
-echo "🔗 Membuat symbolic link storage..."
-php artisan storage:link || read -p "Tekan ENTER untuk keluar..."
-echo ""
+# Run all installation commands
+{
+  composer install && \
+  npm install && \
+  php artisan storage:link && \
+  php artisan app:migrate && \
+  echo "==============================" && \
+  echo "✅ Setup Completed" && \
+  echo "=============================="
+} || {
+  echo "❌ Some process failed."
+  exit 1
+}
 
-# ✅ Jalankan migrasi database
-echo "🗄️  Menjalankan migrasi database..."
-php artisan app:migrate || read -p "Tekan ENTER untuk keluar..."
-echo ""
-
-# ✅ Selesai
-echo "============================================"
-echo "✅ SEMUA PROSES SELESAI"
-echo "============================================"
-read -p "Tekan ENTER untuk keluar..."
+# Keep terminal open if running in interactive mode
+if [ -t 1 ]; then
+  read -p "Press any key to continue..." -n1 -s
+fi
