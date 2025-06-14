@@ -28,5 +28,7 @@
       <x-alert.text-danger customClass="mt-2">{{ $message }}</x-alert.text-danger>
     @enderror
 
-  </div>
+  @if ($horizontal)
+    </div>
+  @endif
 </div>

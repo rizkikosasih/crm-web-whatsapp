@@ -1,4 +1,11 @@
-<div @class(['form-group', 'row', $parentClass ?? ''])>
+@props([
+  'parentClass' => null,
+  'customClass' => null,
+  'label' => null,
+  'name' => null
+])
+
+<div @class(['form-group', 'row' => $horizontal, $parentClass])>
   @isset($label)
     <label for="{{ $name }}" class="fw-bold col-sm-3">{!! $label !!}</label>
   @endisset
@@ -7,8 +14,8 @@
     <textarea
       @class([
         'form-control',
-        $customClass ?? '',
         'is-invalid' => $errors->has($name),
+        $customClass,
       ])
       {{ $attributes }}
     ></textarea>
@@ -16,5 +23,6 @@
     @error($name)
       <x-alert.text-danger customClass="mt-2">{{ $message }}</x-alert.text-danger>
     @enderror
+
   </div>
 </div>
