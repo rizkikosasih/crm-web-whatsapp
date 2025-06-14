@@ -25,14 +25,15 @@
             @endif
 
             <form wire:submit.prevent="save">
-              <x-form.input-horizontal
+              <x-form.input
                 name="name"
                 id="name"
                 label="Nama Pengguna"
                 placeholder="Masukan Nama Pengguna"
                 wire:model.defer="name"
               />
-              <x-form.input-horizontal
+
+              <x-form.input
                 name="username"
                 id="username"
                 label="Username Pengguna"
@@ -40,7 +41,7 @@
                 wire:model.defer="username"
               />
 
-              <x-form.input-horizontal
+              <x-form.input
                 name="phone"
                 id="phone"
                 label="No Handphone <small>(contoh: 6285123456789)</small>"
@@ -49,7 +50,7 @@
                 wire:model.defer="phone"
               />
 
-              <x-form.input-horizontal
+              <x-form.input
                 name="email"
                 id="email"
                 type="email"
@@ -63,7 +64,6 @@
                 id="role_id"
                 label="Role Pengguna"
                 placeholder="Pilih Role Pengguna"
-                horizontal="true"
                 :options="$roles"
                 optionHeader="Pilih Role Pengguna"
                 wire:model.defer="role_id"
