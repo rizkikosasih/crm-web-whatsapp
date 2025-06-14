@@ -5,7 +5,6 @@ namespace App\Services\Api\Implements;
 use App\Models\Customer;
 use App\Models\Message;
 use App\Services\Api\SendMessageApiServiceInterface;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
