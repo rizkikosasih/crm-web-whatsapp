@@ -99,11 +99,10 @@ class WhatsappModal extends Component
 
     $response = $rapiwha->sendMessage($phone, $message);
 
-    if ($response->isSuccessful()) {
+    if ($response->success) {
       $this->dispatch('showSuccess', message: 'Info Produk Berhasil Dikirim');
     } else {
-      $data = json_decode($response->getContent());
-      $this->dispatch('showError', message: $data->message);
+      $this->dispatch('showError', message: $response->message);
     }
   }
 

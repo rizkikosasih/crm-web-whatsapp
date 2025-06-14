@@ -128,11 +128,10 @@ class Index extends Component
           ]);
 
           $response = $rapiwha->sendMessage($customer->phone, $message);
-          $data = json_decode($response->getContent());
-          if ($data->success) {
-            $this->dispatch('showSuccess', message: 'Info Produk Berhasil Dikirim');
+          if ($response->success) {
+            $this->dispatch('showSuccess', message: 'Campaign Broadcast Berhasil Dikirim');
           } else {
-            $this->dispatch('showError', message: $data->message);
+            $this->dispatch('showError', message: $response->message);
           }
         }
 
