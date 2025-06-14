@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,11 +13,6 @@ use Illuminate\Support\Facades\Storage;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-/* Route Fallback */
-Route::fallback(function () {
-  return abort(404);
-});
 
 Route::middleware(['guest'])->group(function () {
   Route::get('/', App\Livewire\Auth\Login::class)->name('index');
@@ -85,4 +79,9 @@ Route::middleware(['auth', 'role'])->group(function () {
         ->where('id', '[0-9]+');
     });
   });
+});
+
+/* Route Fallback */
+Route::fallback(function () {
+  return abort(404);
 });
