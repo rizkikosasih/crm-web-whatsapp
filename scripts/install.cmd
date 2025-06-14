@@ -30,4 +30,4 @@ php artisan app:migrate
 echo ==============================
 echo SEMUA PROSES SELESAI ✅
 echo ==============================
-exit
+pause
