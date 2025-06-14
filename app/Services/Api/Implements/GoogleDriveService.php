@@ -178,7 +178,9 @@ class GoogleDriveService implements GoogleDriveServiceInterface
           'type' => 'anyone',
           'role' => 'reader',
         ]);
-        $this->service->permissions->create($file->id, $permission);
+
+        $service = $this->getService();
+        $service->permissions->create($file->id, $permission);
       }
 
       return 'https://drive.google.com/uc?export=view&id=' . $file->id;
