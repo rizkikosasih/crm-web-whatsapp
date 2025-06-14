@@ -128,27 +128,16 @@
 
   @verbatim
   <script>
-    window.renderedCharts = window.renderedCharts || {};
-
-    function initCharts() {
-      const chartConfigs = @json($charts);
-
-      chartConfigs.forEach(chart => {
-        const canvas = document.getElementById(chart.id);
-        if (chart.show && canvas) {
-          const ctx = canvas.getContext('2d');
-
-          if (window.renderedCharts[chart.id]) {
-            renderedCharts[chart.id].destroy();
-          }
-
-          window.renderedCharts[chart.id] = new Chart(ctx, chart.config);
-        }
-      });
+    function renderChartsSafe() {
+      if (typeof window.renderCharts === 'function') {
+        window.renderCharts(@json($charts));
+      } else {
+        setTimeout(renderChartsSafe, 100);
+      }
     }
 
-    document.addEventListener('livewire:navigated', initCharts);
-    Livewire.on('refreshChart', initCharts);
+    document.addEventListener('livewire:navigated', renderChartsSafe);
+    Livewire.on('refreshChart', renderChartsSafe);
   </script>
   @verbatim
 @endsection
