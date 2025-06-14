@@ -2,8 +2,7 @@
   'path' => 'images/no-image.svg',
   'imageTitle' => 'Perbesar',
   'width' => '30px',
-  'height' => 'auto',
-  'customClass' => null,
+  'height' => 'auto'
 ])
 
 @php
@@ -20,6 +19,6 @@
     width="{{ $width }}"
     height="{{ $height }}"
     src="{{ imageUri($path) }}"
-    @class([ 'img-rounded', $customClass ])
+    {{ $attributes->class(['img-rounded']) }}
   />
 </a>

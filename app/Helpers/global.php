@@ -13,6 +13,13 @@ if (!function_exists('storagePath')) {
   }
 }
 
+if (!function_exists('isLivewireTemporaryFile')) {
+  function isLivewireTemporaryFile($tmp)
+  {
+    return $tmp instanceof \Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
+  }
+}
+
 if (!function_exists('imageUri')) {
   function imageUri(string $path): ?string
   {

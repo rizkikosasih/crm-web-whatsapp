@@ -28,7 +28,7 @@
                 name="campaignTitle"
                 label="Judul Campaign"
                 placeholder="Masukan Judul Campaign"
-                customClass="form-control-sm"
+                class="form-control-sm"
                 wire:model.defer="campaignTitle"
                 horizontal="true"
               />
@@ -47,15 +47,26 @@
                 id="image"
                 name="image"
                 label="Gambar"
-                :preview="$image"
-                path="{{ $image ?? null }}"
                 wire:model.defer="image"
                 horizontal="true"
-              />
+              >
+                @php
+                  $imageUri = isLivewireTemporaryFile($image) ? $image->temporaryUrl() : imageUri($image ?: 'images/no-image.svg');
+                @endphp
+
+                <a href="{{ $imageUri }}" data-toggle="lightbox" class="tooltips" title="Perbesar">
+                  <img
+                    src="{{ $imageUri }}"
+                    class="img-rounded"
+                    width="100"
+                    height="auto"
+                  >
+                </a>
+              </x-form.image>
 
               <hr>
 
-              <x-form.button-container customClass="justify-content-end">
+              <x-form.button-container class="justify-content-end">
                 <x-button wire:click="resetForm" wire:loading.attr="disabled" wire:target="image, save" color="danger">
                   Batal
                 </x-button>

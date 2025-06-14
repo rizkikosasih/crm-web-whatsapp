@@ -29,7 +29,7 @@
                   name="name"
                   label="Nama Produk"
                   placeholder="Masukan Nama Produk"
-                  customClass="form-control-sm"
+                  class="form-control-sm"
                   wire:model.defer="name"
                   horizontal="true"
                 />
@@ -39,7 +39,7 @@
                   name="sku"
                   label="SKU Produk"
                   placeholder="Masukan SKU Produk"
-                  customClass="form-control-sm"
+                  class="form-control-sm"
                   wire:model.defer="sku"
                   horizontal="true"
                 />
@@ -49,7 +49,7 @@
                   name="price"
                   label="Harga"
                   placeholder="Masukan Harga"
-                  customClass="form-control-sm number-only"
+                  class="form-control-sm number-only"
                   wire:model.defer="price"
                   horizontal="true"
                 />
@@ -59,7 +59,7 @@
                   name="stock"
                   label="Stock"
                   placeholder="Masukan Stock"
-                  customClass="form-control-sm number-only"
+                  class="form-control-sm number-only"
                   maxlength="3"
                   wire:model.defer="stock"
                   horizontal="true"
@@ -78,16 +78,27 @@
                   id="image"
                   name="image"
                   label="Gambar"
-                  :preview="$image"
-                  path="{{ $image ?? null }}"
-                  wire:model.defer="image"
+                  wire:model="image"
                   horizontal="true"
-                />
+                >
+                  @php
+                    $imageUri = isLivewireTemporaryFile($image) ? $image->temporaryUrl() : imageUri($image ?: 'images/no-image.svg');
+                  @endphp
+
+                  <a href="{{ $imageUri }}" data-toggle="lightbox" class="tooltips" title="Perbesar">
+                    <img
+                      src="{{ $imageUri }}"
+                      class="img-rounded"
+                      width="100"
+                      height="auto"
+                    >
+                  </a>
+                </x-form.image>
               </x-overlay>
 
               <hr>
 
-              <x-form.button-container customClass="justify-content-end">
+              <x-form.button-container class="justify-content-end">
                 <x-button wire:click="resetForm" wire:loading.attr="disabled" wire:target="image, save" color="danger">
                   Batal
                 </x-button>

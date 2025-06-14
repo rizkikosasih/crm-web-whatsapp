@@ -90,11 +90,25 @@
                       id="proof_of_payment"
                       name="proof_of_payment"
                       label="Bukti Bayar"
-                      path="{{ $proof_of_payment ?? null }}"
-                      :preview="$proof_of_payment"
-                      customClass="form-control-sm"
+                      class="form-control-sm"
                       wire:model.defer="proof_of_payment"
-                    />
+                    >
+                      @php
+                        $imageUri =
+                          isLivewireTemporaryFile($proof_of_payment) ?
+                          $proof_of_payment->temporaryUrl() :
+                          imageUri($proof_of_payment ?: 'images/no-image.svg');
+                      @endphp
+
+                      <a href="{{ $imageUri }}" data-toggle="lightbox" class="tooltips" title="Perbesar">
+                        <img
+                          src="{{ $imageUri }}"
+                          class="img-rounded"
+                          width="100"
+                          height="auto"
+                        >
+                      </a>
+                    </x-form.image>
                   </div>
                 </div>
               @endif
