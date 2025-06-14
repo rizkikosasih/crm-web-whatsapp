@@ -33,7 +33,7 @@
     },
     "files": [
       "app/Helpers/global.php",
-      "app/Helpers/Chart.php"
+      "app/Helpers/ChartHelper.php"
     ]
   },
   "autoload-dev": {
