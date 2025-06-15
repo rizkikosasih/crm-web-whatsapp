@@ -1,38 +1,46 @@
 #!/bin/bash
+clear
+echo "[.] Laravel Setup Starter"
+echo "==============================="
+echo
 
-# Laravel Setup Starter
-echo "=============================="
-echo "Laravel Setup Starter"
-echo "=============================="
-echo ""
-
-# Change to project root directory
+# Pindah ke root proyek Laravel
 cd "$(dirname "$0")/.." || {
-  echo "❌ Failed to change to project root directory."
+  echo "[X] Gagal pindah ke root project."
   exit 1
 }
 
-echo "📦 Installing Dependencies..."
+echo "[.] Install Dependensi ..."
+
+# Salin .env jika belum ada
 if [ ! -f ".env" ]; then
-  cp ".env.example" ".env"
+  cp .env.example .env
 fi
 
-# Run all installation commands
-{
-  composer install && \
-  npm install && \
-  php artisan key:generate && \
-  php artisan storage:link && \
-  php artisan app:migrate && \
-  echo "==============================" && \
-  echo "✅ Setup Completed" && \
-  echo "=============================="
-} || {
-  echo "❌ Some process failed."
+# Cek composer
+if ! command -v composer &> /dev/null; then
+  echo "[X] Composer tidak ditemukan."
   exit 1
-}
+fi
 
-# Keep terminal open if running in interactive mode
-if [ -t 1 ]; then
-  read -p "Press any key to continue..." -n1 -s
+# Cek npm
+if ! command -v npm &> /dev/null; then
+  echo "[X] npm tidak ditemukan."
+  exit 1
+fi
+
+# Cek PHP
+if ! command -v php &> /dev/null; then
+  echo "[X] PHP tidak ditemukan."
+  exit 1
+fi
+
+# Jalankan proses setup
+if composer install && npm install && php artisan key:generate && php artisan storage:link && php artisan app:migrate; then
+  echo "==============================="
+  echo "[OK] Setup Selesai"
+  echo "==============================="
+else
+  echo "[X] Ada proses yang gagal."
+  exit 1
 fi

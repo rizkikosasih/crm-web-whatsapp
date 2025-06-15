@@ -3,7 +3,7 @@ title Laravel Setup Starter
 chcp 65001 > nul
 cls
 
-echo Laravel Setup Starter
+echo [.] Laravel Setup Starter
 echo ==============================
 echo.
 
