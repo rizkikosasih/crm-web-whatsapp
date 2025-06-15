@@ -21,17 +21,17 @@ class GoogleDriveService implements GoogleDriveServiceInterface
 
   protected function getAccessToken(): string
   {
-    $account = json_decode(file_get_contents($this->serviceAccountPath), true);
+    $account = json_decode(file_get_contents($this->serviceAccountPath));
     $now = time();
     $payload = [
-      'iss' => $account['client_email'],
+      'iss' => $account->client_email,
       'scope' => 'https://www.googleapis.com/auth/drive',
       'aud' => 'https://oauth2.googleapis.com/token',
       'iat' => $now,
       'exp' => $now + 3600,
     ];
 
-    $jwt = JWT::encode($payload, $account['private_key'], 'RS256');
+    $jwt = JWT::encode($payload, $account->private_key, 'RS256');
 
     $response = $this->http->post('https://oauth2.googleapis.com/token', [
       'form_params' => [
@@ -40,8 +40,8 @@ class GoogleDriveService implements GoogleDriveServiceInterface
       ],
     ]);
 
-    $data = json_decode($response->getBody(), true);
-    return $data['access_token'];
+    $data = json_decode($response->getBody());
+    return $data->access_token;
   }
 
   protected function getHeaders(): array
@@ -81,8 +81,8 @@ class GoogleDriveService implements GoogleDriveServiceInterface
       ],
     ]);
 
-    $data = json_decode($response->getBody(), true);
-    return count($data['files']) > 0 ? $data['files'][0]['id'] : null;
+    $data = json_decode($response->getBody());
+    return count($data->files) > 0 ? $data->files[0]->id : null;
   }
 
   protected function createFolder(
@@ -104,8 +104,8 @@ class GoogleDriveService implements GoogleDriveServiceInterface
       'body' => json_encode($folderMetadata),
     ]);
 
-    $data = json_decode($response->getBody(), true);
-    return $data['id'];
+    $data = json_decode($response->getBody());
+    return $data->id;
   }
 
   public function upload(
@@ -148,13 +148,13 @@ class GoogleDriveService implements GoogleDriveServiceInterface
         ]
       );
 
-      $data = json_decode($response->getBody(), true);
+      $data = json_decode($response->getBody());
 
       if ($isPublic) {
-        $this->setPublicPermission($data['id']);
+        $this->setPublicPermission($data->id);
       }
 
-      return 'https://drive.google.com/uc?export=view&id=' . $data['id'];
+      return 'https://drive.google.com/uc?export=view&id=' . $data->id;
     } catch (GuzzleException | Exception $e) {
       throw new Exception('Google Drive upload failed: ' . $e->getMessage());
     }
