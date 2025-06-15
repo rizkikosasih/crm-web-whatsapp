@@ -3,9 +3,9 @@ title Laravel + Vite Starter
 chcp 65001 > nul
 cls
 
-rem ✅ Pindah ke root proyek Laravel
+rem Pindah ke root proyek Laravel
 cd /d "%~dp0\.." || (
-  echo ❌ Tidak bisa pindah ke root project.
+  echo [X] Tidak bisa pindah ke root project.
   pause
   exit /b 1
 )
