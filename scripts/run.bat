@@ -33,7 +33,7 @@ if exist package-lock.json (
     pause
     exit /b 1
   )
-  echo [>] Menggunakan npm...
+  echo Menggunakan npm...
   npm run dev-all
 ) else if exist yarn.lock (
   where yarn > nul 2>&1
@@ -42,11 +42,11 @@ if exist package-lock.json (
     pause
     exit /b 1
   )
-  echo [>] Menggunakan yarn...
+  echo Menggunakan yarn...
   yarn dev-all
 ) else (
   echo [!] Tidak ditemukan package-lock.json atau yarn.lock.
-  echo     Default menggunakan npm...
+  echo Default menggunakan npm...
   where npm > nul 2>&1
   if errorlevel 1 (
     echo [X] npm tidak ditemukan.
