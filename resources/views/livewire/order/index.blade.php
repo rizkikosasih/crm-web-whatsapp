@@ -91,7 +91,7 @@
                       <td class="text-end">{{ dateIndo($item->order_date) }}</td>
                       <td class="actions">
                         <div class="btn-group">
-                          <x-link.icon
+                          <x-link.button
                             color="primary"
                             size="sm"
                             class="tooltips"
@@ -103,7 +103,19 @@
                             @else
                               <i class="fas fa-pencil"></i>
                             @endif
-                          </x-link.icon>
+                          </x-link.button>
+
+                          @if ($item->status === 3)
+                            <x-link.button
+                              color="success"
+                              size="sm"
+                              class="tooltips"
+                              onclick="window.open(`{{ $item->link_pdf }}`, `_blank`)"
+                              title="cetak"
+                            >
+                              <i class="fas fa-file"></i>
+                            </x-link.button>
+                          @endif
                         </div>
                       </td>
                     </tr>
