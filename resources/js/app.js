@@ -99,7 +99,5 @@ document.addEventListener('livewire:initialized', function () {
 });
 
 window.addEventListener('refresh-with-tooltips', () => {
-  Livewire.dispatch('refresh');
-
   initializedTooltips();
 });

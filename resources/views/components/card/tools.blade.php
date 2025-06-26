@@ -14,7 +14,7 @@
   @endif
 
   @if ($refresh)
-    <x-button color="tool" class="tooltips" title="Refresh" x-on:click="$dispatch('refresh-with-tooltips')">
+    <x-button color="tool" class="tooltips" title="Refresh" x-on:click="$dispatch('refresh-with-tooltips');$wire.$refresh()">
       <i class="fas fa-refresh"></i>
     </x-button>
   @endif
