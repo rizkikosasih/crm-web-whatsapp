@@ -122,14 +122,17 @@ class Index extends Component
         foreach (Customer::all() as $customer) {
           $message = parseTemplatePlaceholders($campaign->message, [
             'name' => $customer->name,
-            'contact_number' => env('APP_CONTACT_PERSON'),
-            'store_name' => env('APP_NAME'),
+            'contact_number' => config('app.contact'),
+            'store_name' => config('app.name'),
             'image_url' => $campaign->image_url ?? '',
           ]);
 
           $response = $rapiwha->sendMessage($customer->phone, $message);
           if ($response->success) {
-            $this->dispatch('showSuccess', message: 'Campaign Broadcast Berhasil Dikirim');
+            $this->dispatch(
+              'showSuccess',
+              message: 'Campaign Broadcast Berhasil Dikirim'
+            );
           } else {
             $this->dispatch('showError', message: $response->message);
           }

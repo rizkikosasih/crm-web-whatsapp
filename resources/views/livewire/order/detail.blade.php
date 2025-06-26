@@ -76,7 +76,7 @@
                     size="sm"
                     wire:click="updateStatus"
                     wire:loading.attr="disabled"
-                    wire:target="proof_of_payment"
+                    wire:target="proof_of_payment, updateStatus"
                   >
                     Update
                   </x-button>

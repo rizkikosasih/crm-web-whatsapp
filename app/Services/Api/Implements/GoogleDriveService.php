@@ -160,6 +160,64 @@ class GoogleDriveService implements GoogleDriveServiceInterface
     }
   }
 
+  public function uploadPdfContent(
+    string $pdfContent,
+    string $fileName,
+    ?string $folderName = null,
+    ?string $parentFolderId = null,
+    bool $isPublic = true
+  ): string {
+    try {
+      $folderId = $this->resolveFolder(
+        $folderName,
+        $parentFolderId ?? env('GOOGLE_DRIVE_FOLDER_ID')
+      );
+
+      $boundary = uniqid();
+      $delimiter = "------{$boundary}";
+
+      $meta = json_encode([
+        'name' => $fileName,
+        'parents' => [$folderId],
+        'mimeType' => 'application/pdf',
+      ]);
+
+      $body = implode("\r\n", [
+        "--{$delimiter}",
+        'Content-Type: application/json; charset=UTF-8',
+        '',
+        $meta,
+        "--{$delimiter}",
+        'Content-Type: application/pdf',
+        '',
+        $pdfContent,
+        "--{$delimiter}--",
+        '',
+      ]);
+
+      $response = $this->http->post(
+        'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',
+        [
+          'headers' => [
+            'Authorization' => 'Bearer ' . $this->getAccessToken(),
+            'Content-Type' => "multipart/related; boundary={$delimiter}",
+          ],
+          'body' => $body,
+        ]
+      );
+
+      $data = json_decode($response->getBody());
+
+      if ($isPublic) {
+        $this->setPublicPermission($data->id);
+      }
+
+      return 'https://drive.google.com/uc?export=view&id=' . $data->id;
+    } catch (GuzzleException | Exception $e) {
+      throw new Exception('Upload PDF to Google Drive failed: ' . $e->getMessage());
+    }
+  }
+
   protected function setPublicPermission(string $fileId): void
   {
     $this->http->post("https://www.googleapis.com/drive/v3/files/{$fileId}/permissions", [

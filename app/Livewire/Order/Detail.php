@@ -4,7 +4,9 @@ namespace App\Livewire\Order;
 
 use App\Models\MessageTemplate;
 use App\Models\Order;
+use App\Services\Api\GoogleDriveServiceInterface;
 use App\Services\Api\SendMessageApiServiceInterface;
+use App\Services\Contracts\InvoiceServiceInterface;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
@@ -27,7 +29,9 @@ class Detail extends Component
   #[Locked]
   public $colorStatus = ['danger', 'warning', 'primary', 'success', 'secondary'];
 
-  public $orderId, $selectedStatus, $proof_of_payment;
+  public int $orderId;
+  public int $selectedStatus;
+  public $proof_of_payment;
 
   public Order $order;
 
@@ -50,8 +54,11 @@ class Detail extends Component
     };
   }
 
-  public function updateStatus(SendMessageApiServiceInterface $rapiwha)
-  {
+  public function updateStatus(
+    SendMessageApiServiceInterface $rapiwha,
+    InvoiceServiceInterface $invoiceService,
+    GoogleDriveServiceInterface $driveService
+  ) {
     if ($this->selectedStatus == $this->order->status) {
       return;
     }
@@ -64,6 +71,7 @@ class Detail extends Component
     }
 
     switch ($this->selectedStatus) {
+      // belum bayar ke sudah bayar
       case 1:
         $rules = [];
         $messages = [];
@@ -102,14 +110,23 @@ class Detail extends Component
         }
         break;
 
+      // belum bayar ke pengiriman
       case 2:
         $template = MessageTemplate::where(['id' => 4, 'type' => 'order'])->first();
         break;
 
+      // pengiriman ke selesai
       case 3:
         $template = MessageTemplate::where(['id' => 5, 'type' => 'order'])->first();
+        $pdfContent = $invoiceService->generate($this->order);
+        $linkPdf = $driveService->uploadPdfContent(
+          $pdfContent,
+          invoiceFilename($this->order->id),
+          'invoices'
+        );
         break;
 
+      // pesanan batal
       case 4:
         foreach ($this->order->orderItems as $item) {
           $product = $item->product;
@@ -129,8 +146,9 @@ class Detail extends Component
           'customer_name' => $this->order->customer->name,
           'order_number' => $this->order->id,
           'order_total' => rupiah($this->order->total_amount),
-          'store_name' => env('APP_NAME'),
-          'contact_number' => env('APP_CONTACT_PERSON'),
+          'contact_number' => config('app.contact'),
+          'store_name' => config('app.name'),
+          'invoice' => $this->selectedStatus === 3 ? $linkPdf : '',
         ]);
 
         $rapiwha->sendMessage($this->order->customer->phone, $message);

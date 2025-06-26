@@ -22,6 +22,7 @@ class Order extends Model
     'order_date',
     'total_amount',
     'status',
+    'link_pdf',
     'proof_of_payment',
   ];
 

@@ -55,6 +55,14 @@ if (!function_exists('createFilename')) {
   }
 }
 
+if (!function_exists('invoiceFilename')) {
+  function invoiceFilename(string|int $id): string
+  {
+    $names = ['invoice', $id, time()];
+    return implode('-', $names);
+  }
+}
+
 if (!function_exists('setActive')) {
   function setActive(string $slug, ?string $output = 'active'): ?string
   {

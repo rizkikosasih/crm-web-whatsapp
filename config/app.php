@@ -15,6 +15,8 @@ return [
     */
 
   'name' => env('APP_NAME', 'Laravel'),
+  'contact' => env('APP_CONTACT_PERSON', '6285291111124'),
+  'address' => env('APP_ADDRESS', 'Alamat tidak tersedia'),
 
   /*
     |--------------------------------------------------------------------------

@@ -152,8 +152,8 @@ class Create extends Component
         'product_list' => $product_list,
         'order_date' => dateIndo($order->order_date),
         'order_total' => rupiah($order->total_amount),
-        'store_name' => env('APP_NAME'),
-        'contact_number' => env('APP_CONTACT_PERSON'),
+        'contact_number' => config('app.contact'),
+        'store_name' => config('app.name'),
       ]);
 
       $rapiwha->sendMessage($customer->phone, $message);
