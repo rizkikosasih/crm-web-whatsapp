@@ -3,8 +3,8 @@
 namespace App\Livewire\Product;
 
 use App\Models\Product;
-use App\Services\Api\GoogleDriveServiceInterface;
-use Google\Service\AdMob\App;
+use App\Services\Api\ImagekitServiceInterface;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\Validate;
@@ -52,10 +52,8 @@ class Index extends Component
   public $search;
   public $perPage = 10;
 
-  public function save(GoogleDriveServiceInterface $googleDriveService)
+  public function save(ImagekitServiceInterface $imagekitService)
   {
-    $this->validate();
-
     $rules = [];
     $messages = [];
 
@@ -63,46 +61,55 @@ class Index extends Component
       $rules['image'] = 'image|max:2048';
       $messages['image.image'] = 'Format file yang diperbolehkan hanya gambar';
       $messages['image.max'] = 'Ukuran gambar maksimal 2MB';
-      $this->validate($rules, $messages);
     }
 
-    $imageLocalPath = null;
-    $imageUrl = null;
+    $this->validate();
 
-    if ($this->image instanceof TemporaryUploadedFile) {
-      $product = Product::find($this->productId);
-      $filename = createFilename($this->name, $this->image->getClientOriginalExtension());
-      /* Simpan ke lokal */
-      $imageLocalPath = $this->image->storeAs($this->directory, $filename, 'public');
-      $oldImage = $product?->image;
-      if (isset($oldImage) && $imageLocalPath && $oldImage !== $imageLocalPath) {
-        Storage::disk('public')->delete($oldImage);
-      }
+    try {
+      DB::transaction(function () use ($imagekitService) {
+        $imageLocalPath = null;
+        $imageUrl = null;
 
-      /* Simpan ke Google Drive */
-      $oldImageUrl = $product?->image_url;
-      if (isset($oldImageUrl) && $imageLocalPath && $oldImageUrl !== $imageLocalPath) {
-        $googleDriveService->delete($oldImageUrl);
-      }
-      $imageUrl = $googleDriveService->upload($imageLocalPath, $filename, 'products');
+        if ($this->image instanceof TemporaryUploadedFile) {
+          $product = Product::find($this->productId);
+          if (!$product) {
+            abort(404, 'Produk tidak ditemukan');
+          }
+
+          $filename = createFilename(
+            $this->name,
+            $this->image->getClientOriginalExtension()
+          );
+
+          // Simpan ke lokal
+          $imageLocalPath = $this->image->storeAs($this->directory, $filename, 'public');
+
+          // Hapus file lama lokal dan file lama imagekit
+          if ($product->image && $product->image !== $imageLocalPath) {
+            Storage::disk('public')->delete($product?->image);
+            $imagekitService->delete($product->image_url);
+          }
+
+          // Upload ke ImageKit
+          $imageUrl = $imagekitService->upload($imageLocalPath, $filename, 'products');
+
+          // Update data produk
+          $product->image = $imageLocalPath;
+          $product->image_url = $imageUrl;
+          $product->save();
+        }
+      });
+
+      $this->resetForm();
+      $this->dispatch('showSuccess', message: 'Produk berhasil diperbarui.');
+    } catch (\Throwable $e) {
+      logger()->error('Gagal menyimpan produk', [
+        'message' => $e->getMessage(),
+        'trace' => $e->getTraceAsString(),
+      ]);
+
+      $this->dispatch('showError', message: 'Terjadi kesalahan saat menyimpan campaign.');
     }
-
-    $product = Product::find($this->productId);
-    Product::updateOrCreate(
-      ['id' => $this->productId],
-      [
-        'name' => $this->name,
-        'sku' => $this->sku,
-        'description' => e($this->description),
-        'price' => $this->price,
-        'stock' => $this->stock,
-        'image' => $imageLocalPath ?? $product?->image,
-        'image_url' => $imageUrl ?? $product?->image_url,
-      ]
-    );
-
-    $this->resetForm();
-    session()->flash('success', 'Produk berhasil disimpan!');
   }
 
   public function edit($id)

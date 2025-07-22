@@ -2,11 +2,11 @@
 
 namespace App\Providers;
 
+use App\Services\Api\ImagekitServiceInterface;
+use App\Services\Api\Implements\ImagekitService;
 use Illuminate\Support\ServiceProvider;
 use App\Services\Api\SendMessageApiServiceInterface;
 use App\Services\Api\Implements\RapiwhaApiService;
-use App\Services\Api\GoogleDriveServiceInterface;
-use App\Services\Api\Implements\GoogleDriveService;
 use App\Services\Contracts\InvoiceServiceInterface;
 use App\Services\InvoiceService;
 
@@ -20,15 +20,12 @@ class ServiceBindingProvider extends ServiceProvider
 
   protected function singletonInterfaces(): void
   {
-    $this->app->singleton(
-      SendMessageApiServiceInterface::class,
-      RapiwhaApiService::class
-    );
-    $this->app->singleton(GoogleDriveServiceInterface::class, GoogleDriveService::class);
   }
 
   protected function bindInterfaces(): void
   {
+    $this->app->bind(SendMessageApiServiceInterface::class, RapiwhaApiService::class);
+    $this->app->bind(ImagekitServiceInterface::class, ImagekitService::class);
     $this->app->bind(InvoiceServiceInterface::class, InvoiceService::class);
   }
 

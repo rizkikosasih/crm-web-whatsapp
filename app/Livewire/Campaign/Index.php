@@ -4,11 +4,13 @@ namespace App\Livewire\Campaign;
 
 use App\Models\Campaign;
 use App\Models\Customer;
-use App\Services\Api\GoogleDriveServiceInterface;
+use App\Services\Api\ImageKitServiceInterface;
 use App\Services\Api\SendMessageApiServiceInterface;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -47,54 +49,68 @@ class Index extends Component
 
   public $isEdit = false;
 
-  public function save(GoogleDriveServiceInterface $googleDriveService)
+  public function save(ImageKitServiceInterface $imagekitService)
   {
-    $this->validate();
+    try {
+      $this->validate();
 
-    if ($this->image instanceof TemporaryUploadedFile) {
-      $rules['image'] = 'image|max:2048';
-      $messages['image.image'] = 'Format file yang diperbolehkan hanya gambar';
-      $messages['image.max'] = 'Ukuran gambar maksimal 2MB';
-      $this->validate($rules, $messages);
-    }
-
-    $imageLocalPath = null;
-    $imageUrl = null;
-    if ($this->image instanceof TemporaryUploadedFile) {
-      $campaign = Campaign::find($this->campaignId);
-      $filename = createFilename(
-        $this->campaignTitle,
-        $this->image->getClientOriginalExtension()
-      );
-      /* Simpan ke lokal */
-      $imageLocalPath = $this->image->storeAs($this->directory, $filename, 'public');
-      $oldImage = $campaign?->image;
-      if (isset($oldImage) && $imageLocalPath && $oldImage !== $imageLocalPath) {
-        Storage::disk('public')->delete($oldImage);
+      if ($this->image instanceof TemporaryUploadedFile) {
+        $rules['image'] = 'image|max:2048';
+        $messages['image.image'] = 'Format file yang diperbolehkan hanya gambar';
+        $messages['image.max'] = 'Ukuran gambar maksimal 2MB';
+        $this->validate($rules, $messages);
       }
 
-      /* Simpan ke Google Drive */
-      $oldImageUrl = $campaign?->image_url;
-      if (isset($oldImageUrl) && $imageLocalPath && $oldImageUrl !== $imageLocalPath) {
-        $googleDriveService->delete($oldImageUrl);
-      }
-      $imageUrl = $googleDriveService->upload($imageLocalPath, $filename, 'campaigns');
+      DB::transaction(function () use ($imagekitService) {
+        $imageLocalPath = null;
+        $imageUrl = null;
+
+        if ($this->image instanceof TemporaryUploadedFile) {
+          $campaign = Campaign::find($this->campaignId);
+          $filename = createFilename(
+            $this->campaignTitle,
+            $this->image->getClientOriginalExtension()
+          );
+
+          // Simpan ke lokal
+          $imageLocalPath = $this->image->storeAs($this->directory, $filename, 'public');
+
+          // Hapus gambar lama dari lokal jika ada
+          $oldImage = $campaign?->image;
+          if (isset($oldImage) && $imageLocalPath && $oldImage !== $imageLocalPath) {
+            Storage::disk('public')->delete($oldImage);
+            $imagekitService->delete($campaign?->image_url);
+          }
+
+          // Upload ke ImageKit
+          $imageUrl = $imagekitService->upload($imageLocalPath, $filename, 'campaigns');
+        }
+
+        // Simpan atau update campaign
+        $campaign = Campaign::find($this->campaignId);
+        Campaign::updateOrCreate(
+          ['id' => $this->campaignId],
+          [
+            'title' => $this->campaignTitle,
+            'message' => e($this->campaignMessage),
+            'image' => $imageLocalPath ?? $campaign?->image,
+            'image_url' => $imageUrl ?? $campaign?->image_url,
+            'created_by' => Auth::id(),
+          ]
+        );
+      });
+
+      $this->resetForm();
+      $this->dispatch('showSuccess', message: 'Campaign berhasil disimpan.');
+    } catch (ValidationException $e) {
+      $this->dispatch('showError', message: $e->validator->errors()->first());
+    } catch (\Throwable $e) {
+      logger()->error('Gagal menyimpan campaign: ' . $e->getMessage(), [
+        'trace' => $e->getTraceAsString(),
+      ]);
+
+      $this->dispatch('showError', message: 'Terjadi kesalahan saat menyimpan campaign.');
     }
-
-    $campaign = Campaign::find($this->campaignId);
-    Campaign::updateOrCreate(
-      ['id' => $this->campaignId],
-      [
-        'title' => $this->campaignTitle,
-        'message' => e($this->campaignMessage),
-        'image' => $imageLocalPath ?? $campaign?->image,
-        'image_url' => $imageUrl ?? $campaign?->image_url,
-        'created_by' => Auth::id(),
-      ]
-    );
-
-    $this->resetForm();
-    session()->flash('success', 'Campaign berhasil disimpan!');
   }
 
   public function edit($id)

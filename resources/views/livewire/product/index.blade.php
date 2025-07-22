@@ -18,10 +18,6 @@
           </div>
 
           <div class="card-body text-justify">
-            @if (session()->has('success'))
-              <x-alert.success dismissible="true">{{ session('success') }}</x-alert.success>
-            @endif
-
             <form wire:submit.prevent="save">
               <x-overlay wire:target='save'>
                 <x-form.input

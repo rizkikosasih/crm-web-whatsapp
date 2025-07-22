@@ -22,8 +22,8 @@ class AppServiceProvider extends ServiceProvider
     );
 
     $this->app->bind(
-      \App\Services\Api\GoogleDriveServiceInterface::class,
-      \App\Services\Api\Implements\GoogleDriveService::class
+      \App\Services\Api\ImageKitServiceInterface::class,
+      \App\Services\Api\Implements\ImageKitService::class
     );
   }
 

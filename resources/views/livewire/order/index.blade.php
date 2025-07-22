@@ -111,7 +111,7 @@
                               size="sm"
                               class="tooltips"
                               onclick="window.open(`{{ $item->link_pdf }}`, `_blank`)"
-                              title="cetak"
+                              title="Cetak"
                             >
                               <i class="fas fa-file"></i>
                             </x-link.button>

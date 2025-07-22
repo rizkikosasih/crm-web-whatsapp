@@ -4,9 +4,10 @@ namespace App\Livewire\Order;
 
 use App\Models\MessageTemplate;
 use App\Models\Order;
-use App\Services\Api\GoogleDriveServiceInterface;
+use App\Services\Api\ImageKitServiceInterface;
 use App\Services\Api\SendMessageApiServiceInterface;
 use App\Services\Contracts\InvoiceServiceInterface;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
@@ -57,7 +58,7 @@ class Detail extends Component
   public function updateStatus(
     SendMessageApiServiceInterface $rapiwha,
     InvoiceServiceInterface $invoiceService,
-    GoogleDriveServiceInterface $driveService
+    ImageKitServiceInterface $imagekitService
   ) {
     if ($this->selectedStatus == $this->order->status) {
       return;
@@ -70,24 +71,34 @@ class Detail extends Component
       return;
     }
 
-    switch ($this->selectedStatus) {
-      // belum bayar ke sudah bayar
-      case 1:
-        $rules = [];
-        $messages = [];
+    $template = null;
+    $linkPdf = null;
 
-        try {
-          $rules['proof_of_payment'] = 'required';
-          $messages['proof_of_payment.required'] = 'Bukti bayar wajib diisi';
+    try {
+      DB::beginTransaction();
+
+      switch ($this->selectedStatus) {
+        // Belum bayar -> Sudah bayar
+        case 1:
+          $rules = ['proof_of_payment' => 'required'];
+          $messages = ['proof_of_payment.required' => 'Bukti bayar wajib diisi'];
+
           if ($this->proof_of_payment instanceof TemporaryUploadedFile) {
             $rules['proof_of_payment'] = 'image|max:2048';
             $messages['proof_of_payment.image'] =
               'Format file yang diperbolehkan hanya gambar';
             $messages['proof_of_payment.max'] = 'Ukuran gambar maksimal 2MB';
           }
-          $this->validate($rules, $messages);
 
-          $imagePath = null;
+          // Validasi di luar DB transaction
+          try {
+            $this->validate($rules, $messages);
+          } catch (ValidationException $e) {
+            $this->dispatch('showError', message: $e->validator->errors()->first());
+            return;
+          }
+
+          // Upload bukti bayar
           if ($this->proof_of_payment instanceof TemporaryUploadedFile) {
             $filename = createFilename(
               $this->order->customer->name . '-' . $this->orderId,
@@ -104,43 +115,41 @@ class Detail extends Component
 
             $template = MessageTemplate::where(['id' => 3, 'type' => 'order'])->first();
           }
-        } catch (ValidationException $e) {
-          $this->dispatch('showError', message: $e->validator->errors()->first());
-          return;
-        }
-        break;
 
-      // belum bayar ke pengiriman
-      case 2:
-        $template = MessageTemplate::where(['id' => 4, 'type' => 'order'])->first();
-        break;
+          break;
 
-      // pengiriman ke selesai
-      case 3:
-        $template = MessageTemplate::where(['id' => 5, 'type' => 'order'])->first();
-        $pdfContent = $invoiceService->generate($this->order);
-        $linkPdf = $driveService->uploadPdfContent(
-          $pdfContent,
-          invoiceFilename($this->order->id),
-          'invoices'
-        );
-        break;
+        // Belum bayar -> Pengiriman
+        case 2:
+          $template = MessageTemplate::where(['id' => 4, 'type' => 'order'])->first();
+          break;
 
-      // pesanan batal
-      case 4:
-        foreach ($this->order->orderItems as $item) {
-          $product = $item->product;
-          // Kembalikan stok
-          $product->stock += $item->quantity;
-          // Simpan perubahan
-          $product->save();
-        }
+        // Pengiriman -> Selesai
+        case 3:
+          $template = MessageTemplate::where(['id' => 5, 'type' => 'order'])->first();
 
-        $template = MessageTemplate::where(['id' => 6, 'type' => 'order'])->first();
-        break;
-    }
+          // Generate dan upload invoice
+          $pdfContent = $invoiceService->generate($this->order);
+          $linkPdf = $imagekitService->uploadPdfContent(
+            $pdfContent,
+            invoiceFilename($this->order->id),
+            'invoices'
+          );
+          $this->order->link_pdf = $linkPdf;
+          break;
 
-    try {
+        // Batal
+        case 4:
+          foreach ($this->order->orderItems as $item) {
+            $product = $item->product;
+            $product->stock += $item->quantity;
+            $product->save();
+          }
+
+          $template = MessageTemplate::where(['id' => 6, 'type' => 'order'])->first();
+          break;
+      }
+
+      // Kirim pesan WA jika ada template
       if ($template) {
         $message = parseTemplatePlaceholders($template->body, [
           'customer_name' => $this->order->customer->name,
@@ -153,15 +162,23 @@ class Detail extends Component
 
         $rapiwha->sendMessage($this->order->customer->phone, $message);
       }
+
+      // Update status pesanan
+      $this->order->status = $this->selectedStatus;
+      $this->order->save();
+
+      DB::commit();
+
+      session()->flash(
+        'success',
+        "Status ID Pesanan #$this->orderId berhasil diperbarui."
+      );
+      return $this->redirect(route('transaksi-order'), true);
     } catch (\Exception $e) {
+      DB::rollBack();
       $this->dispatch('showError', message: 'Exception: ' . $e->getMessage());
       return;
     }
-
-    $this->order->status = $this->selectedStatus;
-    $this->order->save();
-    session()->flash('success', "Status ID Pesanan #$this->orderId berhasil diperbarui.");
-    return $this->redirect(route('transaksi-order'), true);
   }
 
   public function render()
