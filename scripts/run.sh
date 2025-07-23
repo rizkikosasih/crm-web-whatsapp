@@ -17,7 +17,7 @@ if ! command -v php &> /dev/null; then
 fi
 
 # Clear & cache route Laravel
-php artisan route:clear && php artisan route:cache
+php artisan route:clear && php artisan route:cache && php artisan storage:link
 
 echo
 echo "[.] Menjalankan Laravel + Vite Dev Server..."

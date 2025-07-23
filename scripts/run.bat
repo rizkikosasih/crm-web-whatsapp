@@ -19,7 +19,7 @@ if errorlevel 1 (
 )
 
 rem Clear & cache routes
-php artisan route:clear && php artisan route:cache
+php artisan route:clear && php artisan route:cache && php artisan storage:link
 
 echo.
 echo [.] Menjalankan Laravel + Vite Dev Server...

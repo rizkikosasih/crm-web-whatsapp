@@ -36,7 +36,7 @@ class RapiwhaApiService implements SendMessageApiServiceInterface
         );
       }
 
-      /* For Testing
+      /* For Testing */
       Http::fake([
         'rapiwha.com/*' => Http::response(
           [
@@ -46,7 +46,7 @@ class RapiwhaApiService implements SendMessageApiServiceInterface
           ],
           200
         ),
-      ]); */
+      ]);
 
       // Kirim pesan utama (hanya 1x)
       $response = Http::timeout(10)

@@ -67,37 +67,47 @@ class Index extends Component
 
     try {
       DB::transaction(function () use ($imagekitService) {
+        $product = Product::find($this->productId);
         $imageLocalPath = null;
         $imageUrl = null;
 
         if ($this->image instanceof TemporaryUploadedFile) {
-          $product = Product::find($this->productId);
-          if (!$product) {
-            abort(404, 'Produk tidak ditemukan');
-          }
-
           $filename = createFilename(
             $this->name,
             $this->image->getClientOriginalExtension()
           );
-
-          // Simpan ke lokal
+          /* Simpan ke lokal */
           $imageLocalPath = $this->image->storeAs($this->directory, $filename, 'public');
-
-          // Hapus file lama lokal dan file lama imagekit
-          if ($product->image && $product->image !== $imageLocalPath) {
-            Storage::disk('public')->delete($product?->image);
-            $imagekitService->delete($product->image_url);
+          $oldImage = $product?->image;
+          if (isset($oldImage) && $imageLocalPath && $oldImage !== $imageLocalPath) {
+            Storage::disk('public')->delete($oldImage);
           }
 
-          // Upload ke ImageKit
-          $imageUrl = $imagekitService->upload($imageLocalPath, $filename, 'products');
+          /* Simpan ke Google Drive */
+          $oldImageUrl = $product?->image_url;
+          if (
+            isset($oldImageUrl) &&
+            $imageLocalPath &&
+            $oldImageUrl !== $imageLocalPath
+          ) {
+            $imagekitService->delete($oldImageUrl);
+          }
 
-          // Update data produk
-          $product->image = $imageLocalPath;
-          $product->image_url = $imageUrl;
-          $product->save();
+          $imageUrl = $imagekitService->upload($imageLocalPath, $filename, 'products');
         }
+
+        Product::updateOrCreate(
+          ['id' => $this->productId],
+          [
+            'name' => $this->name,
+            'sku' => $this->sku,
+            'description' => e($this->description),
+            'price' => $this->price,
+            'stock' => $this->stock,
+            'image' => $imageLocalPath ?? $product?->image,
+            'image_url' => $imageUrl ?? $product?->image_url,
+          ]
+        );
       });
 
       $this->resetForm();
