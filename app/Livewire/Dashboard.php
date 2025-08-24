@@ -77,7 +77,7 @@ class Dashboard extends Component
         'color' => $config['color'],
         'colorRibbon' => $config['colorRibbon'],
         'count' => Order::where('status', $status)
-          ->whereBetween('order_date', [now()->subMonth(), now()])
+          ->whereBetween('order_date', [now()->subYear(), now()])
           ->count(),
       ];
     }
@@ -98,7 +98,7 @@ class Dashboard extends Component
     foreach ($statusLabels as $status => $label) {
       $result = Order::selectRaw('DATE(order_date) as date, COUNT(*) as total')
         ->where('status', $status)
-        ->whereBetween('order_date', [now()->subDays(29), now()])
+        ->whereBetween('order_date', [now()->subYear(), now()])
         ->groupBy('date')
         ->orderBy('date')
         ->get();
@@ -111,7 +111,7 @@ class Dashboard extends Component
     $productSales = DB::table('order_items')
       ->join('orders', 'order_items.order_id', '=', 'orders.id')
       ->join('products', 'order_items.product_id', '=', 'products.id')
-      ->whereBetween('orders.order_date', [now()->subDays(29), now()])
+      ->whereBetween('orders.order_date', [now()->subYear(), now()])
       ->where('orders.status', '!=', 4)
       ->select(
         'products.name as product_name',
@@ -136,7 +136,7 @@ class Dashboard extends Component
         'show' => $orderData ? true : false,
       ],
       [
-        'title' => 'Grafik Penjualan Produk 1 Bulan Terakhir',
+        'title' => 'Grafik Penjualan Produk 1 Tahun Terakhir',
         'id' => 'productCharts',
         'config' => ChartHelper::prepareChartConfig(
           'Grafik Penjualan Produk',

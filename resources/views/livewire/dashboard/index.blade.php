@@ -4,7 +4,7 @@
   <div class="container-fluid" id="row1">
     <p class="text-muted">
       Data di bawah ini adalah ringkasan pesanan dari
-      <strong>{{ dateIndo(now()->subMonth()) }}</strong> sampai <strong>{{ dateIndo(now()) }}</strong>.
+      <strong>{{ dateIndo(now()->subYear()) }}</strong> sampai <strong>{{ dateIndo(now()) }}</strong>.
     </p>
     <div class="row">
       @foreach($orderByStatus as $item)
