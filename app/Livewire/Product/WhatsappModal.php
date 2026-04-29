@@ -90,14 +90,7 @@ class WhatsappModal extends Component
       'description' => $this->productDescription,
     ]);
 
-    // Tambahkan link gambar jika tersedia
-    $image = $this->productImage ?? null;
-    $imageUrl = $this->productImageUrl ?? null;
-    if (!empty($imageUrl)) {
-      $message .= "\n\nKlik untuk melihat gambar:\n" . $imageUrl;
-    }
-
-    $response = $rapiwha->sendMessage($phone, $message);
+    $response = $rapiwha->sendMessage($phone, $message, $this->productImageUrl);
 
     if ($response->success) {
       $this->dispatch('showSuccess', message: 'Info Produk Berhasil Dikirim');
