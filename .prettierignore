@@ -1,1 +1,6 @@
 assets/
+vendor
+node_modules
+public
+storage
+bootstrap/cache

@@ -14,9 +14,43 @@
   "[blade]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "github.copilot.enable": {
+    "*": false
+  },
+  "intelephense.files.exclude": [
+    "**/.git/**",
+    "**/.svn/**",
+    "**/.hg/**",
+    "**/CVS/**",
+    "**/.DS_Store/**",
+
+    "**/node_modules/**",
+
+    "**/storage/**",
+    "**/bootstrap/cache/**",
+
+    "**/.history/**",
+    "**/dist/**",
+    "**/build/**"
+  ],
+  "npm.packageManager": "auto",
   "prettier.ignorePath": ".prettierignore",
   "prettier.configPath": ".prettierrc.json",
-  "intelephense.environment.includePaths": ["vendor/**/*.php"],
-  "intelephense.files.maxSize": 5000000,
-  "npm.packageManager": "auto"
+  "sqltools.connections": [
+    {
+      "mysqlOptions": {
+        "authProtocol": "default",
+        "enableSsl": "Disabled"
+      },
+      "ssh": "Disabled",
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 3306,
+      "driver": "MySQL",
+      "name": "crm-web-whatsapp",
+      "database": "crm",
+      "username": "root",
+      "password": ""
+    }
+  ]
 }
