@@ -12,25 +12,25 @@ use App\Services\InvoiceService;
 
 class ServiceBindingProvider extends ServiceProvider
 {
-  public function register(): void
-  {
-    $this->bindInterfaces();
-    $this->singletonInterfaces();
-  }
+    public function register(): void
+    {
+        $this->bindInterfaces();
+        $this->singletonInterfaces();
+    }
 
-  protected function singletonInterfaces(): void
-  {
-  }
+    protected function singletonInterfaces(): void
+    {
+        $this->app->singleton(SendMessageApiServiceInterface::class, RapiwhaApiService::class);
+        $this->app->singleton(ImagekitServiceInterface::class, ImagekitService::class);
+        $this->app->singleton(InvoiceServiceInterface::class, InvoiceService::class);
+    }
 
-  protected function bindInterfaces(): void
-  {
-    $this->app->bind(SendMessageApiServiceInterface::class, RapiwhaApiService::class);
-    $this->app->bind(ImagekitServiceInterface::class, ImagekitService::class);
-    $this->app->bind(InvoiceServiceInterface::class, InvoiceService::class);
-  }
+    protected function bindInterfaces(): void
+    {
+    }
 
-  public function boot(): void
-  {
-    //
-  }
+    public function boot(): void
+    {
+        //
+    }
 }
