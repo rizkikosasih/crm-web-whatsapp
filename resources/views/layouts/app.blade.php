@@ -56,7 +56,8 @@
       @livewire ('layouts.navbar')
 
       <!-- Content Slot -->
-      <main class="flex-1 overflow-x-hidden overflow-y-auto bg-slate-900 p-6 sm:p-8">
+      <main
+        class="flex-1 overflow-x-hidden overflow-y-auto bg-slate-50 dark:bg-slate-900 p-6 sm:p-8 transition-colors duration-150">
         {{ $slot }}
       </main>
     </div>

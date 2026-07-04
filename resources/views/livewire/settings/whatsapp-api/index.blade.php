@@ -3,8 +3,8 @@
 <div class="space-y-8">
   <!-- Page Header -->
   <div>
-    <h1 class="text-2xl font-bold text-white tracking-tight">{{ $title }}</h1>
-    <p class="text-sm text-slate-400 mt-1">Konfigurasi endpoint API URL, API Key, dan Nama Instance WhatsApp Evolution API Anda.</p>
+    <h1 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">{{ $title }}</h1>
+    <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Konfigurasi endpoint API URL, API Key, dan Nama Instance WhatsApp Evolution API Anda.</p>
   </div>
 
   <!-- Form Card -->
@@ -45,11 +45,11 @@
           wire:model="instanceName"
           horizontal="true" />
 
-        <div class="h-px bg-slate-700/50 my-6"></div>
+        <div class="h-px bg-slate-200 dark:bg-slate-700/50 my-6"></div>
 
         <x-form.button-container class="justify-end gap-3">
           <x-button type="submit" color="primary" size="sm" class="cursor-pointer">
-            <i class="fas fa-save mr-1.5 text-xs"></i> Simpan Konfigurasi
+            <x-icon name="save" class="w-4 h-4 mr-1.5 inline-block" /> Simpan Konfigurasi
           </x-button>
         </x-form.button-container>
       </form>
