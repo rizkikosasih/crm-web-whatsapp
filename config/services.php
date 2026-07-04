@@ -33,4 +33,9 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+
+    'rapiwha' => [
+        'key' => env('EVOLUTION_API_KEY', 'crm_wa_secret_token'),
+        'url' => env('EVOLUTION_API_URL', 'http://localhost:8080'),
+    ],
 ];
