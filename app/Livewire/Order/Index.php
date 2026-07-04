@@ -2,8 +2,7 @@
 
 namespace App\Livewire\Order;
 
-use App\Models\Order;
-use Illuminate\Support\Carbon;
+use App\Services\OrderService;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -42,26 +41,15 @@ class Index extends Component
         $this->status = request()->query('status', '');
     }
 
-    public function render()
+    public function render(OrderService $orderService)
     {
-        $items = Order::query()
-            ->with('customer')
-            ->when($this->search, function ($q) {
-                $q->whereHas('customer', function ($q2) {
-                    $q2->where('name', 'like', '%' . $this->search . '%');
-                });
-            })
-            ->when(is_numeric($this->status), fn($q) => $q->where('status', $this->status))
-            ->when(
-                $this->dateStart,
-                fn($q) => $q->whereDate('order_date', '>=', Carbon::parse($this->dateStart)),
-            )
-            ->when(
-                $this->dateEnd,
-                fn($q) => $q->whereDate('order_date', '<=', Carbon::parse($this->dateEnd)),
-            )
-            ->latest()
-            ->paginate($this->perPage);
+        $items = $orderService->getPaginated(
+            $this->perPage,
+            $this->search,
+            $this->status !== '' ? (string) $this->status : null,
+            $this->dateStart,
+            $this->dateEnd,
+        );
 
         return view('livewire.order.index', compact('items'));
     }

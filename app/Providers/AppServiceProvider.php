@@ -11,7 +11,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // Concrete repositories are resolved automatically by Laravel's IoC container.
+        $this->app->bind(
+            \App\Services\Contracts\InvoiceServiceInterface::class,
+            \App\Services\InvoiceService::class,
+        );
     }
 
     /**
