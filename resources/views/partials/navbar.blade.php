@@ -19,13 +19,13 @@
       class="p-2 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-700/50 focus:outline-none transition duration-150 cursor-pointer"
       title="Ubah Tema">
       <!-- Sun Icon (Show in dark mode) -->
-      <x-icon name="sun" class="w-5 h-5 text-amber-400" x-show="$store.theme.dark" x-cloak />
+      <span x-show="$store.theme.dark" x-cloak>
+        <x-icon name="sun" class="w-5 h-5 text-amber-400" />
+      </span>
       <!-- Moon Icon (Show in light mode) -->
-      <x-icon
-        name="moon"
-        class="w-5 h-5 text-indigo-500 dark:text-indigo-400"
-        x-show="!$store.theme.dark"
-        x-cloak />
+      <span x-show="!$store.theme.dark" x-cloak>
+        <x-icon name="moon" class="w-5 h-5 text-indigo-500 dark:text-indigo-400" />
+      </span>
     </button>
 
     <div x-data="{ open: false }" class="relative">

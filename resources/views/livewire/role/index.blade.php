@@ -112,7 +112,7 @@
                 <tr>
                   <td
                     colspan="{{ sizeof($tableHeader) }}"
-                    class="px-6 py-10 text-center text-sm font-medium text-slate-500 bg-slate-800/10">
+                    class="px-6 py-10 text-center text-sm font-medium text-slate-500 bg-white dark:bg-slate-800/10">
                     Data Kosong
                   </td>
                 </tr>

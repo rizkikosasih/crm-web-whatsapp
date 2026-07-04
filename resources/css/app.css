@@ -95,3 +95,12 @@ tbody td .text-red-400 {
 .dark tbody td .text-red-400 {
   color: var(--color-red-400) !important;
 }
+
+/* Empty state row should match the table body background */
+tbody tr td.text-slate-500 {
+  color: var(--color-slate-500) !important;
+  background-color: var(--color-white) !important;
+}
+.dark tbody tr td.text-slate-500 {
+  background-color: transparent !important;
+}
