@@ -35,7 +35,7 @@
     x-transition:leave="transition ease-in duration-150"
     x-transition:leave-start="opacity-100"
     x-transition:leave-end="opacity-0"
-    @click="open = false; $dispatch('close-{{ $id }}')"
+    @click="open = false; $dispatch('closed-{{ $id }}')"
     aria-hidden="true"></div>
 
   {{-- Panel --}}
@@ -56,7 +56,7 @@
         <h3 class="text-base font-bold text-slate-900 dark:text-white">{{ $title }}</h3>
         <button
           type="button"
-          @click="open = false; $dispatch('close-{{ $id }}')"
+          @click="open = false; $dispatch('closed-{{ $id }}')"
           class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition duration-150 cursor-pointer p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700/50">
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
