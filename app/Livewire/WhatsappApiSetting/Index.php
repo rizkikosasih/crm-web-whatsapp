@@ -92,6 +92,7 @@ class Index extends Component
                     ->post($createUrl, [
                         'instanceName' => $this->instanceName,
                         'qrcode' => true,
+                        'integration' => 'WHATSAPP-BAILEYS',
                     ]);
                 logger(
                     'Evolution API Create Instance status: ' .
