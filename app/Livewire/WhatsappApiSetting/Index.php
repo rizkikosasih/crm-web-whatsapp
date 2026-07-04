@@ -77,18 +77,38 @@ class Index extends Component
 
             // 2. Request connection QR
             $connectResponse = Http::withHeaders($headers)->timeout(12)->get($connectUrl);
+            logger(
+                'Evolution API Get Connect initial status: ' .
+                    $connectResponse->status() .
+                    ' body: ' .
+                    $connectResponse->body(),
+            );
+
             if ($connectResponse->status() === 404 || !$connectResponse->successful()) {
                 // If 404, the instance name might not exist on the server yet. Let's create it.
+                logger('Evolution API Instance not found. Creating one...');
                 $createResponse = Http::withHeaders($headers)
                     ->timeout(12)
                     ->post($createUrl, [
                         'instanceName' => $this->instanceName,
                         'qrcode' => true,
                     ]);
+                logger(
+                    'Evolution API Create Instance status: ' .
+                        $createResponse->status() .
+                        ' body: ' .
+                        $createResponse->body(),
+                );
 
                 if ($createResponse->successful()) {
                     // Try to connect again to get the newly generated QR
                     $connectResponse = Http::withHeaders($headers)->timeout(12)->get($connectUrl);
+                    logger(
+                        'Evolution API Get Connect retry status: ' .
+                            $connectResponse->status() .
+                            ' body: ' .
+                            $connectResponse->body(),
+                    );
                 }
             }
 
@@ -104,6 +124,12 @@ class Index extends Component
                     $this->connectionStatus = 'DISCONNECTED';
                 }
             } else {
+                logger(
+                    'Evolution API Connect final check failed with status: ' .
+                        $connectResponse->status() .
+                        ' body: ' .
+                        $connectResponse->body(),
+                );
                 $this->connectionStatus = 'ERROR';
             }
         } catch (\Exception $e) {
