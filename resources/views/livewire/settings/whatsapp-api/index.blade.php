@@ -32,7 +32,7 @@
         <x-form.input
           id="apiKey"
           name="apiKey"
-          label="API Key (Global/Instance Token)"
+          label="API Key (Global/Instance Token) <button type='button' @click.prevent='\$dispatch(&quot;open-api-key-guide&quot;)' class='text-xs font-bold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300 ml-1 inline-flex items-center gap-1 cursor-pointer focus:outline-none' title='Lihat Panduan'><i class='fas fa-circle-question text-sm'></i> Cara Mendapatkan</button>"
           placeholder="Masukkan API Key/Token"
           wire:model="apiKey"
           horizontal="true" />
@@ -48,11 +48,19 @@
         <div class="h-px bg-slate-200 dark:bg-slate-700/50 my-6"></div>
 
         <x-form.button-container class="justify-end gap-3">
-          <x-button type="submit" color="primary" size="sm" class="cursor-pointer">
+          <x-button
+            type="submit"
+            color="primary"
+            size="sm"
+            class="cursor-pointer"
+            loadingText="Menyimpan...">
             <x-icon name="save" class="w-4 h-4 mr-1.5 inline-block" /> Simpan Konfigurasi
           </x-button>
         </x-form.button-container>
       </form>
     </x-card>
   </div>
+
+  <!-- API Key Guide Modal -->
+  <x-modal.api-key-guide />
 </div>

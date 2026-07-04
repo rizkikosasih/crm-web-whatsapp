@@ -104,3 +104,15 @@ tbody tr td.text-slate-500 {
 .dark tbody tr td.text-slate-500 {
   background-color: transparent !important;
 }
+
+/* Table body default text-slate-300 overrides for Light/Dark mode */
+tbody.text-slate-300,
+tbody.text-slate-300 td,
+tbody td.text-slate-300 {
+  color: var(--color-slate-700) !important;
+}
+.dark tbody.text-slate-300,
+.dark tbody.text-slate-300 td,
+.dark tbody td.text-slate-300 {
+  color: var(--color-slate-300) !important;
+}

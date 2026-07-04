@@ -2,18 +2,25 @@
 
 <div class="space-y-8">
   <!-- Page Header -->
-  <div>
-    <h1 class="text-2xl font-bold text-white tracking-tight">{{ $title }}</h1>
-    <p class="text-sm text-slate-400 mt-1">Kelola menu sidebar navigasi, urutan posisi, route URL, dan penugasan Spatie permission pengaman menu.</p>
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div>
+      <h1 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">{{ $title }}</h1>
+      <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Kelola menu sidebar navigasi, urutan posisi, route URL, dan penugasan Spatie permission pengaman menu.</p>
+    </div>
+    <div>
+      <x-button
+        @click="$dispatch('open-form-modal')"
+        color="primary"
+        size="sm"
+        class="w-full sm:w-auto cursor-pointer">
+        <i class="fas fa-plus mr-1.5 text-xs"></i> Tambah Menu
+      </x-button>
+    </div>
   </div>
 
-  <!-- Form Card -->
-  <div id="create-or-update-form" class="w-full">
-    <x-card title="{{ $isEdit ? 'Ubah' : 'Tambah' }} Menu">
-      <x-slot:tools>
-        <x-card.tools minus="true" />
-      </x-slot:tools>
-
+  <!-- Modal Form -->
+  <div x-on:closed-form-modal.window="$wire.resetForm()">
+    <x-modal id="form-modal" title="{{ $isEdit ? 'Ubah' : 'Tambah' }} Menu" maxWidth="2xl">
       @if (session()->has('success'))
         <div class="mb-5">
           <x-alert.success dismissible="true">{{ session('success') }}</x-alert.success>
@@ -86,7 +93,7 @@
           </div>
         </x-overlay>
 
-        <div class="h-px bg-slate-700/50 my-6"></div>
+        <div class="h-px bg-slate-200 dark:bg-slate-700/50 my-6"></div>
 
         <x-form.button-container class="justify-end gap-3">
           <x-button
@@ -98,12 +105,17 @@
             Batal
           </x-button>
 
-          <x-button type="submit" color="primary" size="sm" class="cursor-pointer">
+          <x-button
+            type="submit"
+            color="primary"
+            size="sm"
+            class="cursor-pointer"
+            loadingText="Menyimpan...">
             Simpan
           </x-button>
         </x-form.button-container>
       </form>
-    </x-card>
+    </x-modal>
   </div>
 
   <!-- List Card -->

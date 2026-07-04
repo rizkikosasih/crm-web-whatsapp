@@ -4,8 +4,8 @@
   <!-- Page Header -->
   <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
     <div>
-      <h1 class="text-2xl font-bold text-white tracking-tight">{{ $title }}</h1>
-      <p class="text-sm text-slate-400 mt-1">Buat data pesanan baru untuk pelanggan dan kurangi stok produk secara langsung.</p>
+      <h1 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">{{ $title }}</h1>
+      <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Buat data pesanan baru untuk pelanggan dan kurangi stok produk secara langsung.</p>
     </div>
     <div>
       <x-link.button
@@ -23,8 +23,11 @@
     <x-card title="Pilih Pelanggan & Produk">
       <div class="space-y-6">
         <!-- Customer Selection -->
-        <div class="p-4 bg-slate-900/30 border border-slate-700/50 rounded-xl space-y-4">
-          <h3 class="text-sm font-semibold text-slate-300">1. Data Pelanggan</h3>
+        <div
+          class="p-4 bg-slate-100/80 dark:bg-slate-900/30 border border-slate-200 dark:border-slate-700/50 rounded-xl space-y-4">
+          <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-300">
+            1. Data Pelanggan
+          </h3>
           <x-dropdown-search
             label="Pelanggan"
             name="customer_id"
@@ -40,8 +43,11 @@
         </div>
 
         <!-- Product Selection -->
-        <div class="p-4 bg-slate-900/30 border border-slate-700/50 rounded-xl space-y-4">
-          <h3 class="text-sm font-semibold text-slate-300">2. Pilih Barang Belanjaan</h3>
+        <div
+          class="p-4 bg-slate-100/80 dark:bg-slate-900/30 border border-slate-200 dark:border-slate-700/50 rounded-xl space-y-4">
+          <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-300">
+            2. Pilih Barang Belanjaan
+          </h3>
           <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-end">
             <div class="md:col-span-6">
               <x-dropdown-search
@@ -56,11 +62,13 @@
                 onSelect="selectProduct" />
             </div>
             <div class="md:col-span-3">
-              <label class="block text-sm font-semibold text-slate-400 mb-2">Jumlah (Qty)</label>
+              <label class="block text-sm font-semibold text-slate-600 dark:text-slate-400 mb-2"
+                >Jumlah (Qty)</label
+              >
               <input
                 type="number"
                 wire:model="quantity"
-                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition duration-150 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition duration-150 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 min="1" />
             </div>
             <div class="md:col-span-3">
@@ -78,14 +86,17 @@
 
         <!-- Cart Items List -->
         @if ($orderItems)
-          <div class="h-px bg-slate-700/50 my-6"></div>
+          <div class="h-px bg-slate-200 dark:bg-slate-700/50 my-6"></div>
 
           <div class="space-y-6">
-            <h3 class="text-base font-bold text-white tracking-tight">Rincian Daftar Belanja</h3>
+            <h3 class="text-base font-bold text-slate-900 dark:text-white tracking-tight">
+              Rincian Daftar Belanja
+            </h3>
 
-            <div class="overflow-x-auto rounded-xl border border-slate-700/80 bg-slate-900/10">
-              <table class="min-w-full divide-y divide-slate-700/50">
-                <thead class="bg-slate-800/40 text-slate-400">
+            <div
+              class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700/80 bg-white dark:bg-slate-900/10">
+              <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-700/50">
+                <thead class="bg-slate-50 dark:bg-slate-800/40 text-slate-600 dark:text-slate-400">
                   <tr>
                     <th
                       scope="col"
@@ -114,21 +125,25 @@
                     </th>
                   </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-850 bg-transparent text-slate-300">
+                <tbody
+                  class="divide-y divide-slate-100 dark:divide-slate-800 bg-transparent text-slate-700 dark:text-slate-300">
                   @foreach ($orderItems as $index => $item)
-                    <tr class="hover:bg-slate-800/10 transition duration-150">
-                      <td class="px-6 py-3.5 text-sm font-semibold text-white whitespace-nowrap">
+                    <tr
+                      class="hover:bg-slate-50 dark:hover:bg-slate-800/10 transition duration-150">
+                      <td
+                        class="px-6 py-3.5 text-sm font-semibold text-slate-900 dark:text-white whitespace-nowrap">
                         {{ $item['name'] }}
                       </td>
-                      <td class="px-6 py-3.5 text-right text-sm whitespace-nowrap text-slate-400">
+                      <td
+                        class="px-6 py-3.5 text-right text-sm whitespace-nowrap text-slate-500 dark:text-slate-400">
                         {{ rupiah($item['price']) }}
                       </td>
                       <td
-                        class="px-6 py-3.5 text-center text-sm font-semibold whitespace-nowrap text-white">
+                        class="px-6 py-3.5 text-center text-sm font-semibold whitespace-nowrap text-slate-900 dark:text-white">
                         {{ $item['quantity'] }}
                       </td>
                       <td
-                        class="px-6 py-3.5 text-right text-sm font-bold text-white whitespace-nowrap">
+                        class="px-6 py-3.5 text-right text-sm font-bold text-slate-900 dark:text-white whitespace-nowrap">
                         {{
                           rupiah(
                             $item['price'] * $item['quantity'],
@@ -149,12 +164,14 @@
                   @endforeach
                 </tbody>
                 <tfoot>
-                  <tr class="bg-slate-800/20">
-                    <td colspan="3" class="px-6 py-4 text-right text-sm font-bold text-slate-400">
+                  <tr class="bg-slate-50 dark:bg-slate-800/20">
+                    <td
+                      colspan="3"
+                      class="px-6 py-4 text-right text-sm font-bold text-slate-500 dark:text-slate-400">
                       Total Transaksi :
                     </td>
                     <td
-                      class="px-6 py-4 text-right text-base font-extrabold text-indigo-400 whitespace-nowrap">
+                      class="px-6 py-4 text-right text-base font-extrabold text-indigo-600 dark:text-indigo-400 whitespace-nowrap">
                       {{
                         rupiah(
                           collect($orderItems)->sum(fn($i) => $i['price'] * $i['quantity']),

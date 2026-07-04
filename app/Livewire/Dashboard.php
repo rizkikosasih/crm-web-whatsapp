@@ -63,7 +63,7 @@ class Dashboard extends Component
         $statusConfig = [
             [
                 'title' => 'Belum Dibayar',
-                'icon' => 'alert-circle',
+                'icon' => 'circle-alert',
                 'color' => 'danger',
                 'colorRibbon' => 'success',
             ],
@@ -81,7 +81,7 @@ class Dashboard extends Component
             ],
             [
                 'title' => 'Selesai',
-                'icon' => 'check-circle',
+                'icon' => 'circle-check',
                 'color' => 'success',
                 'colorRibbon' => 'danger',
             ],
