@@ -58,13 +58,16 @@ services:
 
   # ─── Evolution API (WhatsApp Gateway) ───
   evolution-api:
-    image: atendai/evolution-api:latest
+    image: evoapicloud/evolution-api:latest
     container_name: crm-evolution-api
     restart: unless-stopped
     ports:
       - '${EVOLUTION_API_PORT:-8080}:8080'
     environment:
       - AUTHENTICATION_API_KEY=${EVOLUTION_API_KEY:-your_evolution_api_key}
+      - DATABASE_ENABLED=true
+      - DATABASE_PROVIDER=mysql
+      - DATABASE_CONNECTION_URI=mysql://root:${DB_PASSWORD:-secret}@db:3306/${DB_DATABASE:-crm}
     volumes:
       - crm-evolution-data:/evolution/data
     networks:
