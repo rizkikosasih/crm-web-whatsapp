@@ -1,9 +1,5 @@
 <!DOCTYPE html>
-<html
-  lang="id"
-  class="h-full"
-  x-data="{ darkMode: localStorage.getItem('theme') === 'dark' }"
-  :class="{ dark: darkMode }">
+<html lang="id" class="h-full" :class="{ dark: $store.theme.dark }">
 <head>
   <meta charset="UTF-8" />
   <title>@yield ('title', env('APP_NAME', 'CRM WhatsApp'))</title>
@@ -28,6 +24,27 @@
     } else {
       document.documentElement.classList.remove('dark');
     }
+  </script>
+
+  <!-- Alpine.js Global Theme Store -->
+  <script>
+    document.addEventListener('alpine:init', () => {
+      Alpine.store('theme', {
+        dark:
+          localStorage.getItem('theme') === 'dark' ||
+          (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches),
+        toggle() {
+          this.dark = !this.dark;
+          localStorage.setItem('theme', this.dark ? 'dark' : 'light');
+          if (this.dark) {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+          window.dispatchEvent(new CustomEvent('theme-changed'));
+        },
+      });
+    });
   </script>
 
   @vite (['resources/css/app.css', 'resources/js/app.js'])
