@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" class="h-full" :class="{ dark: $store.theme.dark }">
+<html lang="id" class="h-full">
 <head>
   <meta charset="UTF-8" />
   <title>@yield ('title', env('APP_NAME', 'CRM WhatsApp'))</title>
