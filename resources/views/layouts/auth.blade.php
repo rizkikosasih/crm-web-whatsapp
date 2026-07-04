@@ -2,6 +2,27 @@
 <html lang="id" class="h-full">
 <head>
   <meta charset="UTF-8" />
+  <!-- Anti-FOUC Script -->
+  <script>
+    if (
+      localStorage.getItem('theme') === 'dark' ||
+      (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+    ) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
+  <!-- Inline background style to prevent white flash before CSS loads -->
+  <style>
+    html {
+      background-color: #f1f5f9;
+    }
+    html.dark {
+      background-color: #020617;
+    }
+  </style>
+
   <title>@yield ('title', env('APP_NAME', 'CRM WhatsApp'))</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="csrf-token" content="{{ csrf_token() }}" />
@@ -18,18 +39,6 @@
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-
-  <!-- Anti-FOUC Script: apply theme before CSS loads to prevent flash -->
-  <script>
-    if (
-      localStorage.getItem('theme') === 'dark' ||
-      (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
-    ) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  </script>
 
   <!-- Alpine.js Global Theme Store -->
   <script>
