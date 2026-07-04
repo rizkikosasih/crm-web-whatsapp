@@ -1,66 +1,143 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# CRM Web WhatsApp Integration (Laravel 12 + TALL Stack)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi **CRM Web WhatsApp Integration** adalah dasbor manajemen hubungan pelanggan (CRM) terpusat yang menggabungkan pengelolaan data pelanggan, katalog produk, siklus pesanan/transaksi, pelaporan penjualan, dan automasi notifikasi pesan melalui WhatsApp API.
 
-## About Laravel
+Aplikasi ini telah dimodernisasi sepenuhnya dari stack legacy (Laravel 10 + AdminLTE + jQuery) ke **TALL Stack (Tailwind CSS v4, Alpine.js, Livewire 3, Laravel 12)** dengan desain premium Glassmorphic Dark & Light UI.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🚀 Fitur Utama
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. **Dashboard Interaktif & Log Histori**:
+   - Ringkasan indikator transaksi (Belum Bayar, Lunas, Pengiriman, Selesai).
+   - Grafik penjualan real-time menggunakan Neon Chart.js yang adaptif terhadap tema aktif.
+   - Tabel histori status pengiriman pesan WhatsApp keluar.
+2. **Manajemen Data Master (Modal-based CRUD)**:
+   - CRUD Pelanggan, Produk, Campaign, Template Pesan, User, Role, dan Menu navigasi disajikan menggunakan antarmuka popup modal yang interaktif dan responsif.
+3. **Automasi Siklus Transaksi (Orders)**:
+   - Form Checkout dengan autocomplete pencarian dinamis (pelanggan & produk) dan validasi stok real-time.
+   - Pengurangan stok otomatis saat pesanan dibuat dan pengembalian stok otomatis saat pesanan dibatalkan.
+   - Unggah bukti pembayaran dan generate PDF Invoice otomatis via DomPDF.
+   - Integrasi asinkronus unggahan invoice otomatis ke cloud storage **ImageKit.io**.
+4. **WhatsApp Dispatcher Otomatis**:
+   - Mengirim notifikasi WhatsApp secara otomatis di setiap transisi status pesanan menggunakan template dinamis berbasis placeholder (Checkout, Penerimaan Pembayaran, Pengiriman Kurir, Selesai/Kirim Invoice Link, dan Pembatalan).
+5. **Akses Hak Otorisasi (Spatie Permission)**:
+   - Pengaturan Role & Permission berbasis Spatie Permission yang diintegrasikan langsung dengan visibilitas menu navigasi secara dinamis.
+6. **Desain Premium Bebas Kedip (Anti-FOUC & Cookie Sync)**:
+   - Toggling tema (Light/Dark Mode) yang disinkronkan secara instan ke LocalStorage dan Cookie `theme` untuk menghindari bug kedipan putih (FOUC) saat inisiasi halaman dan morphing DOM Livewire.
+   - Default state diatur ke **Light Mode** untuk pengguna baru.
+7. **Premium UX & Scrollbar Kustom**:
+   - Penyelarasan loading spinner horizontal pada tombol transaksi.
+   - Custom scrollbar tipis (rounded) adaptif di seluruh web.
+   - Fallback foto profil inisial nama 2 huruf adaptif.
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 🛠️ Stack Teknologi
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- **Backend**: Laravel 12, PHP >= 8.2
+- **Frontend Stack**: Livewire 3, Alpine.js 3, Tailwind CSS v4
+- **Security & RBAC**: Spatie Laravel Permission
+- **External APIs**: Evolution API (WhatsApp Gateway), ImageKit.io (Media Cloud Storage)
+- **PDF Engine**: DomPDF
+- **Icons**: Lucide Icons
+- **Build Tooling**: Vite, Prettier, npm-run-all2
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## ⚙️ Persyaratan Sistem
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- PHP >= 8.2
+- Composer
+- Node.js 24 LTS & npm
+- Database MySQL / MariaDB
+- Docker (untuk menjalankan Evolution API secara lokal)
 
-### Premium Partners
+---
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+## 💻 Langkah Instalasi Lokal
 
-## Contributing
+### 1. Kloning Project & Pasang Dependensi
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+# Clone repository
+git clone https://github.com/rizkikosasih/crm-web-whatsapp.git
+cd crm-web-whatsapp
 
-## Code of Conduct
+# Install Composer packages
+composer install
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# Install npm packages
+npm install
+```
 
-## Security Vulnerabilities
+### 2. Konfigurasi Environment (`.env`)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Salin file `.env.example` ke `.env` dan lengkapi kredensial database Anda:
 
-## License
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Isi kredensial external API Anda:
+
+```env
+# Evolution API (WhatsApp Gateway)
+EVOLUTION_API_URL=http://localhost:8080
+EVOLUTION_API_KEY=your_evolution_api_key
+EVOLUTION_INSTANCE_NAME=crm-whatsapp
+
+# ImageKit.io Credentials
+IMAGEKIT_PUBLIC_KEY="your_imagekit_public_key"
+IMAGEKIT_PRIVATE_KEY="your_imagekit_private_key"
+IMAGEKIT_ENDPOINT_URL="https://ik.imagekit.io/your_endpoint_id"
+```
+
+### 3. Migrasi Database & Seeding
+
+```bash
+php artisan migrate --seed
+php artisan storage:link
+```
+
+### 4. Menjalankan Aplikasi
+
+Gunakan script runner `dev-all` untuk menjalankan server PHP Laravel, kompilasi Vite, dan membuka browser secara paralel:
+
+```bash
+npm run dev-all
+```
+
+---
+
+## 🐳 Docker Stack & Evolution API (WhatsApp Gateway)
+
+Evolution API dijalankan menggunakan Docker Compose yang disertakan dalam repositori.
+
+1. Jalankan container Evolution API:
+   ```bash
+   docker compose up -d
+   ```
+2. Buka dashboard Evolution API lokal Anda atau panggil API untuk memindai QR Code guna menghubungkan WhatsApp Anda dengan nomor server.
+3. Gunakan panduan clipboard sekali klik yang tersedia di halaman **Pengaturan WhatsApp** untuk menyalin perintah koneksi secara instan.
+
+---
+
+## 🧪 Pengujian & Formatter
+
+Seluruh kode dalam project ini wajib mengikuti standar kerapian Prettier sebelum di-commit.
+
+```bash
+# Jalankan formatting kode otomatis
+npm run format
+
+# Jalankan pengujian unit dan fitur (PHPUnit)
+php artisan test
+```
+
+---
+
+## 📄 Lisensi
+
+Project ini dirilis di bawah lisensi [MIT License](LICENSE).
