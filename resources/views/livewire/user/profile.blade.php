@@ -15,27 +15,35 @@
       <x-card title="Ringkasan Profil">
         <div class="flex flex-col items-center text-center pb-6">
           <div
-            class="w-32 h-32 rounded-full overflow-hidden border-2 border-indigo-500 shadow-lg relative bg-slate-800 mb-4">
-            <img
-              src="{{ $originalAvatar ? imageUri($originalAvatar) : imageUri('images/avatar.png') }}"
-              class="w-full h-full object-cover"
-              alt="Avatar User" />
+            class="w-32 h-32 rounded-full overflow-hidden border-2 border-indigo-500 shadow-lg relative flex items-center justify-center mb-4 bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200">
+            @if ($originalAvatar)
+              <img
+                src="{{ imageUri($originalAvatar) }}"
+                class="w-full h-full object-cover"
+                alt="Avatar User" />
+            @else
+              <span class="text-3xl font-extrabold tracking-wider">
+                {{ strtoupper(substr($name, 0, 2)) }}
+              </span>
+            @endif
           </div>
-          <h3 class="text-lg font-bold text-white tracking-tight">{{ $name }}</h3>
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white tracking-tight">
+            {{ $name }}
+          </h3>
           <span
-            class="inline-flex items-center justify-center px-3 py-1 text-xs font-bold rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 mt-1.5">
+            class="inline-flex items-center justify-center px-3 py-1 text-xs font-bold rounded-full bg-indigo-500/10 text-indigo-650 dark:text-indigo-400 border border-indigo-500/20 mt-1.5">
             {{ $roleName }}
           </span>
         </div>
 
-        <div class="h-px bg-slate-700/50 my-4"></div>
+        <div class="h-px bg-slate-200 dark:bg-slate-700/50 my-4"></div>
 
         <div class="space-y-4 text-sm">
           <div>
             <span class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1"
               ><i class="fas fa-map-marker-alt mr-1"></i> Alamat</span
             >
-            <span class="text-slate-300">{!!
+            <span class="text-slate-700 dark:text-slate-300">{!!
               nl2br(e($address)) ?:
                 'Alamat belum diatur'
             !!}</span>
@@ -45,14 +53,14 @@
             <span class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1"
               ><i class="fas fa-envelope mr-1"></i> Email</span
             >
-            <span class="text-slate-300">{{ $email }}</span>
+            <span class="text-slate-700 dark:text-slate-300">{{ $email }}</span>
           </div>
 
           <div>
             <span class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1"
               ><i class="fas fa-phone mr-1"></i> No Handphone</span
             >
-            <span class="text-slate-300">
+            <span class="text-slate-700 dark:text-slate-300">
               {{
                 Str::replaceFirst(
                   '0',
@@ -68,14 +76,14 @@
 
     <!-- Right Panel: Tabs Settings / Password -->
     <div class="lg:col-span-8 space-y-6">
-      <div class="border-b border-slate-700/80">
+      <div class="border-b border-slate-200 dark:border-slate-700/80">
         <nav class="flex space-x-6" aria-label="Tabs">
           <button
             type="button"
             @click="activeTab = 'settings'"
             :class="activeTab === 'settings'
-              ? 'border-indigo-500 text-indigo-400'
-              : 'border-transparent text-slate-400 hover:text-slate-300 hover:border-slate-600'"
+              ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400'
+              : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:border-slate-300 dark:hover:border-slate-600'"
             class="py-4 px-1 text-sm font-semibold border-b-2 tracking-wide cursor-pointer transition duration-150">
             Pengaturan Profil
           </button>
@@ -83,8 +91,8 @@
             type="button"
             @click="activeTab = 'password'"
             :class="activeTab === 'password'
-              ? 'border-indigo-500 text-indigo-400'
-              : 'border-transparent text-slate-400 hover:text-slate-300 hover:border-slate-600'"
+              ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400'
+              : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:border-slate-300 dark:hover:border-slate-600'"
             class="py-4 px-1 text-sm font-semibold border-b-2 tracking-wide cursor-pointer transition duration-150">
             Ubah Kata Sandi
           </button>
@@ -138,7 +146,7 @@
               <x-preview-image path="{{ $imageUri }}" width="100px" />
             </x-form.image>
 
-            <div class="h-px bg-slate-700/50 my-6"></div>
+            <div class="h-px bg-slate-200 dark:bg-slate-700/50 my-6"></div>
 
             <div class="flex justify-end">
               <x-button
@@ -193,16 +201,16 @@
                   type="checkbox"
                   id="show-pwd"
                   @click="showPasswords = !showPasswords"
-                  class="rounded border-slate-700 text-indigo-500 focus:ring-indigo-500 focus:ring-offset-slate-900 bg-slate-900 w-4 h-4 cursor-pointer" />
+                  class="rounded border-slate-300 dark:border-slate-700 text-indigo-500 focus:ring-indigo-500 focus:ring-offset-slate-900 bg-white dark:bg-slate-900 w-4 h-4 cursor-pointer" />
                 <label
                   for="show-pwd"
-                  class="text-sm font-semibold text-slate-400 cursor-pointer select-none"
+                  class="text-sm font-semibold text-slate-600 dark:text-slate-400 cursor-pointer select-none"
                   >Tampilkan Password</label
                 >
               </div>
             </div>
 
-            <div class="h-px bg-slate-700/50 my-6"></div>
+            <div class="h-px bg-slate-200 dark:bg-slate-700/50 my-6"></div>
 
             <div class="flex justify-end">
               <x-button
