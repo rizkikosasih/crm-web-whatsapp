@@ -149,6 +149,14 @@ Migrasi dari AdminLTE 3 (Bootstrap 4 + jQuery) ke **TALL Stack dengan Custom Pre
 | **Dependensi Dihapus**  | `admin-lte`, `bootstrap`, `jquery`, `@popperjs/core`, `popper.js`, `select2`, `postcss`, `autoprefixer`.                                                                                                                                                              |
 | **Dependensi Ditambah** | `tailwindcss`, `@tailwindcss/vite`, `lucide` (paket npm icon modern).                                                                                                                                                                                                 |
 
+#### 5.2.3. Manajemen Tema (Light/Dark Mode)
+
+Sistem tema dirancang untuk memberikan transisi instan, konsisten, dan bebas kedipan (no flash):
+
+- **Default State**: Halaman akan dimuat pertama kali dalam **Light Mode** (default) apabila user baru pertama kali membuka aplikasi dan belum menentukan preferensinya.
+- **Sinkronisasi Cookie & LocalStorage**: Preferensi tema disimpan di `localStorage` (untuk kebutuhan manipulasi sisi klien) serta cookie `theme` (agar server-side PHP langsung menyajikan kelas `.dark` pada tag `<html>`). Cara ini efektif mengeliminasi bug morphing DOM pada Livewire 3 yang seringkali me-reset tema kembali ke light mode setelah redirect/login.
+- **Optimasi Anti-FOUC (Flash of Unstyled Content)**: Skrip inisialisasi diletakkan di bagian paling atas tag `<head>` bersama dengan inline background style (`#f8fafc` / `#0f172a` untuk aplikasi, serta `#f1f5f9` / `#020617` untuk halaman login) untuk mewarnai kanvas browser secara instan sebelum aset CSS eksternal selesai di-load.
+
 ---
 
 ### 5.3. Evolution API — Migrasi WhatsApp Gateway
