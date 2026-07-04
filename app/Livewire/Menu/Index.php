@@ -95,7 +95,7 @@ class Index extends Component
         $this->permission = $menu->permission;
         $this->isEdit = true;
 
-        $this->dispatch('scrollToTop');
+        $this->dispatch('open-form-modal');
         $this->dispatch('clearError');
     }
 
@@ -182,6 +182,7 @@ class Index extends Component
             'isEdit',
         ]);
         $this->dispatch('clearError');
+        $this->dispatch('close-form-modal');
     }
 
     public function render(MenuService $menuService)

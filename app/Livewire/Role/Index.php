@@ -48,12 +48,14 @@ class Index extends Component
         $this->currentId = $role->id;
         $this->name = $role->name;
         $this->isEdit = true;
+        $this->dispatch('open-form-modal');
     }
 
     public function resetForm()
     {
         $this->reset(['currentId', 'name', 'isEdit']);
         $this->dispatch('clearError');
+        $this->dispatch('close-form-modal');
     }
 
     public function render(RoleService $roleService)

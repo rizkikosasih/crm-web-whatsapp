@@ -80,7 +80,7 @@ class Index extends Component
         $this->sku = $product->sku;
         $this->image = $product->image;
         $this->isEdit = true;
-        $this->dispatch('scrollToTop');
+        $this->dispatch('open-form-modal');
     }
 
     public function resetForm()
@@ -96,6 +96,7 @@ class Index extends Component
             'isEdit',
         ]);
         $this->dispatch('clearError');
+        $this->dispatch('close-form-modal');
     }
 
     public function render(ProductService $productService)

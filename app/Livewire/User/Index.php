@@ -129,7 +129,7 @@ class Index extends Component
         $this->role_id = $role ? $role->id : null;
 
         $this->isEdit = true;
-        $this->dispatch('scrollToTop');
+        $this->dispatch('open-form-modal');
     }
 
     public function confirmActive($id, $status)
@@ -182,6 +182,7 @@ class Index extends Component
             'isEdit',
         ]);
         $this->dispatch('clearError');
+        $this->dispatch('close-form-modal');
     }
 
     public function render(UserService $userService)

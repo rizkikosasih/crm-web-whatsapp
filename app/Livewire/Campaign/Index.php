@@ -69,13 +69,14 @@ class Index extends Component
         $this->campaignMessage = $campaign->message;
         $this->image = $campaign->image;
         $this->isEdit = true;
-        $this->dispatch('scrollToTop');
+        $this->dispatch('open-form-modal');
     }
 
     public function resetForm()
     {
         $this->reset(['campaignId', 'campaignTitle', 'campaignMessage', 'image', 'isEdit']);
         $this->dispatch('clearError');
+        $this->dispatch('close-form-modal');
     }
 
     public function sendWA($id, CampaignService $campaignService)

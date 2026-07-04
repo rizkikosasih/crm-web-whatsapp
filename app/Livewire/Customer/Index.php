@@ -68,13 +68,14 @@ class Index extends Component
         $this->originalPhone = $customer->phone;
         $this->notes = $customer->notes;
         $this->isEdit = true;
-        $this->dispatch('scrollToTop');
+        $this->dispatch('open-form-modal');
     }
 
     public function resetForm()
     {
         $this->reset(['customerId', 'name', 'phone', 'originalPhone', 'notes', 'isEdit']);
         $this->dispatch('clearError');
+        $this->dispatch('close-form-modal');
     }
 
     public function render(CustomerService $customerService)

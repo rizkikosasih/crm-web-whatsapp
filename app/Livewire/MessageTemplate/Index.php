@@ -68,13 +68,14 @@ class Index extends Component
         $this->body = $template->body;
         $this->type = $template->type;
         $this->isEdit = true;
-        $this->dispatch('scrollToTop');
+        $this->dispatch('open-form-modal');
     }
 
     public function resetForm()
     {
         $this->reset(['templateId', 'titleTemplate', 'type', 'body', 'isEdit']);
         $this->dispatch('clearError');
+        $this->dispatch('close-form-modal');
     }
 
     public function render(MessageTemplateService $messageTemplateService)
