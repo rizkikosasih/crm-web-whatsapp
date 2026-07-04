@@ -65,6 +65,7 @@
   @yield ('page-style')
 </head>
 <body
+  x-data
   class="h-full text-slate-800 dark:text-slate-200 antialiased selection:bg-indigo-500 selection:text-white bg-slate-100 dark:bg-slate-950 transition-colors duration-150">
   <!-- Theme Toggle (top-right corner) -->
   <div class="fixed top-4 right-4 z-50">
