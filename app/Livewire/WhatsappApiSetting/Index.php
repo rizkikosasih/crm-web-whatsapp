@@ -117,11 +117,12 @@ class Index extends Component
                 $connectData = $connectResponse->json();
                 $status =
                     $connectData['instance']['status'] ??
-                    ($connectData['instance']['state'] ?? 'connecting');
+                    ($connectData['instance']['state'] ?? ($connectData['status'] ?? 'connecting'));
                 if ($status === 'open' || $status === 'CONNECTED') {
                     $this->connectionStatus = 'CONNECTED';
                 } else {
-                    $this->qrCodeBase64 = $connectData['qrcode']['base64'] ?? null;
+                    $this->qrCodeBase64 =
+                        $connectData['base64'] ?? ($connectData['qrcode']['base64'] ?? null);
                     $this->connectionStatus = 'DISCONNECTED';
                 }
             } else {
