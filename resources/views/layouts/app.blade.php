@@ -12,7 +12,7 @@
         .split('; ')
         .find((row) => row.startsWith('theme='))
         ?.split('=')[1] || localStorage.getItem('theme');
-    if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    if (theme === 'dark') {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
@@ -55,10 +55,7 @@
               .split('; ')
               .find((row) => row.startsWith('theme='))
               ?.split('=')[1] || localStorage.getItem('theme');
-          return (
-            theme === 'dark' ||
-            (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)
-          );
+          return theme === 'dark';
         })(),
         toggle() {
           this.dark = !this.dark;
