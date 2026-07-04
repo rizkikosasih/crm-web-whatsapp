@@ -12,12 +12,15 @@ class WhatsappSettingsSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('whatsapp_settings')->insert([
-            'key' => '-',
-            'url' => 'http://localhost:8080',
-            'instance_name' => 'crm-whatsapp',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        DB::table('whatsapp_settings')->updateOrInsert(
+            ['id' => 1],
+            [
+                'key' => 'crm_wa_secret_token',
+                'url' => 'http://localhost:8080',
+                'instance_name' => 'crm-whatsapp',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
+        );
     }
 }
