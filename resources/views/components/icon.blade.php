@@ -7,8 +7,8 @@
     $svg = file_get_contents($path);
     // Remove class attribute if already present in raw SVG
     $svg = preg_replace('/class="[^"]*"/', '', $svg);
-    // Inject the custom CSS class to style the SVG via Tailwind CSS
-    $svg = str_replace('<svg ', "<svg class=\"{$class}\" ", $svg);
+    // Inject the custom CSS class and any forwarded component attributes to style the SVG via Tailwind CSS/Alpine
+    $svg = str_replace('<svg ', "<svg class=\"{$class}\" " . $attributes->toHtml() . ' ', $svg);
   }
 @endphp
 
