@@ -15,9 +15,9 @@ class WhatsappSettingsSeeder extends Seeder
         DB::table('whatsapp_settings')->updateOrInsert(
             ['id' => 1],
             [
-                'key' => env('EVOLUTION_API_KEY', 'crm_wa_secret_token'),
-                'url' => env('EVOLUTION_API_URL', 'http://localhost:8080'),
-                'instance_name' => env('EVOLUTION_INSTANCE_NAME', 'crm-whatsapp'),
+                'key' => config('services.evolution.key', 'crm_wa_secret_token'),
+                'url' => config('services.evolution.url', 'http://localhost:8080'),
+                'instance_name' => config('services.evolution.instance', 'crm-whatsapp'),
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

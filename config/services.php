@@ -34,8 +34,9 @@ return [
         ],
     ],
 
-    'rapiwha' => [
+    'evolution' => [
         'key' => env('EVOLUTION_API_KEY', 'crm_wa_secret_token'),
         'url' => env('EVOLUTION_API_URL', 'http://localhost:8080'),
+        'instance' => env('EVOLUTION_INSTANCE_NAME', 'crm-whatsapp'),
     ],
 ];
