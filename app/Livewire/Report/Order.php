@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Report;
 
-use App\Models\Order as ModelsOrder;
+use App\Services\ReportService;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
 
@@ -11,6 +11,7 @@ class Order extends Component
     public $dateStart;
     public $dateEnd;
     public $status = '';
+    public $report = [];
 
     #[Locked]
     public $title = 'Laporan Pesanan';
@@ -31,28 +32,27 @@ class Order extends Component
         ['name' => 'Total'],
     ];
 
-    public function mount()
+    public function mount(ReportService $reportService)
     {
         $this->dateStart = now()->subDays(6)->toDateString();
         $this->dateEnd = now()->toDateString();
 
-        $this->report = $this->getReportProperty();
-    }
-
-    public function getReportProperty()
-    {
-        return ModelsOrder::with('customer', 'orderItems')
-            ->when($this->status !== '', fn($q) => $q->where('status', $this->status))
-            ->when($this->dateStart, fn($q) => $q->whereDate('order_date', '>=', $this->dateStart))
-            ->when($this->dateEnd, fn($q) => $q->whereDate('order_date', '<=', $this->dateEnd))
-            ->latest()
-            ->get();
+        $this->report = $reportService->getOrderReport(
+            $this->dateStart,
+            $this->dateEnd,
+            $this->status,
+        );
     }
 
     public function updated($propertyName)
     {
         if (in_array($propertyName, ['dateStart', 'dateEnd', 'status'])) {
-            $this->report = $this->getReportProperty();
+            $reportService = app(ReportService::class);
+            $this->report = $reportService->getOrderReport(
+                $this->dateStart,
+                $this->dateEnd,
+                $this->status,
+            );
         }
     }
 
@@ -60,8 +60,8 @@ class Order extends Component
     {
         $orders = $this->report;
 
-        $totalQty = $orders->flatMap->orderItems->sum('quantity');
-        $totalPrice = $orders->flatMap->orderItems->sum(
+        $totalQty = collect($orders)->flatMap->orderItems->sum('quantity');
+        $totalPrice = collect($orders)->flatMap->orderItems->sum(
             fn($item) => $item->price * $item->quantity,
         );
 

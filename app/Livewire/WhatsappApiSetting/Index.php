@@ -2,7 +2,7 @@
 
 namespace App\Livewire\WhatsappApiSetting;
 
-use App\Models\WhatsappApiSetting;
+use App\Services\WhatsappSettingsService;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
 
@@ -14,40 +14,45 @@ class Index extends Component
     public $templateId;
     public $apiKey;
     public $apiUrl;
+    public $instanceName;
     public $isEdit = false;
 
-    public function mount()
+    public function mount(WhatsappSettingsService $whatsappSettingsService)
     {
-        $setting = WhatsappApiSetting::first();
+        $setting = $whatsappSettingsService->getFirst();
 
         if ($setting) {
             $this->templateId = $setting->id;
             $this->apiKey = $setting->key;
             $this->apiUrl = $setting->url;
+            $this->instanceName = $setting->instance_name;
             $this->isEdit = true;
         }
     }
 
-    public function save()
+    public function save(WhatsappSettingsService $whatsappSettingsService)
     {
         $this->validate(
             [
                 'apiKey' => 'required',
                 'apiUrl' => 'required|url',
+                'instanceName' => 'required',
             ],
             [
                 'apiKey.required' => 'API Key tidak boleh kosong',
                 'apiUrl.required' => 'API URL tidak boleh kosong',
                 'apiUrl.url' => 'API URL harus berupa URL yang valid (contoh: https://example.com)',
+                'instanceName.required' => 'Instance Name tidak boleh kosong',
             ],
         );
 
-        WhatsappApiSetting::updateOrCreate(
-            ['id' => $this->templateId],
+        $whatsappSettingsService->save(
             [
                 'key' => $this->apiKey,
                 'url' => $this->apiUrl,
+                'instance_name' => $this->instanceName,
             ],
+            $this->templateId,
         );
 
         $this->isEdit = true;
@@ -56,7 +61,7 @@ class Index extends Component
 
     public function resetForm()
     {
-        $this->reset(['templateId', 'apiKey', 'apiUrl', 'isEdit']);
+        $this->reset(['templateId', 'apiKey', 'apiUrl', 'instanceName', 'isEdit']);
     }
 
     public function render()

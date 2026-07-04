@@ -1,52 +1,58 @@
 @section ('title', $title)
 
-@section ('page-script')
-  @vite (['resources/js/ekko-lightbox.js'])
-@endsection
-
-<section class="content">
-  <div class="container-fluid" id="form-create-or-update">
-    <div class="row">
-      <div class="col-12 m-1 p-1">
-        <div class="card card-primary card-outline">
-          <div class="card-header">
-            <div class="card-title">{{ $isEdit ? 'Ubah' : 'Tambah' }} Whatsapp API</div>
-            <x-card.tools refresh="true" />
-          </div>
-
-          <div class="card-body text-justify">
-            @if (session()->has('success'))
-              <x-alert.success dismissible="true">{{ session('success') }}</x-alert.success>
-            @endif
-
-            <form wire:submit.prevent="save">
-              <x-form.input
-                id="apiKey"
-                name="apiKey"
-                label="API Key"
-                placeholder="Masukkan API Key"
-                class="form-control-sm"
-                wire:model.defer="apiKey"
-                horizontal="true" />
-
-              <x-form.input
-                id="apiUrl"
-                name="apiUrl"
-                label="API URL"
-                placeholder="Masukkan API URL dengan https://"
-                class="form-control-sm"
-                wire:model.defer="apiUrl"
-                horizontal="true" />
-
-              <hr />
-
-              <x-form.button-container class="justify-content-end">
-                <x-button type="submit" color="primary"> Simpan </x-button>
-              </x-form.button-container>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
+<div class="space-y-8">
+  <!-- Page Header -->
+  <div>
+    <h1 class="text-2xl font-bold text-white tracking-tight">{{ $title }}</h1>
+    <p class="text-sm text-slate-400 mt-1">Konfigurasi endpoint API URL, API Key, dan Nama Instance WhatsApp Evolution API Anda.</p>
   </div>
-</section>
+
+  <!-- Form Card -->
+  <div id="form-create-or-update" class="w-full max-w-3xl">
+    <x-card title="Pengaturan Integrasi WhatsApp">
+      <x-slot:tools>
+        <x-card.tools refresh="true" />
+      </x-slot:tools>
+
+      @if (session()->has('success'))
+        <div class="mb-5">
+          <x-alert.success dismissible="true">{{ session('success') }}</x-alert.success>
+        </div>
+      @endif
+
+      <form wire:submit.prevent="save" class="space-y-6">
+        <x-form.input
+          id="apiUrl"
+          name="apiUrl"
+          label="API URL"
+          placeholder="Contoh: http://localhost:8080"
+          wire:model="apiUrl"
+          horizontal="true" />
+
+        <x-form.input
+          id="apiKey"
+          name="apiKey"
+          label="API Key (Global/Instance Token)"
+          placeholder="Masukkan API Key/Token"
+          wire:model="apiKey"
+          horizontal="true" />
+
+        <x-form.input
+          id="instanceName"
+          name="instanceName"
+          label="Instance Name (Nama Sesi)"
+          placeholder="Contoh: crm-whatsapp"
+          wire:model="instanceName"
+          horizontal="true" />
+
+        <div class="h-px bg-slate-700/50 my-6"></div>
+
+        <x-form.button-container class="justify-end gap-3">
+          <x-button type="submit" color="primary" size="sm" class="cursor-pointer">
+            <i class="fas fa-save mr-1.5 text-xs"></i> Simpan Konfigurasi
+          </x-button>
+        </x-form.button-container>
+      </form>
+    </x-card>
+  </div>
+</div>

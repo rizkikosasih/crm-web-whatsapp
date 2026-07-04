@@ -28,4 +28,20 @@ class MessageTemplateService
     {
         return $this->messageTemplateRepository->findByType($type);
     }
+
+    /**
+     * Get paginated templates.
+     */
+    public function getPaginated(int $perPage, ?string $search)
+    {
+        return $this->messageTemplateRepository->getPaginated($perPage, $search);
+    }
+
+    /**
+     * Save message template.
+     */
+    public function save(array $data, ?int $id = null)
+    {
+        return $this->messageTemplateRepository->createOrUpdate($data, $id);
+    }
 }

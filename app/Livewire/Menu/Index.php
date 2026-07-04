@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Menu;
 
-use App\Models\Menu;
+use App\Services\MenuService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Locked;
@@ -32,6 +32,7 @@ class Index extends Component
         ['name' => 'Urutan'],
         ['name' => 'Route'],
         ['name' => 'Slug'],
+        ['name' => 'Permission'],
         ['name' => 'Status'],
         ['name' => '<i class="fas fa-cogs"></i>', 'class' => 'actions'],
     ];
@@ -41,11 +42,11 @@ class Index extends Component
     public $search = '';
     public $perPage = 10;
 
-    public $menuId, $parentId, $selectedParentName, $parentSearch, $icon, $slug;
+    public $menuId, $parentId, $selectedParentName, $parentSearch, $icon, $slug, $permission;
     #[Validate('required', message: 'Nama Menu tidak boleh kosong')]
     public $name;
     #[Validate('required', message: 'Urutan tidak boleh kosong')]
-    #[Validate('numeric', message: 'Urutan handphone wajib angka')]
+    #[Validate('numeric', message: 'Urutan wajib angka')]
     public $position;
     #[Validate('required', message: 'Route tidak boleh kosong')]
     public $route;
@@ -57,29 +58,30 @@ class Index extends Component
         $this->parentSearch = $name;
     }
 
-    public function save()
+    public function save(MenuService $menuService)
     {
         $this->validate();
 
-        Menu::updateOrCreate(
-            ['id' => $this->menuId],
+        $menuService->save(
             [
                 'name' => $this->name,
-                'parentId' => $this->parentId,
+                'parent_id' => $this->parentId,
                 'route' => $this->route,
-                'slug' => Str::slug($this->slug),
+                'slug' => Str::slug($this->slug ?: $this->name),
                 'position' => $this->position,
                 'icon' => $this->icon,
+                'permission' => $this->permission,
             ],
+            $this->menuId,
         );
 
         session()->flash('success', 'Data Menu Berhasil Disimpan.');
         $this->resetForm();
     }
 
-    public function edit($id)
+    public function edit($id, MenuService $menuService)
     {
-        $menu = Menu::with(['parent'])->findOrFail($id);
+        $menu = $menuService->find($id);
 
         $this->menuId = $id;
         $this->parentId = $menu->parent_id;
@@ -90,7 +92,9 @@ class Index extends Component
         $this->route = $menu->route;
         $this->slug = $menu->slug;
         $this->position = $menu->position;
+        $this->permission = $menu->permission;
         $this->isEdit = true;
+
         $this->dispatch('scrollToTop');
         $this->dispatch('clearError');
     }
@@ -113,14 +117,12 @@ class Index extends Component
     }
 
     #[On('setActive')]
-    public function setActive($id, $status)
+    public function setActive($id, $status, MenuService $menuService)
     {
         try {
             DB::beginTransaction();
 
-            $menu = Menu::findOrFail($id);
-            $menu->is_active = !$status;
-            $menu->save();
+            $menuService->toggleActive($id, !$status);
 
             $message = 'Menu berhasil ' . (!$status ? 'diaktifkan' : 'dinonaktifkan') . '.';
 
@@ -147,12 +149,12 @@ class Index extends Component
     }
 
     #[On('setDelete')]
-    public function setDelete($id)
+    public function setDelete($id, MenuService $menuService)
     {
         try {
             DB::beginTransaction();
 
-            $menu = Menu::where('id', $id)->delete();
+            $menuService->delete($id);
 
             $message = 'Menu berhasil dihapus.';
 
@@ -176,25 +178,20 @@ class Index extends Component
             'route',
             'slug',
             'position',
+            'permission',
+            'isEdit',
         ]);
         $this->dispatch('clearError');
     }
 
-    public function render()
+    public function render(MenuService $menuService)
     {
-        $items = Menu::with('parent')
-            ->when($this->search, function ($query) {
-                $query->whereAny(['name', 'slug', 'route'], 'like', '%' . $this->search . '%');
-            })
-            ->orderByRaw('COALESCE(parent_id, 0) ASC')
-            ->orderBy('position')
-            ->paginate($this->perPage);
+        $items = $menuService->getPaginated($this->perPage, $this->search);
 
-        $menus = Menu::when($this->parentSearch, function ($query) {
-            $query->whereAny(['name'], 'like', '%' . $this->parentSearch . '%');
-        })
-            ->limit(3)
-            ->get();
+        $menus = [];
+        if ($this->parentSearch) {
+            $menus = $menuService->searchParents($this->parentSearch, 3)->all();
+        }
 
         return view('livewire.menu.index', compact(['items', 'menus']));
     }

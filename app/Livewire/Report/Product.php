@@ -2,14 +2,14 @@
 
 namespace App\Livewire\Report;
 
-use App\Models\OrderItem;
-use Illuminate\Support\Facades\DB;
+use App\Services\ReportService;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
 
 class Product extends Component
 {
     public $dateStart, $dateEnd;
+    public $report = [];
 
     #[Locked]
     public $title = 'Laporan Penjualan Per Produk';
@@ -21,42 +21,27 @@ class Product extends Component
         ['name' => 'Pendapatan'],
     ];
 
-    public function mount()
+    public function mount(ReportService $reportService)
     {
         $this->dateStart = now()->subDays(6)->toDateString();
         $this->dateEnd = now()->toDateString();
+        $this->report = $reportService->getProductReport($this->dateStart, $this->dateEnd);
     }
 
     public function updated($propertyName)
     {
         if (in_array($propertyName, ['dateStart', 'dateEnd'])) {
-            $this->report = $this->getReportProperty();
+            $reportService = app(ReportService::class);
+            $this->report = $reportService->getProductReport($this->dateStart, $this->dateEnd);
         }
-    }
-
-    public function getReportProperty()
-    {
-        return OrderItem::select(
-            'product_id',
-            DB::raw('SUM(quantity) as total_quantity'),
-            DB::raw('SUM(quantity * price) as total_income'),
-        )
-            ->whereHas('order', function ($q) {
-                $q->where('status', '!=', 4)
-                    ->whereDate('order_date', '>=', $this->dateStart)
-                    ->whereDate('order_date', '<=', $this->dateEnd);
-            })
-            ->with('product:id,name')
-            ->groupBy('product_id')
-            ->get();
     }
 
     public function render()
     {
         $items = $this->report;
 
-        $totalQty = $items->sum('total_quantity');
-        $totalPrice = $items->sum('total_income');
+        $totalQty = collect($items)->sum('total_quantity');
+        $totalPrice = collect($items)->sum('total_income');
 
         return view('livewire.report.product', compact(['items', 'totalQty', 'totalPrice']));
     }

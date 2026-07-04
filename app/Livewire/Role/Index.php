@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Role;
 
-use App\Models\Role;
+use App\Services\RoleService;
 use Livewire\Component;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\Validate;
@@ -31,22 +31,23 @@ class Index extends Component
     #[Validate('required', message: 'Nama tidak boleh kosong')]
     public $name;
 
-    public function save()
+    public function save(RoleService $roleService)
     {
         $this->validate();
 
-        Role::updateOrCreate(['id' => $this->currentId], ['name' => $this->name]);
+        $roleService->save(['name' => $this->name], $this->currentId);
 
         session()->flash('success', 'Role Pengguna Berhasil Disimpan.');
         $this->resetForm();
     }
 
-    public function edit($id)
+    public function edit($id, RoleService $roleService)
     {
-        $role = Role::findOrFail($id);
+        $role = $roleService->find($id);
 
         $this->currentId = $role->id;
         $this->name = $role->name;
+        $this->isEdit = true;
     }
 
     public function resetForm()
@@ -55,13 +56,9 @@ class Index extends Component
         $this->dispatch('clearError');
     }
 
-    public function render()
+    public function render(RoleService $roleService)
     {
-        $items = Role::when($this->search, function ($q) {
-            $q->where('name', 'like', '%' . $this->search . '%');
-        })
-            ->latest()
-            ->paginate($this->perPage);
+        $items = $roleService->getPaginated($this->perPage, $this->search);
 
         return view('livewire.role.index', compact('items'));
     }

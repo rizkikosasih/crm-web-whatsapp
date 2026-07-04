@@ -2,10 +2,9 @@
 
 namespace App\Livewire\User;
 
-use App\Models\Role;
-use App\Models\User;
+use App\Services\UserService;
+use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
@@ -61,9 +60,9 @@ class Index extends Component
     public $originalEmail;
     public $is_active;
     #[Validate('required', message: 'Role tidak boleh kosong')]
-    public $role_id;
+    public $role_id; // holds the role ID or role name
 
-    public function save()
+    public function save(UserService $userService)
     {
         $this->validate();
 
@@ -90,16 +89,17 @@ class Index extends Component
         try {
             DB::beginTransaction();
 
-            User::updateOrCreate(
-                ['id' => $this->userId],
+            $role = Role::findById($this->role_id);
+
+            $userService->save(
                 [
                     'name' => $this->name,
                     'username' => $this->username,
                     'phone' => $this->phone,
                     'email' => $this->email,
-                    'role_id' => $this->role_id,
-                    'password' => Hash::make($this->username . '123'),
+                    'role' => $role->name,
                 ],
+                $this->userId,
             );
 
             DB::commit();
@@ -112,9 +112,9 @@ class Index extends Component
         $this->resetForm();
     }
 
-    public function edit($id)
+    public function edit($id, UserService $userService)
     {
-        $user = User::findOrFail($id);
+        $user = $userService->find($id);
 
         $this->userId = $id;
         $this->name = $user->name;
@@ -124,7 +124,10 @@ class Index extends Component
         $this->originalPhone = $user->phone;
         $this->email = $user->email;
         $this->originalEmail = $user->email;
-        $this->role_id = $user->role_id;
+
+        $role = $user->roles->first();
+        $this->role_id = $role ? $role->id : null;
+
         $this->isEdit = true;
         $this->dispatch('scrollToTop');
     }
@@ -147,14 +150,12 @@ class Index extends Component
     }
 
     #[On('setActive')]
-    public function setActive($id, $status)
+    public function setActive($id, $status, UserService $userService)
     {
         try {
             DB::beginTransaction();
 
-            $user = User::findOrFail($id);
-            $user->is_active = !$status;
-            $user->save();
+            $userService->toggleActive($id, !$status);
 
             $message = 'Pengguna berhasil ' . (!$status ? 'diaktifkan' : 'dinonaktifkan') . '.';
 
@@ -183,19 +184,15 @@ class Index extends Component
         $this->dispatch('clearError');
     }
 
-    public function render()
+    public function render(UserService $userService)
     {
-        $items = User::with('role')
-            ->when($this->search, function ($q) {
-                $q->whereAny(['name', 'email', 'phone'], 'like', '%' . $this->search . '%');
-            })
-            ->when($this->filterRole, function ($q) {
-                $q->where('role_id', '=', $this->filterRole);
-            })
-            ->where('id', '!=', 1)
-            ->where('id', '!=', auth()->id())
-            ->latest()
-            ->paginate($this->perPage);
+        $roleFilterName = null;
+        if ($this->filterRole) {
+            $roleObj = Role::find($this->filterRole);
+            $roleFilterName = $roleObj ? $roleObj->name : null;
+        }
+
+        $items = $userService->getPaginated($this->perPage, $this->search, $roleFilterName);
 
         $roles = Role::whereRaw('LOWER(name) != ?', ['super admin'])
             ->pluck('name', 'id')

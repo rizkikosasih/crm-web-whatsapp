@@ -3,8 +3,8 @@
 namespace App\Livewire\Role;
 
 use App\Models\Menu;
-use App\Models\Role;
-use Illuminate\Support\Facades\DB;
+use App\Services\RoleService;
+use Spatie\Permission\Models\Permission;
 use Livewire\Component;
 use Livewire\Attributes\Locked;
 use Livewire\WithPagination;
@@ -32,42 +32,56 @@ class Access extends Component
     public $search = '';
     public $perPage = 10;
 
-    public function mount($id)
+    public function mount($id, RoleService $roleService)
     {
-        $role = Role::findOrFail($id);
+        $role = $roleService->find($id);
         $this->roleId = $role->id;
         $this->roleName = $role->name;
     }
 
-    public function toggleMenuAccess(int $menuId)
+    public function toggleMenuAccess(int $menuId, RoleService $roleService)
     {
-        $role = Role::findOrFail($this->roleId);
-        $hasAccess = $role->menus()->where('menus.id', $menuId)->exists();
+        $role = $roleService->find($this->roleId);
+        $menu = Menu::findOrFail($menuId);
 
-        if ($hasAccess) {
-            $role->menus()->detach($menuId);
+        if (!$menu->permission) {
+            return $this->dispatch(
+                'showError',
+                message: 'Menu ini tidak dikaitkan dengan permission apapun.',
+            );
+        }
+
+        // Ensure Spatie permission exists
+        Permission::findOrCreate($menu->permission, 'web');
+
+        if ($role->hasPermissionTo($menu->permission)) {
+            $role->revokePermissionTo($menu->permission);
             $this->dispatch('showSuccess', message: 'Akses menu berhasil dihapus');
         } else {
-            $role->menus()->attach($menuId);
+            $role->givePermissionTo($menu->permission);
             $this->dispatch('showSuccess', message: 'Akses menu berhasil ditambahkan');
         }
     }
 
-    public function render()
+    public function render(RoleService $roleService)
     {
+        $role = $roleService->find($this->roleId);
+
         $items = Menu::with('parent')
             ->when($this->search, function ($q) {
                 $q->where('name', 'like', '%' . $this->search . '%');
             })
-            ->select([
-                'menus.*',
-                DB::raw(
-                    "EXISTS (SELECT 1 FROM menu_roles WHERE menu_roles.menu_id = menus.id AND menu_roles.role_id = $this->roleId ) as is_assigned",
-                ),
-            ])
             ->orderByRaw('COALESCE(parent_id, 0) ASC')
             ->orderBy('position')
             ->paginate($this->perPage);
+
+        // Hydrate is_assigned dynamically from Spatie permissions association
+        $items->getCollection()->transform(function ($menu) use ($role) {
+            $menu->is_assigned = $menu->permission
+                ? $role->hasPermissionTo($menu->permission)
+                : false;
+            return $menu;
+        });
 
         return view('livewire.role.access', compact('items'));
     }

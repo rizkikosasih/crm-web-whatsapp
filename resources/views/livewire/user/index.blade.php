@@ -1,171 +1,195 @@
 @section ('title', $title)
 
-@section ('page-script')
-  @vite (['resources/js/form.js'])
-@endsection
-
-<section class="content">
-  <div class="container-fluid" id="create-or-update-form">
-    <div class="row">
-      <div class="col-12 m-1 p-1">
-        <div class="card card-primary card-outline">
-          <div class="card-header">
-            <div class="card-title">{{ $isEdit ? 'Ubah' : 'Tambah' }} Pengguna</div>
-
-            <x-card.tools minus="true" />
-          </div>
-
-          <div class="card-body text-justify">
-            @if (session()->has('success'))
-              <x-alert.success dismissible="true">{{ session('success') }}</x-alert.success>
-            @endif
-
-            @if (session()->has('error'))
-              <x-alert.danger dismissible="true">{{ session('error') }}</x-alert.danger>
-            @endif
-
-            <form wire:submit.prevent="save">
-              <x-form.input
-                name="name"
-                id="name"
-                label="Nama Pengguna"
-                placeholder="Masukan Nama Pengguna"
-                wire:model.defer="name" />
-
-              <x-form.input
-                name="username"
-                id="username"
-                label="Username Pengguna"
-                placeholder="Masukan Username Pengguna"
-                wire:model.defer="username" />
-
-              <x-form.input
-                name="phone"
-                id="phone"
-                label="No Handphone <small>(contoh: 6285123456789)</small>"
-                placeholder="Masukan no handphone"
-                class="number-only"
-                wire:model.defer="phone" />
-
-              <x-form.input
-                name="email"
-                id="email"
-                type="email"
-                label="Email"
-                placeholder="Masukan email"
-                wire:model.defer="email" />
-
-              <x-form.input-select
-                name="role_id"
-                id="role_id"
-                label="Role Pengguna"
-                placeholder="Pilih Role Pengguna"
-                :options="$roles"
-                optionHeader="Pilih Role Pengguna"
-                wire:model.defer="role_id" />
-
-              <x-form.button-container class="justify-content-end">
-                <x-button wire:click="resetForm" color="danger"> Batal </x-button>
-
-                <x-button type="submit" color="primary"> Simpan </x-button>
-              </x-form.button-container>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
+<div class="space-y-8">
+  <!-- Page Header -->
+  <div>
+    <h1 class="text-2xl font-bold text-white tracking-tight">{{ $title }}</h1>
+    <p class="text-sm text-slate-400 mt-1">Kelola data administrator, petugas gudang, dan staf kasir beserta penugasan role akses Spatie.</p>
   </div>
 
-  <div class="container-fluid" id="list">
-    <div class="row">
-      <div class="col-12 m-1 p-1">
-        <div class="card card-primary card-outline">
-          <div class="card-header">
-            <div class="card-title">Daftar Pengguna</div>
+  <!-- Form Card -->
+  <div id="create-or-update-form" class="w-full">
+    <x-card title="{{ $isEdit ? 'Ubah' : 'Tambah' }} Pengguna">
+      <x-slot:tools>
+        <x-card.tools minus="true" />
+      </x-slot:tools>
 
-            <x-card.tools refresh="true" minus="true" />
+      @if (session()->has('success'))
+        <div class="mb-5">
+          <x-alert.success dismissible="true">{{ session('success') }}</x-alert.success>
+        </div>
+      @endif
+
+      @if (session()->has('error'))
+        <div class="mb-5">
+          <x-alert.danger dismissible="true">{{ session('error') }}</x-alert.danger>
+        </div>
+      @endif
+
+      <form wire:submit.prevent="save" class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <x-form.input
+            name="name"
+            id="name"
+            label="Nama Pengguna"
+            placeholder="Masukkan Nama Pengguna"
+            wire:model="name" />
+
+          <x-form.input
+            name="username"
+            id="username"
+            label="Username Pengguna"
+            placeholder="Masukkan Username Pengguna"
+            wire:model="username" />
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <x-form.input
+            name="phone"
+            id="phone"
+            label="No Handphone (contoh: 6285123456789)"
+            placeholder="Masukkan no handphone"
+            wire:model="phone" />
+
+          <x-form.input
+            name="email"
+            id="email"
+            type="email"
+            label="Email"
+            placeholder="Masukkan email"
+            wire:model="email" />
+        </div>
+
+        <x-form.input-select
+          name="role_id"
+          id="role_id"
+          label="Role Pengguna"
+          placeholder="Pilih Role Pengguna"
+          :options="$roles"
+          optionHeader="Pilih Role Pengguna"
+          wire:model="role_id" />
+
+        <div class="h-px bg-slate-700/50 my-6"></div>
+
+        <x-form.button-container class="justify-end gap-3">
+          <x-button
+            wire:click="resetForm"
+            color="danger"
+            size="sm"
+            type="button"
+            class="cursor-pointer">
+            Batal
+          </x-button>
+
+          <x-button type="submit" color="primary" size="sm" class="cursor-pointer">
+            Simpan
+          </x-button>
+        </x-form.button-container>
+      </form>
+    </x-card>
+  </div>
+
+  <!-- List Card -->
+  <div id="list" class="w-full">
+    <x-card title="Daftar Pengguna">
+      <x-slot:tools>
+        <x-card.tools refresh="true" minus="true" />
+      </x-slot:tools>
+
+      <!-- Table Filters -->
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+        <div class="flex flex-wrap sm:flex-nowrap gap-4 items-center w-full">
+          <div class="w-24">
+            <x-form.input-select
+              name="perPage"
+              wire:model.live="perPage"
+              :options="[5 => 5, 10 => 10, 20 => 20, 50 => 50]"
+              parentClass="mb-0" />
           </div>
-
-          <div class="card-body text-justify">
-            <div
-              class="d-flex justify-content-center justify-content-sm-start align-items-start gap-sm-3">
-              <div class="col-auto">
-                <x-form.input-group-select
-                  prependText="Length"
-                  name="perPage"
-                  wire:model.live.debounce.250ms="perPage"
-                  :options="[5 => 5, 10 => 10, 20 => 20, 50 => 50]" />
-              </div>
-
-              <div class="col-auto">
-                <x-form.input-group-select
-                  prependText="Role"
-                  name="filterRole"
-                  wire:model.live.debounce.250ms="filterRole"
-                  :options="$roles"
-                  optionHeader="Semua" />
-              </div>
-
-              <div class="ml-auto">
-                <div class="col-auto">
-                  <x-form.input
-                    name="search"
-                    placeholder="Cari Pengguna..."
-                    wire:model.live.debounce.250ms="search" />
-                </div>
-              </div>
-            </div>
-
-            <div class="table-responsive">
-              <table class="table table-striped table-bordered">
-                <x-table.header :columns="$tableHeader" />
-
-                <tbody>
-                  @forelse ($items as $index => $item)
-                  <tr>
-                    <td class="text-center">{{ $index + $items->firstItem() }}</td>
-                    <td>{{ $item->name }}</td>
-                    <td>{{ $item->email }}</td>
-                    <td>{{ $item->phone }}</td>
-                    <td class="text-center">
-                      <x-button
-                        wire:click="confirmActive({{ $item->id }}, {{ $item->is_active }})"
-                        color="{{ $colorStatus[$item->is_active] }}"
-                        size="sm">
-                        {{ $statusList[$item->is_active] }}
-                      </x-button>
-                    </td>
-                    <td>{{ $item->role->name }}</td>
-                    <td class="actions">
-                      <div class="btn-group">
-                        <x-button
-                          wire:click="edit({{ $item->id }})"
-                          class="tooltips"
-                          title="Ubah"
-                          color="primary"
-                          size="sm">
-                          <i class="fas fa-pencil"></i>
-                        </x-button>
-                      </div>
-                    </td>
-                  </tr>
-                  @empty
-                  <tr>
-                    <td colspan="{{ sizeof($tableHeader) }}" class="text-center">Data Kosong</td>
-                  </tr>
-                  @endforelse
-                </tbody>
-              </table>
-            </div>
-
-            {{
-              $items->links(
-                'partials.pagination.bootstrap4',
-              )
-            }}
+          <div class="w-48">
+            <x-form.input-select
+              name="filterRole"
+              wire:model.live="filterRole"
+              :options="$roles"
+              optionHeader="Semua Role"
+              parentClass="mb-0" />
           </div>
         </div>
+        <div class="w-full sm:w-64 shrink-0">
+          <x-form.input
+            name="search"
+            placeholder="Cari Pengguna..."
+            wire:model.live.debounce.250ms="search"
+            parentClass="mb-0" />
+        </div>
       </div>
-    </div>
+
+      <!-- Loading Overlay -->
+      <x-overlay target="search, perPage, filterRole, gotoPage, nextPage">
+        <div class="overflow-x-auto rounded-xl border border-slate-700/80 bg-slate-900/10">
+          <table class="min-w-full divide-y divide-slate-700/50">
+            <x-table.header :columns="$tableHeader" />
+            <tbody class="divide-y divide-slate-800 bg-transparent text-slate-300">
+              @forelse ($items as $index => $item)
+                @php
+                  $userRole = $item->roles->first();
+                @endphp
+                <tr class="hover:bg-slate-800/20 transition duration-150">
+                  <td
+                    class="px-6 py-4 text-center text-sm font-medium text-slate-500 whitespace-nowrap">
+                    {{ $index + $items->firstItem() }}
+                  </td>
+                  <td class="px-6 py-4 text-sm font-semibold text-white whitespace-nowrap">
+                    {{ $item->name }}
+                  </td>
+                  <td class="px-6 py-4 text-sm text-slate-400 whitespace-nowrap">
+                    {{ $item->email }}
+                  </td>
+                  <td class="px-6 py-4 text-sm text-slate-400 whitespace-nowrap">
+                    {{ $item->phone }}
+                  </td>
+                  <td class="px-6 py-4 text-center whitespace-nowrap">
+                    <button
+                      type="button"
+                      wire:click="confirmActive({{ $item->id }}, {{ $item->is_active }})"
+                      class="inline-flex items-center justify-center px-2.5 py-1 text-xs font-bold rounded-full cursor-pointer transition duration-150 {{ $item->is_active ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/25' : 'bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/25' }}"
+                      title="{{ $titleStatus[$item->is_active] }}">
+                      {{ $statusList[$item->is_active] }}
+                    </button>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-center">
+                    <span
+                      class="inline-flex items-center justify-center px-2.5 py-1 text-xs font-bold rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                      {{ $userRole ? $userRole->name : '-' }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium actions">
+                    <x-button
+                      wire:click="edit({{ $item->id }})"
+                      color="primary"
+                      size="sm"
+                      class="cursor-pointer"
+                      title="Ubah">
+                      <i class="fas fa-pencil mr-1 text-xs"></i> Ubah
+                    </x-button>
+                  </td>
+                </tr>
+              @empty
+                <tr>
+                  <td
+                    colspan="{{ sizeof($tableHeader) }}"
+                    class="px-6 py-10 text-center text-sm font-medium text-slate-500 bg-slate-800/10">
+                    Data Kosong
+                  </td>
+                </tr>
+              @endforelse
+            </tbody>
+          </table>
+        </div>
+      </x-overlay>
+
+      <!-- Pagination -->
+      <div class="mt-6">{{ $items->links() }}</div>
+    </x-card>
   </div>
-</section>
+</div>

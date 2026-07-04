@@ -2,6 +2,7 @@
 
 namespace App\Livewire\User;
 
+use App\Services\UserService;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -39,11 +40,9 @@ class Profile extends Component
     #[Locked]
     public $isPasswordVisible = false;
 
-    public function mount()
+    public function mount(UserService $userService)
     {
-        $user = User::with('role')
-            ->where('id', '=', auth()->user()->id)
-            ->first();
+        $user = $userService->find(auth()->id());
 
         $this->userId = $user->id;
         $this->name = $user->name;
@@ -54,7 +53,7 @@ class Profile extends Component
         $this->address = $user->address;
         $this->avatar = $user->avatar;
         $this->originalAvatar = $user->avatar;
-        $this->roleName = $user->role->name;
+        $this->roleName = $user->roles->first()?->name ?? 'User';
         $this->originalPassword = $user->password;
     }
 
@@ -63,7 +62,7 @@ class Profile extends Component
         auth()->loginUsingId($this->userId);
     }
 
-    public function updateProfile()
+    public function updateProfile(UserService $userService)
     {
         $this->isPasswordVisible = false;
 
@@ -112,10 +111,10 @@ class Profile extends Component
 
         if ($this->avatar instanceof TemporaryUploadedFile) {
             $filename = createFilename($this->name, $this->avatar->getClientOriginalExtension());
-            /* Simpan ke lokal */
+            /* Save to local disk */
             $avatarPath = $this->avatar->storeAs($this->directory, $filename, 'public');
 
-            $oldAvatar = User::find($this->userId)?->avatar;
+            $oldAvatar = $userService->find($this->userId)?->avatar;
             if (isset($oldAvatar) && $avatarPath && $oldAvatar !== $avatarPath) {
                 Storage::disk('public')->delete($oldAvatar);
             }
@@ -128,7 +127,7 @@ class Profile extends Component
         try {
             DB::beginTransaction();
 
-            $this->originalAvatar = $avatarPath ?? User::find($this->userId)?->avatar;
+            $this->originalAvatar = $avatarPath ?? $userService->find($this->userId)?->avatar;
 
             User::where('id', $this->userId)->update([
                 'name' => $this->name,

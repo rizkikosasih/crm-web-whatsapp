@@ -2,8 +2,7 @@
 
 namespace App\Livewire\MessageTemplate;
 
-use App\Models\MessageTemplate;
-use Illuminate\Support\Str;
+use App\Services\MessageTemplateService;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -44,26 +43,26 @@ class Index extends Component
     public $search;
     public $perPage = 5;
 
-    public function save()
+    public function save(MessageTemplateService $messageTemplateService)
     {
         $this->validate();
 
-        MessageTemplate::updateOrCreate(
-            ['id' => $this->templateId],
+        $messageTemplateService->save(
             [
                 'title' => $this->titleTemplate,
                 'body' => e(str_replace(["\r\n", "\r", "\n"], "\n", $this->body)),
                 'type' => $this->type,
             ],
+            $this->templateId,
         );
 
         $this->resetForm();
         session()->flash('success', 'Template Pesan berhasil disimpan!');
     }
 
-    public function edit($id)
+    public function edit($id, MessageTemplateService $messageTemplateService)
     {
-        $template = MessageTemplate::findOrFail($id);
+        $template = $messageTemplateService->find($id);
         $this->templateId = $template->id;
         $this->titleTemplate = $template->title;
         $this->body = $template->body;
@@ -78,13 +77,9 @@ class Index extends Component
         $this->dispatch('clearError');
     }
 
-    public function render()
+    public function render(MessageTemplateService $messageTemplateService)
     {
-        $items = MessageTemplate::when($this->search, function ($query) {
-            $query->whereAny(['title', 'body'], 'like', '%' . $this->search . '%');
-        })
-            ->latest()
-            ->paginate($this->perPage);
+        $items = $messageTemplateService->getPaginated($this->perPage, $this->search);
 
         return view('livewire.message-template.index', compact('items'));
     }
