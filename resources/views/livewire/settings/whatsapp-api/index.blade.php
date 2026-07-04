@@ -54,7 +54,9 @@
               color="success"
               size="sm"
               class="cursor-pointer font-bold"
-              wire:click="getQrCode">
+              wire:click="getQrCode"
+              wire:target="getQrCode"
+              loadingText="Menghubungkan...">
               <x-icon name="qr-code" class="w-4 h-4 mr-1.5 inline-block" /> Hubungkan WhatsApp (Scan
               QR)
             </x-button>
@@ -64,6 +66,7 @@
             color="primary"
             size="sm"
             class="cursor-pointer"
+            wire:target="save"
             loadingText="Menyimpan...">
             <x-icon name="save" class="w-4 h-4 mr-1.5 inline-block" /> Simpan Konfigurasi
           </x-button>
