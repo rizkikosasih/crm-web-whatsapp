@@ -11,10 +11,10 @@
 
 <div @class (['mb-4', $parentClass])>
   <div
-    class="flex rounded-xl shadow-sm border border-slate-700 bg-slate-900/50 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-500/20 transition duration-150 overflow-hidden">
+    class="flex rounded-xl shadow-sm border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900/50 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-500/20 transition duration-150 overflow-hidden">
     @if ($prependText)
       <span
-        class="inline-flex items-center px-3 border-r border-slate-700 bg-slate-800 text-slate-400 text-sm shrink-0">
+        class="inline-flex items-center px-3 border-r border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 text-sm shrink-0">
         {!! $prependText !!}
       </span>
     @endif
@@ -24,22 +24,28 @@
       id="{{ $id ?? $name }}"
       {{
         $attributes->class([
-          'block w-full border-0 bg-transparent text-white focus:ring-0 focus:outline-none sm:text-sm py-2.5 px-3',
-          'text-red-400' => $errors->has($name),
+          'block w-full border-0 bg-transparent text-slate-900 dark:text-white focus:ring-0 focus:outline-none sm:text-sm py-2.5 px-3',
+          'text-red-550 dark:text-red-400' => $errors->has($name),
         ])
       }}>
       @if ($optionHeader)
-        <option value="" class="bg-slate-900 text-slate-500">{{ $optionHeader }}</option>
+        <option value="" class="bg-white dark:bg-slate-900 text-slate-500">
+          {{ $optionHeader }}
+        </option>
       @endif
 
       @foreach ($options as $key => $value)
-        <option value="{{ $key }}" class="bg-slate-900 text-white">{!! $value !!}</option>
+        <option
+          value="{{ $key }}"
+          class="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
+          {!! $value !!}
+        </option>
       @endforeach
     </select>
 
     @if ($appendText)
       <span
-        class="inline-flex items-center px-3 border-l border-slate-700 bg-slate-800 text-slate-400 text-sm shrink-0">
+        class="inline-flex items-center px-3 border-l border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 text-sm shrink-0">
         {!! $appendText !!}
       </span>
     @endif

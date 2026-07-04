@@ -63,25 +63,25 @@ class Dashboard extends Component
         $statusConfig = [
             [
                 'title' => 'Belum Dibayar',
-                'icon' => 'fas fa-circle-exclamation',
+                'icon' => 'alert-circle',
                 'color' => 'danger',
                 'colorRibbon' => 'success',
             ],
             [
                 'title' => 'Sudah Dibayar',
-                'icon' => 'fas fa-receipt',
+                'icon' => 'receipt',
                 'color' => 'warning',
                 'colorRibbon' => 'primary',
             ],
             [
                 'title' => 'Dalam Pengiriman',
-                'icon' => 'fas fa-truck-fast',
+                'icon' => 'truck',
                 'color' => 'primary',
                 'colorRibbon' => 'warning',
             ],
             [
                 'title' => 'Selesai',
-                'icon' => 'fas fa-circle-check',
+                'icon' => 'check-circle',
                 'color' => 'success',
                 'colorRibbon' => 'danger',
             ],

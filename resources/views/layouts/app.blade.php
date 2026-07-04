@@ -1,5 +1,9 @@
 <!DOCTYPE html>
-<html lang="id" class="h-full bg-slate-900">
+<html
+  lang="id"
+  class="h-full"
+  x-data="{ darkMode: localStorage.getItem('theme') === 'dark' }"
+  :class="{ dark: darkMode }">
 <head>
   <meta charset="UTF-8" />
   <title>@yield ('title', env('APP_NAME', 'CRM WhatsApp'))</title>
@@ -13,6 +17,18 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
     rel="stylesheet" />
+
+  <!-- Anti-FOUC Script -->
+  <script>
+    if (
+      localStorage.getItem('theme') === 'dark' ||
+      (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+    ) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
 
   @vite (['resources/css/app.css', 'resources/js/app.js'])
   @livewireStyles
@@ -29,7 +45,7 @@
 </head>
 <body
   x-data="{ sidebarOpen: window.innerWidth >= 768 }"
-  class="h-full text-slate-200 antialiased selection:bg-indigo-500 selection:text-white bg-slate-900">
+  class="h-full text-slate-800 dark:text-slate-200 antialiased selection:bg-indigo-500 selection:text-white bg-slate-50 dark:bg-slate-900 transition-colors duration-150">
   <div class="flex h-full overflow-hidden">
     <!-- Sidebar Navigation -->
     @livewire ('layouts.sidebar')

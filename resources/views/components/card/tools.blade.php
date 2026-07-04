@@ -2,7 +2,7 @@
   'refresh' => null,
   'minus' => null,
   'url' => null,
-  'urlIcon' => 'fas fa-backward-step',
+  'urlIcon' => 'arrow-left',
   'urlTitle' => 'Kembali',
 ])
 
@@ -15,7 +15,9 @@
       title="{{ $urlTitle }}"
       class="tooltip cursor-pointer"
       wire:navigate>
-      <i class="{{ $urlIcon }} text-xs"></i>
+      <x-icon
+        name="{{ str_starts_with($urlIcon, 'fa') ? 'arrow-left' : $urlIcon }}"
+        class="w-3.5 h-3.5" />
     </x-link.button>
   @endif
 
@@ -26,7 +28,7 @@
       title="Refresh"
       class="tooltip cursor-pointer"
       x-on:click="$wire.$refresh()">
-      <i class="fas fa-arrows-rotate text-xs"></i>
+      <x-icon name="refresh-cw" class="w-3.5 h-3.5" />
     </x-button>
   @endif
 
@@ -42,7 +44,7 @@
           .querySelector('.card-body-collapse')
           .classList.toggle('hidden')
       ">
-      <i class="fas fa-minus text-xs"></i>
+      <x-icon name="minus" class="w-3.5 h-3.5" />
     </x-button>
   @endif
 </div>
