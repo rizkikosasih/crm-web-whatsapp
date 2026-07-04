@@ -1,62 +1,13 @@
-@import 'select2/dist/css/select2.min.css';
-@import 'sweetalert2/dist/sweetalert2.min.css';
-@import 'icheck-bootstrap/icheck-bootstrap.min.css';
-@import 'admin-lte/dist/css/adminlte.min.css';
-@import '@fortawesome/fontawesome-free/css/all.min.css';
-@import './bootstrap-grid.min.css';
-@import './bootstrap-utilities.min.css';
+@import 'tailwindcss';
 
-#nprogress {
-  position: fixed !important;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 99999 !important;
-}
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source "../**/*.blade.php";
+@source "../**/*.js";
+@source "../**/*.vue";
 
-.avatar-image-navbar {
-  width: 24px;
-  height: 24px;
-}
-
-li.page-item:not(.disabled, .active) {
-  cursor: pointer;
-}
-
-.circle {
-  border-radius: 99%;
-}
-
-table.order-detail tr td:first-child {
-  width: 25%;
-  font-weight: 600;
-}
-
-table.order-detail tr td:nth-child(2) {
-  width: 10%;
-  text-align: center;
-}
-
-table.order-detail tr td:last-child {
-  width: 65%;
-}
-
-.card-body {
-  position: relative;
-}
-
-.swal2-container .swal2-actions {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-
-.custom-switch .custom-control-label::after,
-.custom-switch .custom-control-label::before {
-  cursor: pointer;
-}
-
-th.actions,
-td.actions {
-  text-align: center;
+@theme {
+  --font-sans:
+    'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol', 'Noto Color Emoji';
 }

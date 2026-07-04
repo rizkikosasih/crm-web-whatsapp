@@ -1,7 +1,7 @@
-@section('title', $title)
+@section ('title', $title)
 
-@section('page-script')
-  @vite(['resources/js/form.js'])
+@section ('page-script')
+  @vite (['resources/js/form.js'])
 @endsection
 
 <section class="content">
@@ -12,7 +12,7 @@
           <div class="card-header">
             <div class="card-title">{{ $isEdit ? 'Ubah' : 'Tambah' }} Menu</div>
 
-            <x-card.tools minus="true"/>
+            <x-card.tools minus="true" />
           </div>
 
           <div class="card-body text-justify">
@@ -32,8 +32,7 @@
                   :selectedName="$selectedParentName"
                   searchModel="parentSearch"
                   selectedNameModel="selectedParentName"
-                  onSelect="selectParent"
-                />
+                  onSelect="selectParent" />
 
                 <x-form.input
                   name="name"
@@ -41,8 +40,7 @@
                   label="Nama Menu"
                   placeholder="Masukan nama menu"
                   wire:model.defer="name"
-                  horizontal="true"
-                />
+                  horizontal="true" />
 
                 <x-form.input
                   name="position"
@@ -52,8 +50,7 @@
                   placeholder="Masukan urutan menu"
                   class="number-only"
                   wire:model.defer="position"
-                  horizontal="true"
-                />
+                  horizontal="true" />
 
                 <x-form.input
                   name="icon"
@@ -61,8 +58,7 @@
                   label="Icon <small>(<a href='https://fontawesome.com/v6/icons' target='_blank'>Font Awesome</a>)</small>"
                   placeholder="Masukan icon menu"
                   wire:model.defer="icon"
-                  horizontal="true"
-                />
+                  horizontal="true" />
 
                 <x-form.input
                   name="route"
@@ -70,8 +66,7 @@
                   label="Route"
                   placeholder="Masukan route menu"
                   wire:model.defer="route"
-                  horizontal="true"
-                />
+                  horizontal="true" />
 
                 <x-form.input
                   name="slug"
@@ -79,18 +74,13 @@
                   label="Slug"
                   placeholder="Masukan slug menu"
                   wire:model.defer="slug"
-                  horizontal="true"
-                />
+                  horizontal="true" />
               </x-overlay>
 
               <x-form.button-container class="justify-content-end">
-                <x-button wire:click="resetForm" color="danger">
-                  Batal
-                </x-button>
+                <x-button wire:click="resetForm" color="danger"> Batal </x-button>
 
-                <x-button type="submit" color="primary">
-                  Simpan
-                </x-button>
+                <x-button type="submit" color="primary"> Simpan </x-button>
               </x-form.button-container>
             </form>
           </div>
@@ -104,14 +94,14 @@
       <div class="col-12 m-1 p-1">
         <div class="card card-primary card-outline">
           <div class="card-body text-justify">
-            <div class="d-flex justify-content-center justify-content-sm-start align-items-start gap-sm-3">
+            <div
+              class="d-flex justify-content-center justify-content-sm-start align-items-start gap-sm-3">
               <div class="col-auto">
                 <x-form.input-group-select
                   prependText="Length"
                   name="perPage"
                   wire:model.live="perPage"
-                  :options="[5 => 5, 10 => 10, 20 => 20, 50 => 50]"
-                />
+                  :options="[5 => 5, 10 => 10, 20 => 20, 50 => 50]" />
               </div>
 
               <div class="ml-auto">
@@ -119,8 +109,7 @@
                   <x-form.input
                     name="search"
                     placeholder="Cari menu..."
-                    wire:model.live.debounce.250ms="search"
-                  />
+                    wire:model.live.debounce.250ms="search" />
                 </div>
               </div>
             </div>
@@ -132,57 +121,58 @@
 
                   <tbody>
                     @forelse ($items as $index => $item)
-                      <tr>
-                        <td>{{ $item->parent?->name ?? '-' }}</td>
-                        <td>{{ $item->name }}</td>
-                        <td><i class="{{ $item->icon }}"></i> {{ $item->icon }}</td>
-                        <td class="text-center">{{ $item->position }}</td>
-                        <td>{{ $item->route }}</td>
-                        <td>{{ $item->slug }}</td>
-                        <td class="text-center">
+                    <tr>
+                      <td>{{ $item->parent?->name ?? '-' }}</td>
+                      <td>{{ $item->name }}</td>
+                      <td><i class="{{ $item->icon }}"></i> {{ $item->icon }}</td>
+                      <td class="text-center">{{ $item->position }}</td>
+                      <td>{{ $item->route }}</td>
+                      <td>{{ $item->slug }}</td>
+                      <td class="text-center">
+                        <x-button
+                          wire:click="confirmActive({{ $item->id }}, {{ $item->is_active }})"
+                          color="{{ $colorStatus[$item->is_active] }}"
+                          size="sm">
+                          {{ $statusList[$item->is_active] }}
+                        </x-button>
+                      </td>
+                      <td class="actions">
+                        <div class="btn-group">
                           <x-button
-                            wire:click="confirmActive({{ $item->id }}, {{ $item->is_active }})"
-                            color="{{ $colorStatus[$item->is_active] }}"
-                            size="sm"
-                          >
-                            {{ $statusList[$item->is_active] }}
+                            wire:click="edit({{$item->id}})"
+                            class="tooltips"
+                            title="Ubah"
+                            color="primary"
+                            size="sm">
+                            <i class="fas fa-pencil"></i>
                           </x-button>
-                        </td>
-                        <td class="actions">
-                          <div class="btn-group">
-                            <x-button
-                              wire:click="edit({{$item->id}})"
-                              class="tooltips"
-                              title="Ubah"
-                              color="primary"
-                              size="sm"
-                            >
-                              <i class="fas fa-pencil"></i>
-                            </x-button>
 
-                            <x-button
-                              wire:click="confirmDelete({{$item->id}})"
-                              class="tooltips"
-                              title="Hapus"
-                              color="danger"
-                              size="sm"
-                            >
-                              <i class="fas fa-trash"></i>
-                            </x-button>
-                          </div>
-                        </td>
-                      </tr>
+                          <x-button
+                            wire:click="confirmDelete({{$item->id}})"
+                            class="tooltips"
+                            title="Hapus"
+                            color="danger"
+                            size="sm">
+                            <i class="fas fa-trash"></i>
+                          </x-button>
+                        </div>
+                      </td>
+                    </tr>
                     @empty
-                      <tr>
-                        <td colspan="{{ sizeof($tableHeader) }}" class="text-center">Data Kosong</td>
-                      </tr>
+                    <tr>
+                      <td colspan="{{ sizeof($tableHeader) }}" class="text-center">Data Kosong</td>
+                    </tr>
                     @endforelse
                   </tbody>
                 </table>
               </x-overlay>
             </div>
 
-            {{ $items->links('partials.pagination.bootstrap4') }}
+            {{
+              $items->links(
+                'partials.pagination.bootstrap4',
+              )
+            }}
           </div>
         </div>
       </div>

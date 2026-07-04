@@ -7,14 +7,14 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CustomerFactory extends Factory
 {
-  protected $model = Customer::class;
+    protected $model = Customer::class;
 
-  public function definition(): array
-  {
-    return [
-      'name' => $this->faker->name(),
-      'phone' => $this->faker->unique()->numerify('628###########'), // Format nomor WA Indonesia
-      'notes' => $this->faker->optional()->sentence(),
-    ];
-  }
+    public function definition(): array
+    {
+        return [
+            'name' => $this->faker->name(),
+            'phone' => $this->faker->unique()->numerify('628###########'), // Format nomor WA Indonesia
+            'notes' => $this->faker->optional()->sentence(),
+        ];
+    }
 }

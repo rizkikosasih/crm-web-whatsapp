@@ -1,4 +1,4 @@
-@section('title', $title)
+@section ('title', $title)
 
 <section class="content">
   <div class="container-fluid">
@@ -10,7 +10,8 @@
               <x-alert.success dismissible="true">{{ session('success') }}</x-alert.success>
             @endif
 
-            <div class="d-flex justify-content-center justify-content-sm-start align-items-start flex-wrap gap-sm-3">
+            <div
+              class="d-flex justify-content-center justify-content-sm-start align-items-start flex-wrap gap-sm-3">
               <div class="col-auto px-0">
                 <x-form.input-group-select
                   prependText="Status"
@@ -18,8 +19,15 @@
                   parentClass="mb-0"
                   optionHeader="Semua Status"
                   wire:model.live="status"
-                  :options="[0 => 'Belum Bayar', 1 => 'Sudah Bayar', 2 => 'Pengiriman', 3 => 'Selesai', 4 => 'Batal']"
-                />
+                  :options="
+                    [
+      0 => 'Belum Bayar',
+      1 => 'Sudah Bayar',
+      2 => 'Pengiriman',
+      3 => 'Selesai',
+      4 => 'Batal',
+    ]
+                  " />
               </div>
 
               <div class="col-auto px-0">
@@ -28,8 +36,7 @@
                   type="date"
                   name="dateStart"
                   parentClass="mb-0"
-                  wire:model.live="dateStart"
-                />
+                  wire:model.live="dateStart" />
               </div>
 
               <div class="col-auto px-0">
@@ -39,8 +46,7 @@
                   type="date"
                   name="dateEnd"
                   parentClass="mb-0"
-                  wire:model.live="dateEnd"
-                />
+                  wire:model.live="dateEnd" />
               </div>
 
               <div class="col-auto px-0">
@@ -49,8 +55,7 @@
                   class="tooltips"
                   title="Export ke Excel"
                   color="primary"
-                  wire:loading.attr="disabled"
-                >
+                  wire:loading.attr="disabled">
                   <i class="fas fa-file-excel"></i>
                 </x-button>
               </div>
@@ -61,8 +66,7 @@
                   class="tooltips"
                   title="Refresh Halaman"
                   color="info"
-                  wire:loading.attr="disabled"
-                >
+                  wire:loading.attr="disabled">
                   <i class="fas fa-refresh"></i>
                 </x-button>
               </div>
@@ -109,4 +113,3 @@
     </div>
   </div>
 </section>
-

@@ -1,4 +1,4 @@
-@props([
+@props ([
   'refresh' => null,
   'minus' => null,
   'url' => null,
@@ -6,22 +6,43 @@
   'urlTitle' => 'Kembali',
 ])
 
-<div class="card-tools">
+<div class="flex items-center gap-1.5 shrink-0">
   @if ($url)
-    <x-link.button href="{{ $url }}" color="tool" class="tooltips" title="{{ $urlTitle}}" wire:navigate>
-      <i class="{{ $urlIcon }}"></i>
+    <x-link.button
+      url="{{ $url }}"
+      color="secondary"
+      size="xs"
+      title="{{ $urlTitle }}"
+      class="tooltip cursor-pointer"
+      wire:navigate>
+      <i class="{{ $urlIcon }} text-xs"></i>
     </x-link.button>
   @endif
 
   @if ($refresh)
-    <x-button color="tool" class="tooltips" title="Refresh" x-on:click="$dispatch('refresh-with-tooltips');$wire.$refresh()">
-      <i class="fas fa-refresh"></i>
+    <x-button
+      color="secondary"
+      size="xs"
+      title="Refresh"
+      class="tooltip cursor-pointer"
+      x-on:click="$wire.$refresh()">
+      <i class="fas fa-arrows-rotate text-xs"></i>
     </x-button>
   @endif
 
   @if ($minus)
-    <x-button color="tool" data-card-widget="collapse">
-      <i class="fas fa-minus"></i>
+    <x-button
+      color="secondary"
+      size="xs"
+      class="tooltip cursor-pointer"
+      x-data
+      x-on:click="
+        $el
+          .closest('.card-container')
+          .querySelector('.card-body-collapse')
+          .classList.toggle('hidden')
+      ">
+      <i class="fas fa-minus text-xs"></i>
     </x-button>
   @endif
 </div>

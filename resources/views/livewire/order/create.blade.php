@@ -1,7 +1,7 @@
-@section('title', $title)
+@section ('title', $title)
 
-@section('page-script')
-  @vite(['resources/js/form.js'])
+@section ('page-script')
+  @vite (['resources/js/form.js'])
 @endsection
 
 <section class="content">
@@ -10,11 +10,7 @@
       <div class="col-12 m-1 p-1">
         <div class="card card-primary card-outline">
           <div class="card-header">
-            <x-link.button
-              url="{{ url('transaksi/order') }}"
-              color="danger"
-              size="sm"
-            >
+            <x-link.button url="{{ url('transaksi/order') }}" color="danger" size="sm">
               <i class="fas fa-arrow-left"></i> Kembali
             </x-link.button>
           </div>
@@ -31,10 +27,9 @@
               :selectedName="$selectedCustomerName"
               searchModel="customerSearch"
               selectedNameModel="selectedCustomerName"
-              onSelect="selectCustomer"
-            />
+              onSelect="selectCustomer" />
 
-            <hr/>
+            <hr />
 
             <div class="form-group row">
               <div class="col-md-6">
@@ -47,12 +42,11 @@
                   :selectedName="$selectedProductName"
                   searchModel="productSearch"
                   selectedNameModel="selectedProductName"
-                  onSelect="selectProduct"
-                />
+                  onSelect="selectProduct" />
               </div>
               <div class="col-md-3">
                 <label>Jumlah</label>
-                <input type="number" wire:model="quantity" class="form-control" min="1">
+                <input type="number" wire:model="quantity" class="form-control" min="1" />
               </div>
               <div class="col-md-3">
                 <label>&nbsp;</label>
@@ -62,8 +56,8 @@
               </div>
             </div>
 
-            @if($orderItems)
-              <hr/>
+            @if ($orderItems)
+              <hr />
 
               <div class="table-responsive">
                 <table class="table table-bordered">
@@ -82,7 +76,13 @@
                         <td>{{ $item['name'] }}</td>
                         <td class="text-end">{{ rupiah($item['price']) }}</td>
                         <td class="text-center">{{ $item['quantity'] }}</td>
-                        <td class="text-end">{{ rupiah($item['price'] * $item['quantity']) }}</td>
+                        <td class="text-end">
+                          {{
+                            rupiah(
+                              $item['price'] * $item['quantity'],
+                            )
+                          }}
+                        </td>
                         <td class="actions">
                           <div class="btn-group">
                             <x-button
@@ -90,8 +90,7 @@
                               color="danger"
                               size="sm"
                               wire:click="removeItem({{ $index }})"
-                              title="Hapus Item"
-                            >
+                              title="Hapus Item">
                               <i class="fas fa-remove"></i>
                             </x-button>
                           </div>
@@ -103,7 +102,13 @@
                     <tr>
                       <td colspan="3" class="text-end"><h5>Total</h5></td>
                       <td class="text-end">
-                        <h5 class="fw-bold">{{ rupiah(collect($orderItems)->sum(fn ($i) => $i['price'] * $i['quantity'])) }}</h5>
+                        <h5 class="fw-bold">
+                          {{
+                            rupiah(
+                              collect($orderItems)->sum(fn($i) => $i['price'] * $i['quantity']),
+                            )
+                          }}
+                        </h5>
                       </td>
                     </tr>
                   </tfoot>
@@ -118,4 +123,3 @@
     </div>
   </div>
 </section>
-

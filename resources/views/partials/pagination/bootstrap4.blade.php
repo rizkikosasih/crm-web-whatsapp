@@ -5,18 +5,28 @@
         {{-- Previous Page Link --}}
         @if ($paginator->onFirstPage())
           <li class="disabled" aria-disabled="true" aria-label="@lang('pagination.previous')">
-              <span aria-hidden="true">&lsaquo;</span>
+            <span aria-hidden="true">&lsaquo;</span>
           </li>
         @else
           <li>
-            <a wire:click="gotoPage({{ $paginator->currentPage() - 1 }})" rel="prev" aria-label="@lang('pagination.previous')">&lsaquo;</a>
+            <a
+              wire:click="gotoPage({{ $paginator->currentPage() - 1 }})"
+              rel="prev"
+              aria-label="@lang('pagination.previous')"
+              >&lsaquo;</a
+            >
           </li>
         @endif
 
         {{-- Next Page Link --}}
         @if ($paginator->hasMorePages())
           <li>
-            <a wire:click="gotoPage({{ $paginator->currentPage() + 1 }})" rel="next" aria-label="@lang('pagination.next')">&rsaquo;</a>
+            <a
+              wire:click="gotoPage({{ $paginator->currentPage() + 1 }})"
+              rel="next"
+              aria-label="@lang('pagination.next')"
+              >&rsaquo;</a
+            >
           </li>
         @else
           <li class="disabled" aria-disabled="true" aria-label="@lang('pagination.next')">
@@ -27,7 +37,7 @@
     </div>
 
     <div class="d-none flex-md-fill d-md-flex align-items-md-center justify-content-md-between">
-      <p class="small text-muted" style="margin: 18px 0;">
+      <p class="small text-muted" style="margin: 18px 0">
         Total Records
         <span class="fw-semibold">{{ $paginator->total() }}</span>
       </p>
@@ -35,22 +45,31 @@
       <div>
         <ul class="pagination mb-0">
           {{-- First Page Link --}}
-           @if ($paginator->onFirstPage())
-              <li class="page-item disabled"><span class="page-link">&lsaquo;&lsaquo;</span></li>
-            @else
-              <li class="page-item">
-                <a class="page-link" wire:click="gotoPage(1)">&lsaquo;&lsaquo;</a>
-              </li>
-            @endif
+          @if ($paginator->onFirstPage())
+            <li class="page-item disabled"><span class="page-link">&lsaquo;&lsaquo;</span></li>
+          @else
+            <li class="page-item">
+              <a class="page-link" wire:click="gotoPage(1)">&lsaquo;&lsaquo;</a>
+            </li>
+          @endif
 
           {{-- Previous Page Link --}}
           @if ($paginator->onFirstPage())
-            <li class="page-item disabled" aria-disabled="true" aria-label="@lang('pagination.previous')">
+            <li
+              class="page-item disabled"
+              aria-disabled="true"
+              aria-label="@lang('pagination.previous')">
               <span class="page-link" aria-hidden="true">&lsaquo;</span>
             </li>
           @else
             <li class="page-item">
-              <a class="page-link" wire:click="gotoPage({{ $paginator->currentPage() - 1 }})" rel="prev" aria-label="@lang('pagination.previous')">&lsaquo;</a>
+              <a
+                class="page-link"
+                wire:click="gotoPage({{ $paginator->currentPage() - 1 }})"
+                rel="prev"
+                aria-label="@lang('pagination.previous')"
+                >&lsaquo;</a
+              >
             </li>
           @endif
 
@@ -67,26 +86,44 @@
           @endphp
 
           @for ($i = $start; $i <= $end; $i++)
-              @if ($i == $currentPage)
-                <li class="page-item active"><span class="page-link">{{ $i }}</span></li>
-              @else
-                <li class="page-item"><a class="page-link" wire:click="gotoPage({{ $i }})">{{ $i }}</a></li>
-              @endif
+            @if ($i == $currentPage)
+              <li class="page-item active"><span class="page-link">{{ $i }}</span></li>
+            @else
+              <li class="page-item">
+                <a class="page-link" wire:click="gotoPage({{ $i }})">{{ $i }}</a>
+              </li>
+            @endif
           @endfor
 
           {{-- Elipsis --}}
           @if ($end < $totalPages)
             <li class="page-item disabled"><span class="page-link">...</span></li>
-            <li class="page-item"><a class="page-link" href="{{ $paginator->url($totalPages) }}" wire:navigate>{{ $totalPages }}</a></li>
+            <li class="page-item">
+              <a
+                class="page-link"
+                href="{{ $paginator->url($totalPages) }}"
+                wire:navigate
+                >{{ $totalPages }}</a
+              >
+            </li>
           @endif
 
           {{-- Next Page Link --}}
           @if ($paginator->hasMorePages())
             <li class="page-item">
-              <a class="page-link" wire:click="gotoPage({{ $paginator->currentPage() + 1 }})" rel="next" aria-label="@lang('pagination.next')">&rsaquo;</a>
+              <a
+                class="page-link"
+                wire:click="gotoPage({{ $paginator->currentPage() + 1 }})"
+                rel="next"
+                aria-label="@lang('pagination.next')"
+                >&rsaquo;</a
+              >
             </li>
           @else
-            <li class="page-item disabled" aria-disabled="true" aria-label="@lang('pagination.next')">
+            <li
+              class="page-item disabled"
+              aria-disabled="true"
+              aria-label="@lang('pagination.next')">
               <span class="page-link" aria-hidden="true">&rsaquo;</span>
             </li>
           @endif

@@ -1,12 +1,8 @@
-/** Bootstrap 4 */
-import * as bootstrap from 'bootstrap';
-window.bootstrap = bootstrap;
+import './bootstrap';
 
-/** Jquery */
-import $ from 'jquery';
-window.$ = window.jQuery = $;
+import Chart from 'chart.js/auto';
+window.Chart = Chart;
 
-/** Sweetalert2 */
 import Swal from 'sweetalert2';
 window.Swal = Swal;
 
@@ -19,54 +15,16 @@ window.Toast = Swal.mixin({
 
 window.swalWithBsBtn = Swal.mixin({
   customClass: {
-    confirmButton: 'btn btn-success',
-    cancelButton: 'btn btn-danger',
+    confirmButton:
+      'bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-4 rounded shadow mx-1 transition duration-150 cursor-pointer',
+    cancelButton:
+      'bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded shadow mx-1 transition duration-150 cursor-pointer',
   },
   buttonsStyling: false,
 });
 
-/** AdminLTE 3 */
-import 'admin-lte';
-
-/** Initialize Tooltip */
-function initializedTooltips() {
-  // $('.tooltip').remove();
-  $(document).tooltip({
-    selector: '.tooltips',
-    container: 'body',
-    html: true,
-    placement: function (context, source) {
-      let position = $(source).position();
-      if (position.left > 515) return 'left';
-      if (position.left < 515) return 'right';
-      if (position.top < 110) return 'bottom';
-      return 'top';
-    },
-  });
-}
-
-document.addEventListener('livewire:navigated', function () {
-  initializedTooltips();
-
-  /** Fixing Bug Sidebar */
-  function fixingSidebar() {
-    if (window.innerWidth < 991) {
-      document.body.classList.add('sidebar-collapse');
-    }
-  }
-  fixingSidebar();
-  window.addEventListener('resize', fixingSidebar);
-
-  $('input, textarea').on('input', function () {
-    $(this).removeClass('is-invalid').parents('.form-group').find('.error').remove();
-  });
-
-  $('select').on('change', function () {
-    $(this).removeClass('is-invalid').parents('.form-group').find('.error').remove();
-  });
-});
-
-document.addEventListener('livewire:initialized', function () {
+// Event listener for SweetAlert from Livewire components
+document.addEventListener('livewire:init', () => {
   Livewire.on('swal:confirm', ({ method, params = {}, options = {} }) => {
     const {
       title = 'Konfirmasi',
@@ -96,8 +54,4 @@ document.addEventListener('livewire:initialized', function () {
         }
       });
   });
-});
-
-window.addEventListener('refresh-with-tooltips', () => {
-  initializedTooltips();
 });

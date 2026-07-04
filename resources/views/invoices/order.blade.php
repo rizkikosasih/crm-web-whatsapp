@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   <title>Invoice #{{ $order->id }}</title>
   <style>
     * {
@@ -9,7 +9,9 @@
     }
 
     body {
-      font-family: DejaVu Sans, sans-serif;
+      font-family:
+        DejaVu Sans,
+        sans-serif;
       font-size: 12px;
       margin: 0;
       padding: 0;
@@ -96,14 +98,23 @@
     {{-- Header --}}
     <div class="header">
       <h1>{{ config('app.name') }}</h1>
-      <p>{{ config('app.address', 'Alamat tidak tersedia') }}</p>
+      <p>{{
+        config(
+          'app.address',
+          'Alamat tidak tersedia',
+        )
+      }}</p>
       <p>Telp: {{ config('app.contact', '-') }}</p>
     </div>
 
     {{-- Informasi --}}
     <div class="info">
       <p><strong>Invoice #: </strong>{{ $order->id }}</p>
-      <p><strong>Tanggal: </strong>{{ $order->created_at->format('d M Y') }}</p>
+      <p><strong>Tanggal: </strong>{{
+        $order->created_at->format(
+          'd M Y',
+        )
+      }}</p>
       <p><strong>Customer: </strong>{{ $order->customer->name }}</p>
     </div>
 
@@ -111,32 +122,36 @@
     <table class="table">
       <thead>
         <tr>
-          <th style="width: 40%;">Produk</th>
-          <th style="width: 15%;">Qty</th>
-          <th style="width: 20%;">Harga</th>
-          <th style="width: 25%;">Subtotal</th>
+          <th style="width: 40%">Produk</th>
+          <th style="width: 15%">Qty</th>
+          <th style="width: 20%">Harga</th>
+          <th style="width: 25%">Subtotal</th>
         </tr>
       </thead>
       <tbody>
-        @foreach($order->orderItems as $item)
+        @foreach ($order->orderItems as $item)
           <tr>
             <td>{{ $item->product->name }}</td>
-            <td style="text-align: center;">{{ $item->quantity }}</td>
+            <td style="text-align: center">{{ $item->quantity }}</td>
             <td>{{ rupiah($item->price) }}</td>
-            <td>{{ rupiah($item->quantity * $item->price) }}</td>
+            <td>
+              {{
+                rupiah(
+                  $item->quantity * $item->price,
+                )
+              }}
+            </td>
           </tr>
         @endforeach
       </tbody>
     </table>
 
-    <div class="total">
-      Total: {{ rupiah($order->total_amount) }}
-    </div>
+    <div class="total">Total: {{ rupiah($order->total_amount) }}</div>
   </div>
 
   {{-- Footer --}}
   <div class="footer">
-    Terima kasih sudah belanja di {{ config('app.name') }}!<br>
+    Terima kasih sudah belanja di {{ config('app.name') }}!<br />
     Semoga harimu menyenangkan dan kami tunggu order selanjutnya.
   </div>
 </body>

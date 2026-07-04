@@ -8,16 +8,16 @@ use Livewire\Component;
 
 class Navbar extends Component
 {
-  #[On('refreshNavbar')]
-  public function refreshComponent()
-  {
-    $this->dispatch('$refresh');
-  }
+    #[On('refreshNavbar')]
+    public function refreshComponent()
+    {
+        $this->dispatch('$refresh');
+    }
 
-  public function render()
-  {
-    $user = auth()->user();
+    public function render()
+    {
+        $user = auth()->user();
 
-    return view('partials.navbar', compact('user'));
-  }
+        return view('partials.navbar', compact('user'));
+    }
 }

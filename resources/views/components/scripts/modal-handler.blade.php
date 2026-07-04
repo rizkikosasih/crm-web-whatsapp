@@ -1,14 +1,18 @@
-@props(['id'])
+@props (['id'])
 
-<script>
-  document.addEventListener('livewire:navigated', () => {
+<script type="module">
+  document.addEventListener('livewire:init', () => {
     Livewire.on('bootstrap:show', () => {
-      const modalEl = document.getElementById(@js($id));
-      if (modalEl && window.bootstrap) {
-        const modal = new bootstrap.Modal(modalEl);
-        modal.show();
-      } else {
-        console.warn('Modal atau Bootstrap tidak tersedia');
+      const modalEl = document.getElementById(@js ($id));
+      if (modalEl) {
+        modalEl.dispatchEvent(new CustomEvent('open-modal', { bubbles: true }));
+      }
+    });
+
+    Livewire.on('bootstrap:hide', () => {
+      const modalEl = document.getElementById(@js ($id));
+      if (modalEl) {
+        modalEl.dispatchEvent(new CustomEvent('close-modal', { bubbles: true }));
       }
     });
   });

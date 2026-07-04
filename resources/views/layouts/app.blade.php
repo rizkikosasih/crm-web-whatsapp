@@ -1,31 +1,72 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id" class="h-full bg-slate-900">
 <head>
-  <meta charset="UTF-8">
-  <title>@yield('title', env('APP_NAME', 'CRM'))</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="">
-  <meta name="author" content="">
-  <meta name="csrf-token" content="{{ csrf_token() }}">
-  <link rel="shortcut icon" href="{{ asset('storage/favicon/favicon.ico') }}">
+  <meta charset="UTF-8" />
+  <title>@yield ('title', env('APP_NAME', 'CRM WhatsApp'))</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="csrf-token" content="{{ csrf_token() }}" />
+  <link rel="shortcut icon" href="{{ asset('storage/favicon/favicon.ico') }}" />
 
-  @include('partials.head')
+  <!-- Google Fonts - Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+
+  @vite (['resources/css/app.css', 'resources/js/app.js'])
+  @livewireStyles
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    [x-cloak] {
+      display: none !important;
+    }
+  </style>
+  @yield ('page-style')
 </head>
-<body class="hold-transition sidebar-mini layout-fixed" style="overflow-x: visible;">
-  <div class="wrapper">
-    @livewire('layouts.navbar')
+<body
+  x-data="{ sidebarOpen: window.innerWidth >= 768 }"
+  class="h-full text-slate-200 antialiased selection:bg-indigo-500 selection:text-white bg-slate-900">
+  <div class="flex h-full overflow-hidden">
+    <!-- Sidebar Navigation -->
+    @livewire ('layouts.sidebar')
 
-    @livewire('layouts.sidebar')
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+      <!-- Navbar -->
+      @livewire ('layouts.navbar')
 
-    <div class="content-wrapper">
-      @include('partials.content-header')
-
-      <div class="content">
+      <!-- Content Slot -->
+      <main class="flex-1 overflow-x-hidden overflow-y-auto bg-slate-900 p-6 sm:p-8">
         {{ $slot }}
-      </div>
+      </main>
     </div>
   </div>
 
-  @include('partials.footer')
+  @livewireScripts
+
+  <!-- Global Event Listeners -->
+  <script type="module">
+    document.addEventListener('livewire:init', () => {
+      Livewire.on('showError', (event) => {
+        const message = Array.isArray(event) ? event[0].message : event.message;
+        Toast.fire({ icon: 'error', title: message });
+      });
+
+      Livewire.on('showSuccess', (event) => {
+        const message = Array.isArray(event) ? event[0].message : event.message;
+        Toast.fire({ icon: 'success', title: message });
+      });
+
+      Livewire.on('scrollToTop', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+  </script>
+
+  @yield ('page-script')
 </body>
 </html>

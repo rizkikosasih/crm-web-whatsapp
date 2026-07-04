@@ -1,17 +1,13 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
-import glob from 'glob';
-
-// Function to get all JS and CSS files dynamically
-const getCssFiles = () => glob.sync('resources/css/**/*.css');
-const getJsFiles = () => glob.sync('resources/js/**/*.js');
+import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   plugins: [
+    tailwindcss(),
     laravel({
-      input: [...getCssFiles(), ...getJsFiles()],
+      input: ['resources/css/app.css', 'resources/js/app.js'],
       refresh: true,
     }),
   ],
 });
-

@@ -61,7 +61,7 @@ class Detail extends Component
     public function updateStatus(
         SendMessageApiServiceInterface $rapiwha,
         InvoiceServiceInterface $invoiceService,
-        ImageKitServiceInterface $imagekitService
+        ImageKitServiceInterface $imagekitService,
     ) {
         // Guard Clauses (Cek validasi awal)
         if ($this->selectedStatus == $this->order->status) {
@@ -120,12 +120,12 @@ class Detail extends Component
                 if ($this->proof_of_payment instanceof TemporaryUploadedFile) {
                     $filename = createFilename(
                         $this->order->customer->name . '-' . $this->orderId,
-                        $this->proof_of_payment->getClientOriginalExtension()
+                        $this->proof_of_payment->getClientOriginalExtension(),
                     );
                     $this->order->proof_of_payment = $this->proof_of_payment->storeAs(
                         $this->directory,
                         $filename,
-                        'public'
+                        'public',
                     );
                 }
                 $this->templateId = 3;
@@ -141,7 +141,7 @@ class Detail extends Component
                 $this->linkPdf = $imagekitService->uploadPdfContent(
                     $pdfContent,
                     invoiceFilename($this->order->id),
-                    'invoices'
+                    'invoices',
                 );
                 $this->order->link_pdf = $this->linkPdf;
                 break;

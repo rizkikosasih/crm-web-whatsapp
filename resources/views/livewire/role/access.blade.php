@@ -1,4 +1,4 @@
-@section('title', $title)
+@section ('title', $title)
 
 <section class="content">
   <div class="container-fluid" id="list">
@@ -12,14 +12,14 @@
           </div>
 
           <div class="card-body text-justify">
-            <div class="d-flex justify-content-center justify-content-sm-start align-items-start gap-sm-3">
+            <div
+              class="d-flex justify-content-center justify-content-sm-start align-items-start gap-sm-3">
               <div class="col-auto">
                 <x-form.input-group-select
                   prependText="Length"
                   name="perPage"
                   wire:model.live="perPage"
-                  :options="[5 => 5, 10 => 10, 20 => 20, 50 => 50]"
-                />
+                  :options="[5 => 5, 10 => 10, 20 => 20, 50 => 50]" />
               </div>
 
               <div class="ml-auto">
@@ -27,8 +27,7 @@
                   <x-form.input
                     name="search"
                     placeholder="Cari menu..."
-                    wire:model.live.debounce.250ms="search"
-                  />
+                    wire:model.live.debounce.250ms="search" />
                 </div>
               </div>
             </div>
@@ -47,23 +46,31 @@
                         <td><i class="{{ $item->icon }}"></i> {{ $item->icon }}</td>
                         <td class="actions">
                           <div class="btn-group">
-                            <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                            <div
+                              class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
                               <input
                                 type="checkbox"
                                 name="switch"
                                 id="{{ Str::slug($item->name) . $item->id }}"
                                 class="custom-control-input"
                                 wire:click="toggleMenuAccess({{$item->id}})"
-                                {{ $item->is_assigned ? 'checked' : '' }}
-                              />
-                              <label class="custom-control-label" for="{{ Str::slug($item->name) . $item->id }}"></label>
+                                {{
+                                  $item->is_assigned
+                                    ? 'checked'
+                                    : ''
+                                }} />
+                              <label
+                                class="custom-control-label"
+                                for="{{ Str::slug($item->name) . $item->id }}"></label>
                             </div>
                           </div>
                         </td>
                       </tr>
                     @empty
                       <tr>
-                        <td colspan="{{ sizeof($tableHeader) }}" class="text-center">Data Kosong</td>
+                        <td colspan="{{ sizeof($tableHeader) }}" class="text-center">
+                          Data Kosong
+                        </td>
                       </tr>
                     @endforelse
                   </tbody>
@@ -71,7 +78,11 @@
               </x-overlay>
             </div>
 
-            {{ $items->links('partials.pagination.bootstrap4') }}
+            {{
+              $items->links(
+                'partials.pagination.bootstrap4',
+              )
+            }}
           </div>
         </div>
       </div>

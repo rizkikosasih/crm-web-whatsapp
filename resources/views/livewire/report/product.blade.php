@@ -1,4 +1,4 @@
-@section('title', $title)
+@section ('title', $title)
 
 <section class="content">
   <div class="container-fluid">
@@ -10,15 +10,15 @@
               <x-alert.success dismissible="true">{{ session('success') }}</x-alert.success>
             @endif
 
-            <div class="d-flex justify-content-center justify-content-sm-start align-items-start flex-wrap gap-sm-3">
+            <div
+              class="d-flex justify-content-center justify-content-sm-start align-items-start flex-wrap gap-sm-3">
               <div class="col-auto px-0">
                 <x-form.input-group
                   prependText="Mulai"
                   type="date"
                   name="dateStart"
                   parentClass="mb-0"
-                  wire:model.live="dateStart"
-                />
+                  wire:model.live="dateStart" />
               </div>
 
               <div class="col-auto px-0">
@@ -28,8 +28,7 @@
                   type="date"
                   name="dateEnd"
                   parentClass="mb-0"
-                  wire:model.live="dateEnd"
-                />
+                  wire:model.live="dateEnd" />
               </div>
 
               <div class="col-auto px-0">
@@ -38,18 +37,17 @@
                   class="tooltips"
                   title="Export ke Excel"
                   color="primary"
-                  wire:loading.attr="disabled"
-                >
+                  wire:loading.attr="disabled">
                   <i class="fas fa-file-excel"></i>
                 </x-button>
               </div>
 
               <div class="col-auto px-0">
                 <x-button
-                  wire:click="$refresh" title="Refresh Halaman"
+                  wire:click="$refresh"
+                  title="Refresh Halaman"
                   wire:loading.attr="disabled"
-                  color="info"
-                >
+                  color="info">
                   <i class="fas fa-refresh"></i>
                 </x-button>
               </div>
@@ -90,5 +88,3 @@
     </div>
   </div>
 </section>
-
-

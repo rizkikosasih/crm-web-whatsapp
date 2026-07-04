@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class MenuRoleFactory extends Factory
 {
-  public function definition(): array
-  {
-    return [
-      'menu_id' => Menu::factory()->id, // atau pilih manual jika sudah ada menu
-      'role_id' => Role::factory()->id, // atau pilih manual jika sudah ada role
-    ];
-  }
+    public function definition(): array
+    {
+        return [
+            'menu_id' => Menu::factory()->id, // atau pilih manual jika sudah ada menu
+            'role_id' => Role::factory()->id, // atau pilih manual jika sudah ada role
+        ];
+    }
 }

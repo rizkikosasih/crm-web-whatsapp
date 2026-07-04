@@ -1,7 +1,7 @@
-@section('title', $title)
+@section ('title', $title)
 
-@section('page-script')
-  @vite(['resources/js/form.js'])
+@section ('page-script')
+  @vite (['resources/js/form.js'])
 @endsection
 
 <section class="content">
@@ -12,7 +12,7 @@
           <div class="card-header">
             <div class="card-title">{{ $isEdit ? 'Ubah' : 'Tambah' }} Pengguna</div>
 
-            <x-card.tools minus="true"/>
+            <x-card.tools minus="true" />
           </div>
 
           <div class="card-body text-justify">
@@ -30,16 +30,14 @@
                 id="name"
                 label="Nama Pengguna"
                 placeholder="Masukan Nama Pengguna"
-                wire:model.defer="name"
-              />
+                wire:model.defer="name" />
 
               <x-form.input
                 name="username"
                 id="username"
                 label="Username Pengguna"
                 placeholder="Masukan Username Pengguna"
-                wire:model.defer="username"
-              />
+                wire:model.defer="username" />
 
               <x-form.input
                 name="phone"
@@ -47,8 +45,7 @@
                 label="No Handphone <small>(contoh: 6285123456789)</small>"
                 placeholder="Masukan no handphone"
                 class="number-only"
-                wire:model.defer="phone"
-              />
+                wire:model.defer="phone" />
 
               <x-form.input
                 name="email"
@@ -56,8 +53,7 @@
                 type="email"
                 label="Email"
                 placeholder="Masukan email"
-                wire:model.defer="email"
-              />
+                wire:model.defer="email" />
 
               <x-form.input-select
                 name="role_id"
@@ -66,17 +62,12 @@
                 placeholder="Pilih Role Pengguna"
                 :options="$roles"
                 optionHeader="Pilih Role Pengguna"
-                wire:model.defer="role_id"
-              />
+                wire:model.defer="role_id" />
 
               <x-form.button-container class="justify-content-end">
-                <x-button wire:click="resetForm" color="danger">
-                  Batal
-                </x-button>
+                <x-button wire:click="resetForm" color="danger"> Batal </x-button>
 
-                <x-button type="submit" color="primary">
-                  Simpan
-                </x-button>
+                <x-button type="submit" color="primary"> Simpan </x-button>
               </x-form.button-container>
             </form>
           </div>
@@ -92,18 +83,18 @@
           <div class="card-header">
             <div class="card-title">Daftar Pengguna</div>
 
-            <x-card.tools refresh="true" minus="true"/>
+            <x-card.tools refresh="true" minus="true" />
           </div>
 
           <div class="card-body text-justify">
-            <div class="d-flex justify-content-center justify-content-sm-start align-items-start gap-sm-3">
+            <div
+              class="d-flex justify-content-center justify-content-sm-start align-items-start gap-sm-3">
               <div class="col-auto">
                 <x-form.input-group-select
                   prependText="Length"
                   name="perPage"
                   wire:model.live.debounce.250ms="perPage"
-                  :options="[5 => 5, 10 => 10, 20 => 20, 50 => 50]"
-                />
+                  :options="[5 => 5, 10 => 10, 20 => 20, 50 => 50]" />
               </div>
 
               <div class="col-auto">
@@ -112,8 +103,7 @@
                   name="filterRole"
                   wire:model.live.debounce.250ms="filterRole"
                   :options="$roles"
-                  optionHeader="Semua"
-                />
+                  optionHeader="Semua" />
               </div>
 
               <div class="ml-auto">
@@ -121,8 +111,7 @@
                   <x-form.input
                     name="search"
                     placeholder="Cari Pengguna..."
-                    wire:model.live.debounce.250ms="search"
-                  />
+                    wire:model.live.debounce.250ms="search" />
                 </div>
               </div>
             </div>
@@ -133,45 +122,47 @@
 
                 <tbody>
                   @forelse ($items as $index => $item)
-                    <tr>
-                      <td class="text-center">{{ $index + $items->firstItem() }}</td>
-                      <td>{{ $item->name }}</td>
-                      <td>{{ $item->email }}</td>
-                      <td>{{ $item->phone }}</td>
-                      <td class="text-center">
+                  <tr>
+                    <td class="text-center">{{ $index + $items->firstItem() }}</td>
+                    <td>{{ $item->name }}</td>
+                    <td>{{ $item->email }}</td>
+                    <td>{{ $item->phone }}</td>
+                    <td class="text-center">
+                      <x-button
+                        wire:click="confirmActive({{ $item->id }}, {{ $item->is_active }})"
+                        color="{{ $colorStatus[$item->is_active] }}"
+                        size="sm">
+                        {{ $statusList[$item->is_active] }}
+                      </x-button>
+                    </td>
+                    <td>{{ $item->role->name }}</td>
+                    <td class="actions">
+                      <div class="btn-group">
                         <x-button
-                          wire:click="confirmActive({{ $item->id }}, {{ $item->is_active }})"
-                          color="{{ $colorStatus[$item->is_active] }}"
-                          size="sm"
-                        >
-                          {{ $statusList[$item->is_active] }}
+                          wire:click="edit({{ $item->id }})"
+                          class="tooltips"
+                          title="Ubah"
+                          color="primary"
+                          size="sm">
+                          <i class="fas fa-pencil"></i>
                         </x-button>
-                      </td>
-                      <td>{{ $item->role->name }}</td>
-                      <td class="actions">
-                        <div class="btn-group">
-                          <x-button
-                            wire:click="edit({{ $item->id }})"
-                            class="tooltips"
-                            title="Ubah"
-                            color="primary"
-                            size="sm"
-                          >
-                            <i class="fas fa-pencil"></i>
-                          </x-button>
-                        </div>
-                      </td>
-                    </tr>
+                      </div>
+                    </td>
+                  </tr>
                   @empty
-                    <tr>
-                      <td colspan="{{ sizeof($tableHeader) }}" class="text-center">Data Kosong</td>
-                    </tr>
+                  <tr>
+                    <td colspan="{{ sizeof($tableHeader) }}" class="text-center">Data Kosong</td>
+                  </tr>
                   @endforelse
                 </tbody>
               </table>
             </div>
 
-            {{ $items->links('partials.pagination.bootstrap4') }}
+            {{
+              $items->links(
+                'partials.pagination.bootstrap4',
+              )
+            }}
           </div>
         </div>
       </div>

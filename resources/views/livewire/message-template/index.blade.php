@@ -1,7 +1,7 @@
-@section('title', $title)
+@section ('title', $title)
 
-@section('page-script')
-  @vite(['resources/js/ekko-lightbox.js'])
+@section ('page-script')
+  @vite (['resources/js/ekko-lightbox.js'])
 @endsection
 
 <section class="content">
@@ -12,7 +12,7 @@
           <div class="card-header">
             <div class="card-title">{{ $isEdit ? 'Ubah' : 'Tambah' }} Template</div>
 
-            <x-card.tools minus="true"/>
+            <x-card.tools minus="true" />
           </div>
 
           <div class="card-body text-justify">
@@ -28,8 +28,7 @@
                 placeholder="Masukan Judul Template"
                 class="form-control-sm"
                 wire:model.defer="titleTemplate"
-                horizontal="true"
-              />
+                horizontal="true" />
 
               <x-form.input-select
                 id="type"
@@ -37,10 +36,15 @@
                 label="Tipe Template"
                 class="form-control-sm"
                 wire:model.defer="type"
-                :options="['campaign' => 'Campaign Broadcast', 'product' => 'Produk', 'order' => 'Pemesanan']"
+                :options="
+                  [
+      'campaign' => 'Campaign Broadcast',
+      'product' => 'Produk',
+      'order' => 'Pemesanan',
+    ]
+                "
                 selected="{{ $this->type }}"
-                horizontal="true"
-              />
+                horizontal="true" />
 
               <x-form.textarea
                 id="body"
@@ -49,19 +53,14 @@
                 placeholder="Masukan Isi Pesan"
                 rows="6"
                 wire:model.defer="body"
-                horizontal="true"
-              />
+                horizontal="true" />
 
-              <hr>
+              <hr />
 
               <x-form.button-container class="justify-content-end">
-                <x-button wire:click="resetForm" color="danger">
-                  Batal
-                </x-button>
+                <x-button wire:click="resetForm" color="danger"> Batal </x-button>
 
-                <x-button type="submit" color="primary">
-                  Simpan
-                </x-button>
+                <x-button type="submit" color="primary"> Simpan </x-button>
               </x-form.button-container>
             </form>
           </div>
@@ -79,14 +78,14 @@
           </div>
 
           <div class="card-body text-justify">
-            <div class="d-flex justify-content-center justify-content-sm-start align-items-start gap-sm-3">
+            <div
+              class="d-flex justify-content-center justify-content-sm-start align-items-start gap-sm-3">
               <div class="col-auto">
                 <x-form.input-group-select
                   prependText="Length"
                   name="perPage"
                   wire:model.live="perPage"
-                  :options="[5 => 5, 10 => 10, 20 => 20, 50 => 50]"
-                />
+                  :options="[5 => 5, 10 => 10, 20 => 20, 50 => 50]" />
               </div>
 
               <div class="ml-auto">
@@ -94,8 +93,7 @@
                   <x-form.input
                     name="search"
                     placeholder="Cari Template..."
-                    wire:model.live.debounce.250ms="search"
-                  />
+                    wire:model.live.debounce.250ms="search" />
                 </div>
               </div>
             </div>
@@ -110,9 +108,7 @@
                       <td class="text-center">{{ $index + $items->firstItem() }}</td>
                       <td>{{ $item->title }}</td>
                       <td>{!! nl2br(e($item->body)) !!}</td>
-                      <td class="text-center">
-                        {{ $types[$item->type] }}
-                      </td>
+                      <td class="text-center">{{ $types[$item->type] }}</td>
                       <td class="actions">
                         <div class="btn-group">
                           <x-button
@@ -120,8 +116,7 @@
                             class="tooltips"
                             title="Ubah"
                             color="primary"
-                            size="sm"
-                          >
+                            size="sm">
                             <i class="fas fa-pencil"></i>
                           </x-button>
                         </div>
@@ -136,7 +131,11 @@
               </table>
             </div>
 
-            {{ $items->links('partials.pagination.bootstrap4') }}
+            {{
+              $items->links(
+                'partials.pagination.bootstrap4',
+              )
+            }}
           </div>
         </div>
       </div>

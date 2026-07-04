@@ -1,7 +1,7 @@
-@section('title', $title)
+@section ('title', $title)
 
-@section('page-script')
-  @vite(['resources/js/ekko-lightbox.js'])
+@section ('page-script')
+  @vite (['resources/js/ekko-lightbox.js'])
 @endsection
 
 <section class="content">
@@ -11,7 +11,7 @@
         <div class="card card-primary card-outline">
           <div class="card-header">
             <div class="card-title">{{ $isEdit ? 'Ubah' : 'Tambah' }} Whatsapp API</div>
-            <x-card.tools refresh="true"/>
+            <x-card.tools refresh="true" />
           </div>
 
           <div class="card-body text-justify">
@@ -27,8 +27,7 @@
                 placeholder="Masukkan API Key"
                 class="form-control-sm"
                 wire:model.defer="apiKey"
-                horizontal="true"
-              />
+                horizontal="true" />
 
               <x-form.input
                 id="apiUrl"
@@ -37,15 +36,12 @@
                 placeholder="Masukkan API URL dengan https://"
                 class="form-control-sm"
                 wire:model.defer="apiUrl"
-                horizontal="true"
-              />
+                horizontal="true" />
 
-              <hr>
+              <hr />
 
               <x-form.button-container class="justify-content-end">
-                <x-button type="submit" color="primary">
-                  Simpan
-                </x-button>
+                <x-button type="submit" color="primary"> Simpan </x-button>
               </x-form.button-container>
             </form>
           </div>

@@ -7,16 +7,17 @@ use Illuminate\Support\Facades\DB;
 
 class WhatsappSettingsSeeder extends Seeder
 {
-  /**
-   * Run the database seeds.
-   */
-  public function run(): void
-  {
-    DB::table('whatsapp_settings')->insert([
-      'key' => '-',
-      'url' => 'https://panel.rapiwha.com/send_message.php',
-      'created_at' => now(),
-      'updated_at' => now(),
-    ]);
-  }
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        DB::table('whatsapp_settings')->insert([
+            'key' => '-',
+            'url' => 'http://localhost:8080',
+            'instance_name' => 'crm-whatsapp',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+    }
 }

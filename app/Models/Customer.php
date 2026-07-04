@@ -8,12 +8,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Customer extends Model
 {
-  use HasFactory, SoftDeletes;
-  protected $fillable = ['name', 'phone', 'notes'];
+    use HasFactory, SoftDeletes;
+    protected $fillable = ['name', 'phone', 'notes'];
 
-  protected $casts = [
-    'created_at' => 'datetime',
-    'updated_at' => 'datetime',
-    'deleted_at' => 'datetime',
-  ];
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
+    ];
 }

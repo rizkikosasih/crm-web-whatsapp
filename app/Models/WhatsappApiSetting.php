@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class WhatsappApiSetting extends Model
 {
-  use HasFactory;
-  protected $table = 'whatsapp_settings';
+    use HasFactory;
+    protected $table = 'whatsapp_settings';
 
-  protected $fillable = ['key', 'url'];
+    protected $fillable = ['key', 'url', 'instance_name'];
 }

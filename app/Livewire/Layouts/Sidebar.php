@@ -6,35 +6,23 @@ use Livewire\Component;
 
 class Sidebar extends Component
 {
-  public $menus;
+    public $menus;
 
-  public function mount()
-  {
-    $user = auth()->user();
-    $roleId = $user->role_id; // Misalkan role user disimpan di kolom `role_id`
+    public function mount()
+    {
+        $this->menus = Menu::with([
+            'children' => function ($query) {
+                $query->active()->orderBy('position', 'asc');
+            },
+        ])
+            ->active()
+            ->whereNull('parent_id')
+            ->orderBy('position', 'asc')
+            ->get();
+    }
 
-    // Ambil menu berdasarkan role
-    $this->menus = Menu::with([
-      'children' => function ($query) use ($roleId) {
-        $query
-          ->active()
-          ->whereHas('roles', function ($q) use ($roleId) {
-            $q->where('role_id', $roleId);
-          })
-          ->orderBy('position', 'asc');
-      },
-    ])
-      ->active()
-      ->whereNull('parent_id')
-      ->whereHas('roles', function ($query) use ($roleId) {
-        $query->where('role_id', $roleId);
-      })
-      ->orderBy('position', 'asc')
-      ->get();
-  }
-
-  public function render()
-  {
-    return view('partials.sidebar');
-  }
+    public function render()
+    {
+        return view('partials.sidebar');
+    }
 }

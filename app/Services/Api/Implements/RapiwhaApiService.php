@@ -23,7 +23,7 @@ class RapiwhaApiService implements SendMessageApiServiceInterface
         string $number,
         string $text,
         ?string $fileUrl = null,
-        bool $isObject = true
+        bool $isObject = true,
     ): array|object {
         try {
             DB::beginTransaction();
@@ -33,7 +33,7 @@ class RapiwhaApiService implements SendMessageApiServiceInterface
                 return $this->formatResponse(
                     false,
                     'Nomor Handphone tidak ditemukan dalam daftar pelanggan',
-                    $isObject
+                    $isObject,
                 );
             }
 
@@ -89,7 +89,7 @@ class RapiwhaApiService implements SendMessageApiServiceInterface
             return $this->formatResponse(
                 false,
                 $response->status() . ': ' . $response->body(),
-                $isObject
+                $isObject,
             );
         } catch (\Exception $e) {
             DB::rollBack();
@@ -102,7 +102,7 @@ class RapiwhaApiService implements SendMessageApiServiceInterface
         bool $success,
         string $message,
         bool $asObject = true,
-        array $data = []
+        array $data = [],
     ): array|object {
         $result = [
             'success' => $success,

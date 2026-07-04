@@ -1,136 +1,182 @@
-@section('title', $title)
+<div class="space-y-8">
+  <!-- Page Header -->
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <div>
+      <h1 class="text-2xl font-bold text-white tracking-tight">Dashboard Utama</h1>
+      <p class="text-sm text-slate-400 mt-1">Ringkasan data pesanan dari <strong class="text-slate-300">{{ dateIndo(now()->subYear()) }}</strong> sampai <strong class="text-slate-300">{{ dateIndo(now()) }}</strong>.</p>
+    </div>
+  </div>
 
-<section class="content">
-  <div class="container-fluid" id="row1">
-    <p class="text-muted">
-      Data di bawah ini adalah ringkasan pesanan dari
-      <strong>{{ dateIndo(now()->subYear()) }}</strong> sampai <strong>{{ dateIndo(now()) }}</strong>.
-    </p>
-    <div class="row">
-      @foreach($orderByStatus as $item)
-        <div class="col-lg-3 col-6">
-          {{-- small box --}}
-          <div class="small-box bg-{{ $item['color'] }}">
-            <div class="ribbon-wrapper">
-              <div class="ribbon bg-{{ $item['colorRibbon'] }}">
-                Pesanan
-              </div>
-            </div>
-            <div class="inner">
-              <h3>{{ $item['count'] }}</h3>
+  <!-- Stats Grid (4 Boxes) -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    @foreach ($orderByStatus as $item)
+      @php
+        $glowColor = match ($item['color']) {
+          'danger' => 'group-hover:border-red-500/50 group-hover:shadow-red-500/5',
+          'warning' => 'group-hover:border-amber-500/50 group-hover:shadow-amber-500/5',
+          'primary' => 'group-hover:border-indigo-500/50 group-hover:shadow-indigo-500/5',
+          'success' => 'group-hover:border-emerald-500/50 group-hover:shadow-emerald-500/5',
+          default => 'group-hover:border-indigo-500/50 group-hover:shadow-indigo-500/5',
+        };
 
-              <p>{{ $item['title'] }}</p>
-            </div>
-            <div class="icon">
-              <i class="{{ $item['icon'] }}"></i>
-            </div>
-            <a href="{{ $item['url'] }}" class="small-box-footer" wire:navigate>Info Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
+        $badgeColor = match ($item['color']) {
+          'danger' => 'bg-red-500/10 text-red-400 border border-red-500/20',
+          'warning' => 'bg-amber-500/10 text-amber-400 border border-amber-500/20',
+          'primary' => 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20',
+          'success' => 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20',
+          default => 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20',
+        };
+      @endphp
+      <a
+        href="{{ $item['url'] }}"
+        wire:navigate
+        class="group flex flex-col justify-between bg-slate-800/40 border border-slate-700/50 hover:bg-slate-800/60 shadow-md hover:shadow-xl rounded-2xl p-6 transition duration-200 cursor-pointer {{ $glowColor }}">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <span
+              class="text-3xl font-extrabold text-white tracking-tight"
+              >{{ $item['count'] }}</span
+            >
+            <h3 class="text-sm font-semibold text-slate-400 mt-2">{{ $item['title'] }}</h3>
+          </div>
+          <div
+            class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 {{ $badgeColor }}">
+            <i class="{{ $item['icon'] }} text-lg"></i>
           </div>
         </div>
-      @endforeach
-    </div>
+        <div
+          class="mt-6 flex items-center gap-2 text-xs font-semibold text-indigo-400 group-hover:text-indigo-300 transition duration-150">
+          <span>Info Selengkapnya</span>
+          <i
+            class="fas fa-arrow-right text-[10px] transform group-hover:translate-x-1 transition duration-150"></i>
+        </div>
+      </a>
+    @endforeach
   </div>
 
-  <div class="container-fluid" id="row2">
-    <div class="row">
-      @foreach ($charts as $chart)
-        @if($chart['show'])
-          <div class="col-md-6 mb-4">
-            <div class="card card-outline card-primary">
-              <div class="card-header">
-                <div class="card-title">{{ $chart['title'] }}</div>
-                <x-card.tools minus="true" url="{{ url('dashboard') }}" urlTitle="Refresh" urlIcon="fas fa-refresh" />
-              </div>
-              <div class="card-body text-justify">
-                <canvas id="{{ $chart['id'] }}" wire:ignore></canvas>
-              </div>
-            </div>
+  <!-- Charts Grid (2 columns) -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    @foreach ($charts as $chart)
+      @if ($chart['show'])
+        <x-card title="{{ $chart['title'] }}" class="h-full">
+          <x-slot:tools>
+            <x-card.tools
+              url="{{ url('dashboard') }}"
+              urlTitle="Refresh"
+              urlIcon="fas fa-arrows-rotate" />
+          </x-slot:tools>
+          <div class="p-2 flex items-center justify-center min-h-[300px]">
+            <canvas id="{{ $chart['id'] }}" wire:ignore class="max-h-[350px] w-full"></canvas>
           </div>
-        @endif
-      @endforeach
-    </div>
+        </x-card>
+      @endif
+    @endforeach
   </div>
 
-  <div class="container-fluid" id="row3">
-    <div class="row">
-      <div class="col-12 m-1 p-1">
-        <div class="card card-primary card-outline">
-          <div class="card-header">
-            <div class="card-title">Histori Pesan Keluar</div>
+  <!-- Table Container (Histori Pesan Keluar) -->
+  <div class="w-full">
+    <x-card title="Histori Pesan Keluar">
+      <x-slot:tools>
+        <x-card.tools refresh="true" />
+      </x-slot:tools>
 
-            <x-card.tools minus="true" refresh="true"/>
-          </div>
-
-          <div class="card-body text-justify">
-            <div class="d-flex justify-content-center justify-content-sm-start align-items-start gap-sm-3">
-              <div class="col-auto">
-                <x-form.input-group-select
-                  prependText="Length"
-                  name="perPage"
-                  wire:model.live="perPage"
-                  :options="[5 => 5, 10 => 10, 20 => 20, 50 => 50]"
-                />
-              </div>
-
-              <div class="ml-auto">
-                <div class="col-auto">
-                  <x-form.input
-                    name="search"
-                    placeholder="Cari Pesan..."
-                    wire:model.live.debounce.250ms="search"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div class="table-responsive">
-              <table class="table table-striped table-bordered">
-                <x-table.header :columns="$messageHeader" />
-
-                <tbody>
-                  @forelse ($messages as $index => $item)
-                    <tr>
-                      <td class="text-center">{{ $index + $messages->firstItem() }}</td>
-                      <td>{{ $item->customer->name }}</td>
-                      <td>{{ $item->user->name }}</td>
-                      <td>{!! nl2br(e($item->message)) !!}</td>
-                      <td class="text-center">
-                        @if($item->image)
-                          <x-preview-image path="{{ $item->image }}" />
-                        @else
-                          -
-                        @endif
-                      </td>
-                      <td class="text-center">
-                        <div>{{ dateIndo($item->sent_at) }}</div>
-                        <div>{{ timeIndo($item->sent_at) }}</div>
-                      </td>
-                    </tr>
-                  @empty
-                    <tr>
-                      <td colspan="{{ sizeof($messageHeader) }}" class="text-center">Data Kosong</td>
-                    </tr>
-                  @endforelse
-                </tbody>
-              </table>
-            </div>
-
-            {{ $messages->links('partials.pagination.bootstrap4') }}
-          </div>
+      <!-- Table Filters -->
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+        <div class="w-24 shrink-0">
+          <x-form.input-select
+            name="perPage"
+            wire:model.live="perPage"
+            :options="[5 => 5, 10 => 10, 20 => 20, 50 => 50]"
+            parentClass="mb-0" />
+        </div>
+        <div class="w-full sm:w-64 shrink-0">
+          <x-form.input
+            name="search"
+            placeholder="Cari Pesan..."
+            wire:model.live.debounce.250ms="search"
+            parentClass="mb-0" />
         </div>
       </div>
-    </div>
+
+      <!-- Livewire Loading Overlay -->
+      <x-overlay target="search, perPage, gotoPage, nextPage">
+        <!-- Table Responsive -->
+        <div class="overflow-x-auto rounded-xl border border-slate-700/80 bg-slate-900/10">
+          <table class="min-w-full divide-y divide-slate-700/50">
+            <x-table.header :columns="$messageHeader" />
+            <tbody class="divide-y divide-slate-800 bg-transparent text-slate-300">
+              @forelse ($messages as $index => $item)
+                <tr class="hover:bg-slate-800/20 transition duration-150">
+                  <td
+                    class="px-6 py-4 text-center text-sm font-medium text-slate-500 whitespace-nowrap">
+                    {{ $index + $messages->firstItem() }}
+                  </td>
+                  <td class="px-6 py-4 text-sm font-semibold text-white whitespace-nowrap">
+                    {{ $item->customer->name }}
+                  </td>
+                  <td class="px-6 py-4 text-sm text-slate-400 whitespace-nowrap">
+                    {{ $item->user->name }}
+                  </td>
+                  <td
+                    class="px-6 py-4 text-sm text-slate-300 max-w-xs truncate md:max-w-md whitespace-normal leading-relaxed">
+                    {!! nl2br(e($item->message)) !!}
+                  </td>
+                  <td class="px-6 py-4 text-center whitespace-nowrap">
+                    @if ($item->image)
+                      <x-preview-image path="{{ $item->image }}" width="40px" />
+                    @else
+                      <span class="text-slate-600">-</span>
+                    @endif
+                  </td>
+                  <td class="px-6 py-4 text-center whitespace-nowrap text-xs text-slate-400">
+                    <div class="font-medium text-slate-300">{{ dateIndo($item->sent_at) }}</div>
+                    <div class="text-[10px] text-slate-500 mt-0.5">
+                      {{ timeIndo($item->sent_at) }}
+                    </div>
+                  </td>
+                </tr>
+              @empty
+                <tr>
+                  <td
+                    colspan="{{ sizeof($messageHeader) }}"
+                    class="px-6 py-10 text-center text-sm font-medium text-slate-500 bg-slate-800/10">
+                    Data Kosong
+                  </td>
+                </tr>
+              @endforelse
+            </tbody>
+          </table>
+        </div>
+      </x-overlay>
+
+      <!-- Pagination Footer -->
+      <div class="mt-6">{{ $messages->links() }}</div>
+    </x-card>
   </div>
-</section>
+</div>
 
-@section('page-script')
-  @vite(['resources/plugins/chart.js', 'resources/js/ekko-lightbox.js'])
-
-  @verbatim
+@section ('page-script')
   <script>
+    window.renderCharts = function (chartConfigs) {
+      window.renderedCharts = window.renderedCharts || {};
+
+      chartConfigs.forEach((chart) => {
+        const canvas = document.getElementById(chart.id);
+        if (chart.show && canvas) {
+          const ctx = canvas.getContext('2d');
+
+          if (window.renderedCharts[chart.id]) {
+            window.renderedCharts[chart.id].destroy();
+          }
+
+          window.renderedCharts[chart.id] = new Chart(ctx, chart.config);
+        }
+      });
+    };
+
     function renderChartsSafe() {
-      if (typeof window.renderCharts === 'function') {
-        window.renderCharts(@json($charts));
+      if (typeof window.renderCharts === 'function' && typeof window.Chart === 'function') {
+        window.renderCharts(@json ($charts));
       } else {
         setTimeout(renderChartsSafe, 100);
       }
@@ -138,6 +184,8 @@
 
     document.addEventListener('livewire:navigated', renderChartsSafe);
     Livewire.on('refreshChart', renderChartsSafe);
+
+    // Initial run
+    setTimeout(renderChartsSafe, 150);
   </script>
-  @verbatim
 @endsection

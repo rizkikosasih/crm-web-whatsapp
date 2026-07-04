@@ -6,32 +6,19 @@ use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-  /**
-   * Register any application services.
-   */
-  public function register(): void
-  {
-    $this->bindInterfaces();
-  }
+    /**
+     * Register any application services.
+     */
+    public function register(): void
+    {
+        // Concrete repositories are resolved automatically by Laravel's IoC container.
+    }
 
-  protected function bindInterfaces(): void
-  {
-    $this->app->bind(
-      \App\Services\Api\SendMessageApiServiceInterface::class,
-      \App\Services\Api\Implements\RapiwhaApiService::class
-    );
-
-    $this->app->bind(
-      \App\Services\Api\ImageKitServiceInterface::class,
-      \App\Services\Api\Implements\ImageKitService::class
-    );
-  }
-
-  /**
-   * Bootstrap any application services.
-   */
-  public function boot(): void
-  {
-    //
-  }
+    /**
+     * Bootstrap any application services.
+     */
+    public function boot(): void
+    {
+        //
+    }
 }

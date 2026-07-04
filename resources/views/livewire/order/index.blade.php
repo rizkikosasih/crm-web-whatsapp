@@ -1,4 +1,4 @@
-@section('title', $title)
+@section ('title', $title)
 
 <section class="content">
   <div class="container-fluid">
@@ -18,15 +18,15 @@
               <x-alert.success dismissible="true">{{ session('success') }}</x-alert.success>
             @endif
 
-            <div class="d-flex justify-content-center justify-content-sm-start align-items-start flex-wrap gap-sm-3">
+            <div
+              class="d-flex justify-content-center justify-content-sm-start align-items-start flex-wrap gap-sm-3">
               <div class="col-auto px-0">
                 <x-form.input-group-select
                   prependText="Length"
                   name="perPage"
                   parentClass="mb-0"
                   wire:model.live="perPage"
-                  :options="[5 => 5, 10 => 10, 20 => 20, 50 => 50]"
-                />
+                  :options="[5 => 5, 10 => 10, 20 => 20, 50 => 50]" />
               </div>
 
               <div class="col-auto px-0">
@@ -36,8 +36,15 @@
                   parentClass="mb-0"
                   optionHeader="Semua Status"
                   wire:model.live="status"
-                  :options="[0 => 'Belum Bayar', 1 => 'Sudah Bayar', 2 => 'Pengiriman', 3 => 'Selesai', 4 => 'Batal']"
-                />
+                  :options="
+                    [
+      0 => 'Belum Bayar',
+      1 => 'Sudah Bayar',
+      2 => 'Pengiriman',
+      3 => 'Selesai',
+      4 => 'Batal',
+    ]
+                  " />
               </div>
 
               <div class="col-auto px-0">
@@ -46,8 +53,7 @@
                   type="date"
                   name="dateStart"
                   parentClass="mb-0"
-                  wire:model.live="dateStart"
-                />
+                  wire:model.live="dateStart" />
               </div>
 
               <div class="col-auto px-0">
@@ -57,16 +63,14 @@
                   type="date"
                   name="dateEnd"
                   parentClass="mb-0"
-                  wire:model.live="dateEnd"
-                />
+                  wire:model.live="dateEnd" />
               </div>
 
               <div class="col-auto px-0">
                 <x-form.input
                   name="search"
                   placeholder="Cari Pelanggan..."
-                  wire:model.live.debounce.250ms="search"
-                />
+                  wire:model.live.debounce.250ms="search" />
               </div>
             </div>
 
@@ -96,9 +100,8 @@
                             size="sm"
                             class="tooltips"
                             url="{{ url('transaksi/order/detail/' . $item->id) }}"
-                            title="{{ in_array($item->status, [3,4]) ? 'Lihat Detail' : 'Update Status' }}"
-                          >
-                            @if (in_array($item->status, [3,4]))
+                            title="{{ in_array($item->status, [3,4]) ? 'Lihat Detail' : 'Update Status' }}">
+                            @if (in_array($item->status, [3, 4]))
                               <i class="fas fa-eye"></i>
                             @else
                               <i class="fas fa-pencil"></i>
@@ -111,8 +114,7 @@
                               size="sm"
                               class="tooltips"
                               onclick="window.open(`{{ $item->link_pdf }}`, `_blank`)"
-                              title="Cetak"
-                            >
+                              title="Cetak">
                               <i class="fas fa-file"></i>
                             </x-link.button>
                           @endif
@@ -128,11 +130,14 @@
               </table>
             </div>
 
-            {{ $items->links('partials.pagination.bootstrap4') }}
+            {{
+              $items->links(
+                'partials.pagination.bootstrap4',
+              )
+            }}
           </div>
         </div>
       </div>
     </div>
   </div>
 </section>
-

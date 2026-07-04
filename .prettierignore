@@ -1,6 +1,9 @@
-assets/
-vendor
-node_modules
-public
-storage
-bootstrap/cache
+storage/
+bootstrap/cache/
+vendor/
+node_modules/
+public/build/
+public/hot
+public/storage
+_ide_helper.php
+.phpstorm.meta.php

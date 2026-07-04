@@ -1,4 +1,4 @@
-@section('title', $title)
+@section ('title', $title)
 
 <section class="content">
   <div class="container-fluid" id="create-or-update-form">
@@ -8,7 +8,7 @@
           <div class="card-header">
             <div class="card-title">{{ $isEdit ? 'Ubah' : 'Tambah' }} Role</div>
 
-            <x-card.tools minus="true"/>
+            <x-card.tools minus="true" />
           </div>
 
           <div class="card-body text-justify">
@@ -23,18 +23,13 @@
                   id="name"
                   label="Nama Role"
                   placeholder="Masukan nama role pengguna"
-                  wire:model.defer="name"
-                />
+                  wire:model.defer="name" />
               </x-overlay>
 
               <x-form.button-container class="justify-content-end">
-                <x-button wire:click="resetForm" color="danger">
-                  Batal
-                </x-button>
+                <x-button wire:click="resetForm" color="danger"> Batal </x-button>
 
-                <x-button type="submit" color="primary">
-                  Simpan
-                </x-button>
+                <x-button type="submit" color="primary"> Simpan </x-button>
               </x-form.button-container>
             </form>
           </div>
@@ -48,14 +43,14 @@
       <div class="col-12 m-1 p-1">
         <div class="card card-primary card-outline">
           <div class="card-body text-justify">
-            <div class="d-flex justify-content-center justify-content-sm-start align-items-start gap-sm-3">
+            <div
+              class="d-flex justify-content-center justify-content-sm-start align-items-start gap-sm-3">
               <div class="col-auto">
                 <x-form.input-group-select
                   prependText="Length"
                   name="perPage"
                   wire:model.live="perPage"
-                  :options="[5 => 5, 10 => 10, 20 => 20, 50 => 50]"
-                />
+                  :options="[5 => 5, 10 => 10, 20 => 20, 50 => 50]" />
               </div>
 
               <div class="ml-auto">
@@ -63,8 +58,7 @@
                   <x-form.input
                     name="search"
                     placeholder="Cari Role..."
-                    wire:model.live.debounce.250ms="search"
-                  />
+                    wire:model.live.debounce.250ms="search" />
                 </div>
               </div>
             </div>
@@ -86,8 +80,7 @@
                               size="sm"
                               color="warning"
                               class="tooltips"
-                              title="Akses Menu"
-                            >
+                              title="Akses Menu">
                               <i class="fas fa-key"></i>
                             </x-link.button>
 
@@ -96,8 +89,7 @@
                               class="btn-sm tooltips"
                               title="Ubah"
                               color="primary"
-                              size="sm"
-                            >
+                              size="sm">
                               <i class="fas fa-pencil"></i>
                             </x-button>
                           </div>
@@ -105,7 +97,9 @@
                       </tr>
                     @empty
                       <tr>
-                        <td colspan="{{ sizeof($tableHeader) }}" class="text-center">Data Kosong</td>
+                        <td colspan="{{ sizeof($tableHeader) }}" class="text-center">
+                          Data Kosong
+                        </td>
                       </tr>
                     @endforelse
                   </tbody>
@@ -113,7 +107,11 @@
               </x-overlay>
             </div>
 
-            {{ $items->links('partials.pagination.bootstrap4') }}
+            {{
+              $items->links(
+                'partials.pagination.bootstrap4',
+              )
+            }}
           </div>
         </div>
       </div>

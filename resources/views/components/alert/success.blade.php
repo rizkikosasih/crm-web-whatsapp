@@ -1,14 +1,30 @@
-@props([
+@props ([
   'dismissible' => false,
 ])
 
-<div {{ $attributes->class([
-  'alert alert-success',
-  'alert-dismissible' => $dismissible,
-]) }}>
-  @if ($dismissible)
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-  @endif
+<div
+  x-data="{ show: true }"
+  x-show="show"
+  {{
+    $attributes->class([
+      'bg-emerald-950/40 border border-emerald-500/50 rounded-xl p-4 flex items-center justify-between gap-3 text-emerald-200 text-sm font-medium',
+    ])
+  }}>
+  <div class="flex items-center gap-3">
+    <svg class="h-5 w-5 text-emerald-400 shrink-0" viewBox="0 0 20 20" fill="currentColor">
+      <path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4.13-5.69z" clip-rule="evenodd" />
+    </svg>
+    <div>{{ $slot }}</div>
+  </div>
 
-  {{ $slot }}
+  @if ($dismissible)
+    <button
+      @click="show = false"
+      type="button"
+      class="text-emerald-400 hover:text-emerald-200 transition duration-150 cursor-pointer">
+      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+  @endif
 </div>

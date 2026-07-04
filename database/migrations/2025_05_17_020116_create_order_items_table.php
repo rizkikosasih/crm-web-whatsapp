@@ -5,27 +5,27 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-  /**
-   * Run the migrations.
-   */
-  public function up(): void
-  {
-    Schema::create('order_items', function (Blueprint $table) {
-      $table->id();
-      $table->foreignId('order_id')->constrained()->onDelete('cascade');
-      $table->foreignId('product_id')->constrained()->onDelete('restrict');
-      $table->integer('quantity');
-      $table->decimal('price', 12, 2); // harga saat transaksi
-      $table->timestamps();
-      $table->softDeletes();
-    });
-  }
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('order_items', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('order_id')->constrained()->onDelete('cascade');
+            $table->foreignId('product_id')->constrained()->onDelete('restrict');
+            $table->integer('quantity');
+            $table->decimal('price', 12, 2); // harga saat transaksi
+            $table->timestamps();
+            $table->softDeletes();
+        });
+    }
 
-  /**
-   * Reverse the migrations.
-   */
-  public function down(): void
-  {
-    Schema::dropIfExists('order_items');
-  }
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('order_items');
+    }
 };
