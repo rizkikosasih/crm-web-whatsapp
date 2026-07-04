@@ -58,14 +58,18 @@
                     @if (str_starts_with($child->icon, 'fa'))
                       @php
                         $iconMap = [
+                          'fas fa-dashboard' => 'layout-dashboard',
                           'fas fa-tachometer-alt' => 'layout-dashboard',
-                          'fas fa-users' => 'users',
-                          'fas fa-box' => 'shopping-bag',
+                          'fas fa-address-book' => 'book-user',
+                          'fas fa-box' => 'package',
                           'fas fa-bullhorn' => 'megaphone',
+                          'fas fa-shop' => 'shopping-bag',
                           'fas fa-shopping-cart' => 'shopping-cart',
+                          'fas fa-chart-simple' => 'trending-up',
                           'fas fa-file-invoice-dollar' => 'file-text',
                           'fas fa-chart-line' => 'trending-up',
                           'fas fa-chart-bar' => 'bar-chart-2',
+                          'fas fa-table-columns' => 'bar-chart-3',
                           'fas fa-envelope' => 'mail',
                           'fas fa-share-alt' => 'share-2',
                           'fas fa-cogs' => 'settings',
@@ -75,6 +79,8 @@
                           'fas fa-comments' => 'messages-square',
                           'fas fa-cog' => 'settings',
                           'fas fa-key' => 'key',
+                          'fas fa-wrench' => 'wrench',
+                          'fas fa-network-wired' => 'network',
                         ];
                         $iconName = $iconMap[$child->icon] ?? 'circle';
                       @endphp
