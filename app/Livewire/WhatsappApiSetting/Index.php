@@ -10,18 +10,18 @@ use Livewire\Component;
 class Index extends Component
 {
     #[Locked]
-    public $title = 'Whatsapp API';
+    public string $title = 'Whatsapp API';
 
-    public $templateId;
-    public $apiKey;
-    public $apiUrl;
-    public $instanceName;
-    public $isEdit = false;
+    public ?int $templateId = null;
+    public ?string $apiKey = null;
+    public ?string $apiUrl = null;
+    public ?string $instanceName = null;
+    public bool $isEdit = false;
 
     // WA Connector States
-    public $qrCodeBase64 = null;
-    public $connectionStatus = 'DISCONNECTED';
-    public $isLoadingQr = false;
+    public ?string $qrCodeBase64 = null;
+    public string $connectionStatus = 'DISCONNECTED';
+    public bool $isLoadingQr = false;
 
     public function mount(WhatsappSettingsService $whatsappSettingsService)
     {
