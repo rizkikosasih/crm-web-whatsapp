@@ -13,3 +13,85 @@
     'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
     'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+/* ─── Global Table Adaptations for Light/Dark Modes ─── */
+.overflow-x-auto.border {
+  border-color: var(--color-slate-200) !important;
+}
+.dark .overflow-x-auto.border {
+  border-color: var(--color-slate-800) !important;
+}
+.overflow-x-auto {
+  background-color: var(--color-white) !important;
+}
+.dark .overflow-x-auto {
+  background-color: var(--color-slate-900) !important;
+}
+
+table {
+  border-color: var(--color-slate-200) !important;
+}
+.dark table {
+  border-color: var(--color-slate-800) !important;
+}
+
+tbody {
+  border-color: var(--color-slate-200) !important;
+  color: var(--color-slate-700) !important;
+}
+.dark tbody {
+  border-color: var(--color-slate-800) !important;
+  color: var(--color-slate-300) !important;
+}
+
+tbody tr {
+  border-color: var(--color-slate-200) !important;
+  transition: background-color 150ms ease-in-out;
+}
+.dark tbody tr {
+  border-color: var(--color-slate-800) !important;
+}
+
+tbody tr:hover {
+  background-color: var(--color-slate-50) !important;
+}
+.dark tbody tr:hover {
+  background-color: rgba(30, 41, 59, 0.4) !important;
+}
+
+/* Cell-level text color overrides */
+tbody td.text-white {
+  color: var(--color-slate-900) !important;
+}
+.dark tbody td.text-white {
+  color: var(--color-white) !important;
+}
+
+tbody td.text-slate-400 {
+  color: var(--color-slate-600) !important;
+}
+.dark tbody td.text-slate-400 {
+  color: var(--color-slate-400) !important;
+}
+
+/* Badge and status overrides within tables */
+tbody td .text-indigo-400 {
+  color: var(--color-indigo-600) !important;
+}
+.dark tbody td .text-indigo-400 {
+  color: var(--color-indigo-400) !important;
+}
+
+tbody td .text-emerald-400 {
+  color: var(--color-emerald-600) !important;
+}
+.dark tbody td .text-emerald-400 {
+  color: var(--color-emerald-400) !important;
+}
+
+tbody td .text-red-400 {
+  color: var(--color-red-600) !important;
+}
+.dark tbody td .text-red-400 {
+  color: var(--color-red-400) !important;
+}

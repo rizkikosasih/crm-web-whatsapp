@@ -3,8 +3,8 @@
 <div class="space-y-8">
   <!-- Page Header -->
   <div>
-    <h1 class="text-2xl font-bold text-white tracking-tight">{{ $title }}</h1>
-    <p class="text-sm text-slate-400 mt-1">Konfigurasi group hak akses (roles) seperti Administrator, Warehouse, Staff Kasir, dll.</p>
+    <h1 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">{{ $title }}</h1>
+    <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Konfigurasi group hak akses (roles) seperti Administrator, Warehouse, Staff Kasir, dll.</p>
   </div>
 
   <!-- Form Card -->

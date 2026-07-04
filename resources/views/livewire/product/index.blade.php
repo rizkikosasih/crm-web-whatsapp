@@ -7,8 +7,8 @@
 <div class="space-y-8">
   <!-- Page Header -->
   <div>
-    <h1 class="text-2xl font-bold text-white tracking-tight">{{ $title }}</h1>
-    <p class="text-sm text-slate-400 mt-1">Mengelola katalog produk, stok, dan harga, serta membagikan informasi produk langsung ke WhatsApp pelanggan.</p>
+    <h1 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">{{ $title }}</h1>
+    <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Mengelola katalog produk, stok, dan harga, serta membagikan informasi produk langsung ke WhatsApp pelanggan.</p>
   </div>
 
   <!-- Form Card -->

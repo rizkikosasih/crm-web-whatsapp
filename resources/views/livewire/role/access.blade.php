@@ -4,10 +4,10 @@
   <!-- Page Header -->
   <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
     <div>
-      <h1 class="text-2xl font-bold text-white tracking-tight">
-        {{ $title }} : <span class="text-indigo-400">{{ $roleName }}</span>
+      <h1 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
+        {{ $title }} : <span class="text-indigo-650 dark:text-indigo-400">{{ $roleName }}</span>
       </h1>
-      <p class="text-sm text-slate-400 mt-1">Aktifkan atau matikan hak akses menu navigasi di bawah ini untuk pengguna dengan role <strong>{{ $roleName }}</strong>.</p>
+      <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Aktifkan atau matikan hak akses menu navigasi di bawah ini untuk pengguna dengan role <strong>{{ $roleName }}</strong>.</p>
     </div>
     <div>
       <x-link.button
