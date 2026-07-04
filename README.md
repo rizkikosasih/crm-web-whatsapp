@@ -113,14 +113,14 @@ npm run dev-all
 
 ## 🐳 Docker Stack & Evolution API (WhatsApp Gateway)
 
-Evolution API dijalankan menggunakan Docker Compose yang disertakan dalam repositori.
+Aplikasi Evolution API dijalankan secara lokal menggunakan Docker Compose yang telah dikonfigurasi di dalam project.
 
-1. Jalankan container Evolution API:
+1. Jalankan service Database & Evolution API:
    ```bash
    docker compose up -d
    ```
-2. Buka dashboard Evolution API lokal Anda atau panggil API untuk memindai QR Code guna menghubungkan WhatsApp Anda dengan nomor server.
-3. Gunakan panduan clipboard sekali klik yang tersedia di halaman **Pengaturan WhatsApp** untuk menyalin perintah koneksi secara instan.
+2. Hubungkan nomor WhatsApp Anda secara interaktif langsung melalui menu **Pengaturan Whatsapp API** di dasbor web CRM.
+3. Klik tombol **"Hubungkan WhatsApp (Scan QR)"** untuk membuka modal pop-up, yang secara dinamis memicu registrasi sesi kontainer dan menampilkan QR Code secara instan untuk dipindai.
 
 ---
 

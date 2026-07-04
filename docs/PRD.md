@@ -511,7 +511,7 @@ Seluruh stack aplikasi dikemas dalam container Docker untuk memastikan konsisten
 | **app**           | Build dari `docker/php/Dockerfile` (PHP 8.2-FPM) | 9000 (internal) | Menjalankan aplikasi Laravel via PHP-FPM.                              |
 | **webserver**     | `nginx:stable-alpine`                            | 8000 → 80       | Reverse proxy yang menerima request HTTP dan meneruskannya ke PHP-FPM. |
 | **db**            | `mysql:8.0`                                      | 3306 → 3306     | Database MySQL dengan persistent volume.                               |
-| **evolution-api** | `atendai/evolution-api:latest`                   | 8080 → 8080     | Gateway WhatsApp API (self-hosted, open-source).                       |
+| **evolution-api** | `evoapicloud/evolution-api:latest`               | 8080 → 8080     | Gateway WhatsApp API (self-hosted, open-source).                       |
 
 ### 8.3. Struktur File Docker
 
