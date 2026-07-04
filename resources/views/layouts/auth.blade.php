@@ -1,13 +1,17 @@
-<!DOCTYPE html>
-<html lang="id" class="h-full">
+<html
+  lang="id"
+  class="h-full {{ (isset($_COOKIE['theme']) && $_COOKIE['theme'] === 'dark') ? 'dark' : '' }}"
+  :class="{ dark: $store.theme.dark }">
 <head>
   <meta charset="UTF-8" />
   <!-- Anti-FOUC Script -->
   <script>
-    if (
-      localStorage.getItem('theme') === 'dark' ||
-      (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
-    ) {
+    const theme =
+      document.cookie
+        .split('; ')
+        .find((row) => row.startsWith('theme='))
+        ?.split('=')[1] || localStorage.getItem('theme');
+    if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
@@ -44,12 +48,22 @@
   <script>
     document.addEventListener('alpine:init', () => {
       Alpine.store('theme', {
-        dark:
-          localStorage.getItem('theme') === 'dark' ||
-          (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches),
+        dark: (() => {
+          const theme =
+            document.cookie
+              .split('; ')
+              .find((row) => row.startsWith('theme='))
+              ?.split('=')[1] || localStorage.getItem('theme');
+          return (
+            theme === 'dark' ||
+            (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)
+          );
+        })(),
         toggle() {
           this.dark = !this.dark;
           localStorage.setItem('theme', this.dark ? 'dark' : 'light');
+          document.cookie =
+            'theme=' + (this.dark ? 'dark' : 'light') + '; path=/; max-age=31536000; SameSite=Lax';
           if (this.dark) {
             document.documentElement.classList.add('dark');
           } else {
