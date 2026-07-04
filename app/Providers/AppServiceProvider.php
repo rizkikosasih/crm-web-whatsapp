@@ -15,6 +15,16 @@ class AppServiceProvider extends ServiceProvider
             \App\Services\Contracts\InvoiceServiceInterface::class,
             \App\Services\InvoiceService::class,
         );
+
+        $this->app->bind(
+            \App\Services\Api\SendMessageApiServiceInterface::class,
+            \App\Services\Api\Implements\EvolutionApiService::class,
+        );
+
+        $this->app->bind(
+            \App\Services\Api\ImagekitServiceInterface::class,
+            \App\Services\Api\Implements\ImagekitService::class,
+        );
     }
 
     /**
