@@ -67,7 +67,8 @@ services:
       - AUTHENTICATION_API_KEY=${EVOLUTION_API_KEY:-your_evolution_api_key}
       - DATABASE_ENABLED=true
       - DATABASE_PROVIDER=mysql
-      - DATABASE_CONNECTION_URI=mysql://root:${DB_PASSWORD:-secret}@db:3306/${DB_DATABASE:-crm}
+      - DATABASE_CONNECTION_URI=mysql://root:${DB_PASSWORD:-secret}@db:3306/crm_evolution
+      - CACHE_REDIS_ENABLED=false
     volumes:
       - crm-evolution-data:/evolution/data
     networks:
