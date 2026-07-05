@@ -98,7 +98,7 @@ Setiap perubahan status pesanan secara otomatis memicu pengiriman pesan WhatsApp
 ### 4.6. Pengaturan Sistem (Settings)
 
 - **Template Pesan**: Kustomisasi isi pesan notifikasi WhatsApp untuk setiap status transaksi menggunakan placeholder dinamis seperti `{{customer_name}}`, `{{order_number}}`, `{{order_total}}`, `{{contact_number}}`, `{{store_name}}`, dan `{{invoice_link}}`.
-- **Pengaturan WhatsApp API**: Pengaturan Instance Name, API Key, dan URL Server Evolution API langsung melalui antarmuka web.
+- **Pengaturan WhatsApp API**: Menghubungkan nomor WhatsApp secara interaktif dengan melihat status koneksi real-time, memindai QR Code inline, atau memutuskan koneksi sesi Evolution API secara dinamis (tanpa perlu mengisi ulang form konfigurasi karena kredensial dibaca otomatis dari berkas `.env`).
 - **Manajemen Role & Permission**: Mengelola role dan permission menggunakan Spatie Permission. Super Admin dapat membuat role baru, menetapkan permission ke role, dan mengassign role ke user melalui antarmuka web.
 - **Manajemen Menu**: Mengonfigurasi menu navigasi sidebar. Visibilitas menu dikontrol berdasarkan permission yang dimiliki role user.
 

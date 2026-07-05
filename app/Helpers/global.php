@@ -147,25 +147,20 @@ if (!function_exists('arrayKey')) {
 if (!function_exists('waApiKey')) {
     function waApiKey(): ?string
     {
-        $setting = WhatsappApiSetting::first();
-        return $setting && $setting->key != '-' ? $setting->key : config('services.evolution.key');
+        return config('services.evolution.key');
     }
 }
 
 if (!function_exists('waApiUrl')) {
     function waApiUrl(): ?string
     {
-        $setting = WhatsappApiSetting::first();
-        return $setting && $setting->url != '-' ? $setting->url : config('services.evolution.url');
+        return config('services.evolution.url');
     }
 }
 
 if (!function_exists('waInstanceName')) {
     function waInstanceName(): ?string
     {
-        $setting = WhatsappApiSetting::first();
-        return $setting && $setting->instance_name
-            ? $setting->instance_name
-            : config('services.evolution.instance');
+        return config('services.evolution.instance');
     }
 }

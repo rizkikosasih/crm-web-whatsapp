@@ -2,7 +2,6 @@
 
 namespace App\Livewire\WhatsappApiSetting;
 
-use App\Services\WhatsappSettingsService;
 use Illuminate\Support\Facades\Http;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
@@ -12,43 +11,33 @@ class Index extends Component
     #[Locked]
     public string $title = 'Whatsapp API';
 
-    public ?int $templateId = null;
     public ?string $apiKey = null;
     public ?string $apiUrl = null;
     public ?string $instanceName = null;
-    public bool $isEdit = false;
 
     // WA Connector States
     public ?string $qrCodeBase64 = null;
-    public string $connectionStatus = 'DISCONNECTED';
+    public string $connectionStatus = 'LOADING';
     public bool $isLoadingQr = false;
 
-    public function mount(WhatsappSettingsService $whatsappSettingsService)
+    public function mount()
     {
-        $setting = $whatsappSettingsService->getFirst();
-
-        if ($setting) {
-            $this->templateId = $setting->id;
-            $this->apiKey = $setting->key;
-            $this->apiUrl = $setting->url;
-            $this->instanceName = $setting->instance_name;
-            $this->isEdit = true;
-        }
+        $this->apiKey = config('services.evolution.key');
+        $this->apiUrl = config('services.evolution.url');
+        $this->instanceName = config('services.evolution.instance');
     }
 
-    public function getQrCode()
+    public function checkConnection()
     {
         if (!$this->apiUrl || !$this->apiKey || !$this->instanceName) {
-            $this->dispatch('showError', [
-                'message' =>
-                    'Silakan isi & simpan konfigurasi API URL, API Key, dan Instance Name terlebih dahulu.',
-            ]);
+            $this->connectionStatus = 'ERROR';
+            $this->isLoadingQr = false;
             return;
         }
 
         $this->isLoadingQr = true;
         $this->qrCodeBase64 = null;
-        $this->dispatch('open-wa-connector');
+        $this->connectionStatus = 'LOADING';
 
         try {
             $baseUrlClean = rtrim($this->apiUrl, '/');
@@ -63,6 +52,13 @@ class Index extends Component
 
             // 1. Check if connected first
             $stateResponse = Http::withHeaders($headers)->timeout(5)->get($stateUrl);
+            logger(
+                'Evolution API Check Connection State status: ' .
+                    $stateResponse->status() .
+                    ' body: ' .
+                    $stateResponse->body(),
+            );
+
             if ($stateResponse->successful()) {
                 $stateData = $stateResponse->json();
                 $status =
@@ -85,7 +81,6 @@ class Index extends Component
             );
 
             if ($connectResponse->status() === 404 || !$connectResponse->successful()) {
-                // If 404, the instance name might not exist on the server yet. Let's create it.
                 logger('Evolution API Instance not found. Creating one...');
                 $createResponse = Http::withHeaders($headers)
                     ->timeout(12)
@@ -102,7 +97,6 @@ class Index extends Component
                 );
 
                 if ($createResponse->successful()) {
-                    // Try to connect again to get the newly generated QR
                     $connectResponse = Http::withHeaders($headers)->timeout(12)->get($connectUrl);
                     logger(
                         'Evolution API Get Connect retry status: ' .
@@ -142,38 +136,40 @@ class Index extends Component
         $this->isLoadingQr = false;
     }
 
-    public function save(WhatsappSettingsService $whatsappSettingsService)
+    public function disconnect()
     {
-        $this->validate(
-            [
-                'apiKey' => 'required',
-                'apiUrl' => 'required|url',
-                'instanceName' => 'required',
-            ],
-            [
-                'apiKey.required' => 'API Key tidak boleh kosong',
-                'apiUrl.required' => 'API URL tidak boleh kosong',
-                'apiUrl.url' => 'API URL harus berupa URL yang valid (contoh: https://example.com)',
-                'instanceName.required' => 'Instance Name tidak boleh kosong',
-            ],
-        );
+        $this->isLoadingQr = true;
+        $this->connectionStatus = 'LOADING';
 
-        $whatsappSettingsService->save(
-            [
-                'key' => $this->apiKey,
-                'url' => $this->apiUrl,
-                'instance_name' => $this->instanceName,
-            ],
-            $this->templateId,
-        );
+        try {
+            $baseUrlClean = rtrim($this->apiUrl, '/');
+            $logoutUrl = "{$baseUrlClean}/instance/logout/{$this->instanceName}";
 
-        $this->isEdit = true;
-        session()->flash('success', 'Whatsapp API berhasil disimpan!');
-    }
+            $headers = [
+                'apikey' => $this->apiKey,
+                'Content-Type' => 'application/json',
+            ];
 
-    public function resetForm()
-    {
-        $this->reset(['templateId', 'apiKey', 'apiUrl', 'instanceName', 'isEdit']);
+            $response = Http::withHeaders($headers)->timeout(12)->delete($logoutUrl);
+            logger(
+                'Evolution API Disconnect response status: ' .
+                    $response->status() .
+                    ' body: ' .
+                    $response->body(),
+            );
+
+            // Re-check connection to get new QR
+            $this->checkConnection();
+
+            session()->flash('success', 'Berhasil memutuskan koneksi WhatsApp.');
+        } catch (\Exception $e) {
+            logger('Evolution API Logout Error: ' . $e->getMessage());
+            $this->dispatch('showError', [
+                'message' => 'Gagal memutuskan koneksi: ' . $e->getMessage(),
+            ]);
+            $this->connectionStatus = 'ERROR';
+            $this->isLoadingQr = false;
+        }
     }
 
     public function render()
