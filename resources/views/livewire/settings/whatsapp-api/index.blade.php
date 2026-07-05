@@ -14,7 +14,7 @@
     <div class="lg:col-span-2 space-y-6">
       <x-card title="Status Koneksi WhatsApp">
         <x-slot:tools>
-          <x-card.tools refresh="true" />
+          <x-card.tools />
         </x-slot:tools>
 
         @if (session()->has('success'))
