@@ -33,6 +33,22 @@
   <meta name="csrf-token" content="{{ csrf_token() }}" />
   <link rel="shortcut icon" href="{{ asset('favicon.png') }}" type="image/png" />
 
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="@yield('title', env('APP_NAME', 'CRM WhatsApp'))" />
+  <meta
+    property="og:description"
+    content="Sistem CRM terintegrasi dengan automasi WhatsApp Gateway dan cloud media storage." />
+  <meta property="og:image" content="{{ asset('images/og-image.png') }}" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="@yield('title', env('APP_NAME', 'CRM WhatsApp'))" />
+  <meta
+    name="twitter:description"
+    content="Sistem CRM terintegrasi dengan automasi WhatsApp Gateway dan cloud media storage." />
+  <meta name="twitter:image" content="{{ asset('images/og-image.png') }}" />
+
   <!-- Google Fonts - Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
